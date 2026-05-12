@@ -1,0 +1,11 @@
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json.get('username')
+    password = request.json.get('password')
+
+    # VULNERABILITY 2: Insecure string comparison (Timing Attack)
+    # VULNERABILITY 3: Direct plaintext comparison
+    if username in users and users[username] == password:
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"message": "Login failed"}), 401
