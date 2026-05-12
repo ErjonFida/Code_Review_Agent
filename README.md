@@ -61,7 +61,7 @@ GitHub Push Event
 
 ---
 
-## 🤖 Agents & Nodes
+## Agents & Nodes
 
 ### Node 1 — Context (`get_context`)
 
@@ -128,7 +128,7 @@ The report contains:
 
 ---
 
-## 🗄️ Vector Store & Dataset Pipeline
+## Vector Store & Dataset Pipeline
 
 ### `dataset.py` — Data Ingestion
 
@@ -148,7 +148,7 @@ Downloads the [scthornton/securecode](https://huggingface.co/datasets/scthornton
 
 ---
 
-## 🌐 Flask Webhook Server (`app.py`)
+## Flask Webhook Server (`app.py`)
 
 A minimal Flask server that acts as the entry point for the entire pipeline:
 
@@ -217,7 +217,7 @@ The Flask server starts on `http://localhost:3000`. Configure your GitHub reposi
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
