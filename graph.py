@@ -61,7 +61,7 @@ class StaticFindings(BaseModel):
 # Node to remove unnecessary git headers/symbols and call LLM to get context for code snippet
 def get_context(state: GraphState) -> Dict[str, Any]:
 
-    print("\n=== [NODE 1] TRIAGE ROUTER ===")
+    print("=== [NODE 1] TRIAGE ROUTER ===")
     raw_diff = state.get("raw_diff", "")
     
     sanitized_lines = []
@@ -103,7 +103,7 @@ def get_context(state: GraphState) -> Dict[str, Any]:
 # Create semnatic query from PR Context and code then search ChromaDB
 def retrieve_examples(state: GraphState) -> Dict[str, Any]:
 
-    print("\n=== [NODE 2] RETRIEVE EXAMPLES (Vector DB) ===")
+    print("=== [NODE 2] RETRIEVE EXAMPLES (Vector DB) ===")
     pr_context = state.get("pr_context", {})
     sanitized_diff = state.get("sanitized_diff", "")
 
@@ -138,7 +138,7 @@ def retrieve_examples(state: GraphState) -> Dict[str, Any]:
 # Analyze code and retrieved examples, return description of vulnerabilities if any
 def security_agent(state: GraphState) -> Dict[str, Any]:
 
-    print("\n=== [NODE 3a] SECURITY AGENT ===")
+    print("=== [NODE 3a] SECURITY AGENT ===")
     sanitized_diff = state.get("sanitized_diff", "")
     retrieved = state.get("retrieved_examples", [])
 
@@ -192,7 +192,7 @@ If the code is secure, return an empty findings list."""
 # Analyze code for efficinecy/best-practices issues
 def static_analysis_agent(state: GraphState) -> Dict[str, Any]:
 
-    print("\n=== [NODE 3b] STATIC ANALYSIS AGENT ===")
+    print("=== [NODE 3b] STATIC ANALYSIS AGENT ===")
     sanitized_diff = state.get("sanitized_diff", "")
     pr_context = state.get("pr_context", {})
 
@@ -240,7 +240,7 @@ If the code is clean, return an empty findings list."""
 # Return issues and suggestions if any
 def generate_final_review(state: GraphState) -> Dict[str, Any]:
 
-    print("\n=== [NODE 4] GENERATE FINAL REVIEW ===")
+    print("=== [NODE 4] GENERATE FINAL REVIEW ===")
     pr_metadata = state.get("pr_metadata", {})
     pr_context = state.get("pr_context", {})
     security_findings = state.get("security_findings", [])
@@ -252,7 +252,7 @@ def generate_final_review(state: GraphState) -> Dict[str, Any]:
     lines.append("PR Metadata")
     lines.append(f"-Repository: {pr_metadata.get('repository', 'N/A')}")
     lines.append(f"-PR Number: {pr_metadata.get('pr_number', 'N/A')}")
-    lines.append(f"-Author: {pr_metadata.get('author', pr_metadata.get('authot_name', 'N/A'))}")
+    lines.append(f"-Author: {pr_metadata.get('author', 'N/A')}")
     lines.append(f"-Commit: `{pr_metadata.get('commit_hash', 'N/A')}`")
     lines.append(f"-Language: {pr_context.get('primary_language', 'N/A')}")
     lines.append(f"-Concept: {pr_context.get('core_concept', 'N/A')}")
@@ -283,9 +283,7 @@ def generate_final_review(state: GraphState) -> Dict[str, Any]:
         sorted_sec = sorted(security_findings, key=lambda f: severity_order.get(f.get("severity", "LOW"), 4))
         for i, finding in enumerate(sorted_sec, 1):
             sev = finding.get("severity", "UNKNOWN")
-            severity_labels = ["Critical", "High", "Medium", "Low", "Unknown"]
-            icon = severity_labels[severity_order.get(sev, 4)]
-            lines.append(f"{icon} {i}. [{sev}] {finding.get('description', 'N/A')}")
+            lines.append(f"{i}. [{sev}] {finding.get('description', 'N/A')}")
             lines.append(f"-Line: {finding.get('line_number', '?')}")
             lines.append(f"-Fix: {finding.get('fix', 'N/A')}")
             lines.append("")
@@ -293,10 +291,9 @@ def generate_final_review(state: GraphState) -> Dict[str, Any]:
     
     if static_findings:
         lines.append("Code Quality Findings\n")
-        categories = ["style", "performance", "maintainability", "error-handling", "best-practice"]
         for i, finding in enumerate(static_findings, 1):
             cat = finding.get("category", "general")
-            lines.append(f"{categories.index(cat) if cat in categories else 'General'} {i}. [{cat}] {finding.get('description', 'N/A')}")
+            lines.append(f"{i}. [{cat}] {finding.get('description', 'N/A')}")
             lines.append(f"-Line: {finding.get('line_number', '?')}")
             lines.append(f"-Suggestion: {finding.get('suggestion', 'N/A')}")
             lines.append("")
@@ -390,7 +387,7 @@ if __name__ == "__main__":
         pr_metadata=dummy_webhook_payload["pr_metadata"]
     )
 
-    print("\n" + "=" * 60)
+    print("=" * 60)
     print("  FINAL REVIEW REPORT")
     print("=" * 60)
     print(report)
