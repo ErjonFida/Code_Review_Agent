@@ -234,4 +234,5 @@ The Flask server starts on `http://localhost:3000`. Configure your GitHub reposi
 
 ## License
 
-This project was built as a capstone project for a LangGraph and RAG course.
+
+MIT
