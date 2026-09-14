@@ -13,8 +13,6 @@ COLLECTION_NAME = "vulnerability_examples"
 EMBEDDING_MODEL = "nomic-embed-text"
 BATCH_SIZE = 100
 
-# Flatten dataset into searchable text
-# 6000 char context window to fit in nomic embedding
 def _entry_to_document(entry: dict) -> str:
 
     MAX_DOC_LENGTH = 6000
@@ -167,27 +165,34 @@ def get_collection():
         _collection = client.get_collection(COLLECTION_NAME)
     return _collection
 
-def search(query: str, n_results: int = 3) -> list[dict]:
+def search(query: str, n_results: int = 3, exclude_containing: list[str] | None = None) -> list[dict]:
 
     collection = get_collection()
     embed_model = _get_embeddings()
 
     query_embedding = embed_model.embed_query(query)
 
+    fetch = n_results + 10 if exclude_containing else n_results
+
     results = collection.query(
         query_embeddings=[query_embedding],
-        n_results=n_results,
+        n_results=fetch,
         include=["documents", "metadatas", "distances"]
     )
 
     output = []
     for i in range(len(results["ids"][0])):
+        document = results["documents"][0][i]
+        if exclude_containing and any(probe in document for probe in exclude_containing):
+            continue
         output.append({
             "id": results["ids"][0][i],
-            "document": results["documents"][0][i],
+            "document": document,
             "metadata": results["metadatas"][0][i],
             "distance": results["distances"][0][i],
         })
+        if len(output) == n_results:
+            break
 
     return output
 
@@ -199,7 +204,6 @@ if __name__ == "__main__":
 
     build_vectorstore(force_rebuild=args.rebuild)
 
-    # Quick test
     print("\n--- Test Search: 'SQL injection Python sqlite3' ---")
     results = search("SQL injection Python sqlite3", n_results=3)
     for r in results:

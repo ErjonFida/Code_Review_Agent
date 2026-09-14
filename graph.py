@@ -1,3 +1,5 @@
+import os
+
 from langchain_ollama import ChatOllama
 from langgraph.graph import StateGraph, END
 from typing import TypedDict, List, Dict, Any
@@ -7,7 +9,21 @@ from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from vectorstore import search as vector_search
 
-# Declare graph state schema
+MODEL = os.getenv("REVIEW_MODEL", "llama3.2")
+MAX_OUTPUT_TOKENS = 1536
+REQUEST_TIMEOUT_S = 600
+
+
+def _reviewer(schema):
+
+    llm = ChatOllama(
+        model=MODEL,
+        temperature=0,
+        num_predict=MAX_OUTPUT_TOKENS,
+        client_kwargs={"timeout": REQUEST_TIMEOUT_S},
+    )
+    return llm.with_structured_output(schema)
+
 class GraphState(TypedDict):
 
     pr_metadata: Dict[str, Any]
@@ -15,8 +31,9 @@ class GraphState(TypedDict):
     sanitized_diff: str
     pr_context: Dict[str, Any]
     retrieved_examples: List[Dict[str, Any]]
+
+    exclude_snippets: List[str]
     
-    # Annotated with operator.add so parallel nodes append rather than overwrite
     static_findings: Annotated[List[Dict[str, Any]], operator.add]
     security_findings: Annotated[List[Dict[str, Any]], operator.add]
     final_review: str
@@ -75,8 +92,7 @@ def get_context(state: GraphState) -> Dict[str, Any]:
             
     sanitized_diff = "\n".join(sanitized_lines)
  
-    llm = ChatOllama(model="llama3.2", temperature=0)
-    structured_llm = llm.with_structured_output(PRContext)
+    structured_llm = _reviewer(PRContext)
     
     system_prompt = """You are a highly analytical code extraction agent. 
     Read the provided code snippet. Your ONLY job is to identify the primary programming language, 
@@ -120,7 +136,11 @@ def retrieve_examples(state: GraphState) -> Dict[str, Any]:
     print(f"  Query: {language} | {libraries} | {concept}")
 
 
-    results = vector_search(query=search_query, n_results=3)
+    results = vector_search(
+        query=search_query,
+        n_results=3,
+        exclude_containing=state.get("exclude_snippets") or None,
+    )
 
     retrieved = []
     for i, r in enumerate(results):
@@ -151,8 +171,7 @@ def security_agent(state: GraphState) -> Dict[str, Any]:
         examples_text += f"\n--- Reference Example {i} (ID: {ex.get('id', 'N/A')}, similarity: {distance}) ---\n"
         examples_text += f"{doc_text}\n"
 
-    llm = ChatOllama(model="llama3.2", temperature=0)
-    structured_llm = llm.with_structured_output(SecurityFindings)
+    structured_llm = _reviewer(SecurityFindings)
 
     system_prompt = """You are an expert application security engineer performing a code review.
 Analyze the provided code diff for security vulnerabilities. Use the reference examples as guidance
@@ -196,8 +215,7 @@ def static_analysis_agent(state: GraphState) -> Dict[str, Any]:
     sanitized_diff = state.get("sanitized_diff", "")
     pr_context = state.get("pr_context", {})
 
-    llm = ChatOllama(model="llama3.2", temperature=0)
-    structured_llm = llm.with_structured_output(StaticFindings)
+    structured_llm = _reviewer(StaticFindings)
 
     system_prompt = """You are a senior software engineer performing a code quality review.
 The code is written in {language}. Analyze the diff for NON-SECURITY issues only.
@@ -347,6 +365,7 @@ def run_review(raw_diff: str, pr_metadata: Dict[str, Any]) -> str:
         "sanitized_diff": "",
         "pr_context": {},
         "retrieved_examples": [],
+        "exclude_snippets": [],
         "static_findings": [],
         "security_findings": [],
         "final_review": ""

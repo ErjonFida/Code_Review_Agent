@@ -1,0 +1,1290 @@
+{
+  "label": "baseline-rag",
+  "generated_at": "2026-09-07T17:54:15.788782+00:00",
+  "config": {
+    "arm": "rag",
+    "model": "llama3.2",
+    "dataset": "gold.jsonl",
+    "gold_fingerprint": "33e33329c8a3e7be",
+    "cases": 40,
+    "excluded_from_retrieval": 40,
+    "exclusion": "content probes",
+    "n_retrieved": 3
+  },
+  "metrics": {
+    "overall": {
+      "cases": 39,
+      "detection_rate": 0.6154,
+      "false_positive_rate": 0.359,
+      "secure_any_finding_rate": 0.6923,
+      "high_severity_fp_rate": 0.6923,
+      "severity_match": 0.75,
+      "findings_per_vulnerable_case": 3.18,
+      "findings_per_secure_case": 3.31,
+      "p50_latency_ms": 49610.11,
+      "p95_latency_ms": 70891.59
+    },
+    "by_severity": {
+      "CRITICAL": {
+        "cases": 28,
+        "detection_rate": 0.6429
+      },
+      "HIGH": {
+        "cases": 11,
+        "detection_rate": 0.5455
+      }
+    },
+    "by_language": {
+      "csharp": {
+        "cases": 2,
+        "detection_rate": 1.0
+      },
+      "go": {
+        "cases": 6,
+        "detection_rate": 0.3333
+      },
+      "java": {
+        "cases": 9,
+        "detection_rate": 0.5556
+      },
+      "javascript": {
+        "cases": 10,
+        "detection_rate": 0.8
+      },
+      "kotlin": {
+        "cases": 2,
+        "detection_rate": 0.5
+      },
+      "php": {
+        "cases": 3,
+        "detection_rate": 0.6667
+      },
+      "python": {
+        "cases": 3,
+        "detection_rate": 0.6667
+      },
+      "ruby": {
+        "cases": 2,
+        "detection_rate": 0.0
+      },
+      "rust": {
+        "cases": 1,
+        "detection_rate": 1.0
+      },
+      "yaml": {
+        "cases": 1,
+        "detection_rate": 1.0
+      }
+    },
+    "errors": 1
+  },
+  "misses": [
+    {
+      "id": "authentication-000004-e9a47989",
+      "technique": "Session fixation",
+      "cwe": "CWE-384",
+      "expected_terms": [
+        "fixation",
+        "session"
+      ],
+      "said": []
+    },
+    {
+      "id": "authentication-000009-a570e254",
+      "technique": "Missing account lockout",
+      "cwe": "CWE-287",
+      "expected_terms": [
+        "account",
+        "lockout"
+      ],
+      "said": [
+        "Missing rate limiting on login endpoint, allowing brute-force attacks and credential stuffing.",
+        "No failed attempt tracking, allowing attackers to guess passwords indefinitely."
+      ]
+    },
+    {
+      "id": "authentication-000010-41a9a95a",
+      "technique": "Devise security configuration",
+      "cwe": "CWE-287",
+      "expected_terms": [
+        "configur",
+        "devise"
+      ],
+      "said": []
+    },
+    {
+      "id": "authorization-000001-3308e7ce",
+      "technique": "Privilege escalation (horizontal)",
+      "cwe": "CWE-284",
+      "expected_terms": [
+        "escalati",
+        "horizont",
+        "privileg"
+      ],
+      "said": [
+        "Sensitive PII (Social Security Number) is exposed in the response.",
+        "The 'remember me' feature uses a predictable token based on user ID, which can be stolen or forged.",
+        "The database session is not properly validated or sanitized, allowing potential access to other users' authenticated session objects."
+      ]
+    },
+    {
+      "id": "authorization-000002-06aa3cc9",
+      "technique": "Strong parameters",
+      "cwe": "CWE-284",
+      "expected_terms": [
+        "paramete",
+        "strong"
+      ],
+      "said": [
+        "Directly passing `params[:user]` to `@user.update` without validation or sanitization can lead to SQL injection attacks. This is because the `update` method uses a query with user-provided input.",
+        "The `before_action :authenticate_user!` is not sufficient to protect against session fixation attacks. The `session[:user_id] = user.id` line should be replaced with `session[:user_id] = user.id.to_s + rand(1000000).to_s` to rotate the session ID on each login.",
+        "The `skip_before_action :verify_authenticity_token` is not sufficient to protect against CSRF attacks. The `current_user` method should be replaced with a token-based approach."
+      ]
+    },
+    {
+      "id": "authorization-000008-2c64d0c9",
+      "technique": "Forced browsing",
+      "cwe": "CWE-284",
+      "expected_terms": [
+        "browsing",
+        "forced"
+      ],
+      "said": [
+        "No authorization check on admin routes. Anyone who knows this URL can access it!",
+        "No verification of admin privileges. Any authenticated user can delete any user!",
+        "Sensitive data exposed to anyone. Anyone who knows this URL can access it!"
+      ]
+    },
+    {
+      "id": "authorization-000010-429cefdd",
+      "technique": "IDOR (Insecure Direct Object Reference)",
+      "cwe": "CWE-284",
+      "expected_terms": [
+        "direct",
+        "idor"
+      ],
+      "said": [
+        "Trusting user-supplied ID without authorization check. An attacker can control the `id` parameter, potentially leading to unauthorized access or data tampering.",
+        "Exposing detailed SQL errors to users. This can reveal sensitive information about the database schema and structure, making it easier for attackers to extract data."
+      ]
+    },
+    {
+      "id": "dependencies-000003-13931f6e",
+      "technique": "Supply chain attacks",
+      "cwe": "CWE-1035",
+      "expected_terms": [
+        "chain",
+        "supply"
+      ],
+      "said": [
+        "The Maven repository URL is untrusted, which can lead to security vulnerabilities.",
+        "The version range for commons-text allows automatic updates to any version 1.0 or higher, which can introduce security vulnerabilities.",
+        "The LATEST keyword in guava allows automatic updates, which can introduce security vulnerabilities.",
+        "The lack of version pinning for spring-core allows automatic updates, which can introduce security vulnerabilities.",
+        "The use of typosquatting risk with similar package names (com.amazonaws/aws-java-sdk-s3) can lead to security vulnerabilities."
+      ]
+    },
+    {
+      "id": "dependencies-000009-76cf73ed",
+      "technique": "Dependency confusion",
+      "cwe": "CWE-1035",
+      "expected_terms": [
+        "confusio",
+        "dependen"
+      ],
+      "said": [
+        "Default Gin mode is debug, exposing debug information to potential attackers.",
+        "Default database connection with no encryption, allowing unauthorized access to sensitive data.",
+        "Permissive CORS allows all origins, potentially leading to cross-site scripting attacks."
+      ]
+    },
+    {
+      "id": "dependencies-000010-bb693212",
+      "technique": "Supply chain attacks",
+      "cwe": "CWE-1035",
+      "expected_terms": [
+        "chain",
+        "supply"
+      ],
+      "said": [
+        "The `composer.json` configuration is vulnerable to outdated dependencies. The `guzzlehttp/guzzle` and `monolog/monolog` packages are not locked to specific versions, which can lead to security vulnerabilities.",
+        "The `Application` class uses an unverified HTTP client, which can lead to security vulnerabilities. The `GuzzleHttp.Client` instance is not configured with any authentication or verification mechanisms.",
+        "The `fetchData` method trusts external packages completely, which can lead to security vulnerabilities. The `PHPMailer/PHPMailer` package is vulnerable to CVE-2016-10033 RCE vulnerability.",
+        "The `ContactForm` class uses unvalidated user input, which can lead to security vulnerabilities. The `PHPMailer/PHPMailer` package is vulnerable to CVE-2016-10033 RCE vulnerability.",
+        "The `ConfigManager` class uses recursive merging of untrusted user input, which can lead to security vulnerabilities. This is a prototype pollution-style attack."
+      ]
+    },
+    {
+      "id": "logging-000003-888f16c9",
+      "technique": "No alerting on suspicious activity",
+      "cwe": "CWE-778",
+      "expected_terms": [
+        "activity",
+        "alerting",
+        "suspicio"
+      ],
+      "said": [
+        "Hardcoded credentials in source code. The database URL, user name, and password are hardcoded directly in the source code.",
+        "Insecure password change. The current password is not verified before allowing a change, and the operation is not bound to the authenticated session.",
+        "Insecure database connection. The database URL, user name, and password are hardcoded directly in the source code.",
+        "Insecure client IP logging. The client IP address is logged without any sanitization or validation."
+      ]
+    },
+    {
+      "id": "logging-000007-94f9bfd7",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "expected_terms": [
+        "event",
+        "logging"
+      ],
+      "said": [
+        "Hardcoded credentials in source code. The database URL, username, and password are hardcoded directly in the source code.",
+        "Insecure password change. The current password is not verified before allowing a change, and the operation is not bound to the authenticated session.",
+        "Insecure database connection. The database URL, username, and password are hardcoded directly in the source code."
+      ]
+    },
+    {
+      "id": "mixed-000004-d7d5b617",
+      "technique": "Mustache SSTI",
+      "cwe": "CWE-94",
+      "expected_terms": [
+        "mustache",
+        "ssti"
+      ],
+      "said": [
+        "User input directly used as template, vulnerable to template injection attacks.",
+        "Direct string concatenation without escaping, vulnerable to XSS attacks."
+      ]
+    },
+    {
+      "id": "sql-000003-90f8c3f3",
+      "technique": "WebView security",
+      "cwe": "CWE-000",
+      "expected_terms": [
+        "webview"
+      ],
+      "said": [
+        "Direct string concatenation with untrusted input in `InsecureJsBridge.searchUsers` method. This can lead to SQL injection attacks."
+      ]
+    },
+    {
+      "id": "ssrf-000003-ff68f316",
+      "technique": "URL parser bypasses",
+      "cwe": "CWE-918",
+      "expected_terms": [
+        "bypasses",
+        "parser"
+      ],
+      "said": [
+        "The `fetchWebhook` method uses simple string matching to check if the host is blocked. This can be easily bypassed by an attacker.",
+        "The `fetchWebhook` method makes the request without checking for HTTPS. This allows an attacker to intercept sensitive data.",
+        "The `authenticateUser` method uses HTTP instead of HTTPS, which is insecure for transmitting credentials.",
+        "The `WebhookController` class directly fetches user-provided URLs without validation. This can lead to SSRF attacks.",
+        "The `UserDataServlet` class uses the `getParameter` method, which returns only the first value. This can lead to parameter pollution attacks."
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "authentication-000001-b5c68422",
+      "technique": "Open redirect after login",
+      "cwe": "CWE-601",
+      "lang": "python",
+      "severity": "HIGH",
+      "must_match": [
+        "after",
+        "login",
+        "open",
+        "redirect"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "No validation of redirect URL in the login route. This can lead to a potential security vulnerability where an attacker can redirect the user to any URL.",
+        "Predictable token based on user ID in the remember me feature. This can be exploited by an attacker to gain persistent access without credentials.",
+        "Insecure password change feature. The old password is not verified properly, and the new password is not hashed before being stored.",
+        "Hardcoded secret key. This can be exploited by an attacker to gain access to sensitive data.",
+        "No input validation for the username and password fields. This can lead to potential security vulnerabilities."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 66706.75,
+      "secure_latency_ms": 42597.49
+    },
+    {
+      "id": "authentication-000003-03573a2f",
+      "technique": "Encryption and hashing",
+      "cwe": "CWE-287",
+      "lang": "kotlin",
+      "severity": "CRITICAL",
+      "must_match": [
+        "encrypti",
+        "hashing"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Hardcoded credentials in source code. The database URL, username, and password are hardcoded directly in the source code.",
+        "Insecure password hashing using SHA-256. The `hashPassword` method uses SHA-256 without a salt, making it vulnerable to brute-force attacks.",
+        "Insecure password change functionality. The `PasswordChangeServlet` class fails to verify the user's current password before allowing a change.",
+        "Lack of input validation. The `registerUser` method does not validate user input, making it vulnerable to SQL injection attacks.",
+        "Missing error handling. The `login` method does not handle errors properly, which can lead to unexpected behavior."
+      ],
+      "secure_findings": 5,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 70891.59,
+      "secure_latency_ms": 63047.78
+    },
+    {
+      "id": "authentication-000004-e9a47989",
+      "technique": "Session fixation",
+      "cwe": "CWE-384",
+      "lang": "go",
+      "severity": "HIGH",
+      "must_match": [
+        "fixation",
+        "session"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 0,
+      "vuln_descriptions": [],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 65683.54,
+      "secure_latency_ms": 43898.36
+    },
+    {
+      "id": "authentication-000005-31f3b402",
+      "technique": "Insecure password reset",
+      "cwe": "CWE-287",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "password",
+        "reset"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 7,
+      "vuln_descriptions": [
+        "Predictable token based on timestamp and email. An attacker could guess the token by combining possible timestamps and emails.",
+        "Token never expires. This allows an attacker to use stolen or leaked tokens indefinitely.",
+        "No current password verification during password change. An attacker could change the user's password without knowing the original password.",
+        "User ID from client-side input. An attacker could manipulate the user ID to gain unauthorized access.",
+        "No password complexity validation. An attacker could use weak passwords to gain unauthorized access.",
+        "MD5 is cryptographically broken. Use a secure hashing algorithm instead.",
+        "Direct query without session validation. An attacker could exploit this to gain unauthorized access."
+      ],
+      "secure_findings": 6,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 66981.5,
+      "secure_latency_ms": 63350.59
+    },
+    {
+      "id": "authentication-000005-38513cf4",
+      "technique": "Timing attacks on login",
+      "cwe": "CWE-208",
+      "lang": "php",
+      "severity": "HIGH",
+      "must_match": [
+        "login",
+        "timing"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Timing Leak #1: Early return if user not found. This can leak information about the existence of a user, allowing attackers to perform more targeted attacks.",
+        "Timing Leak #2: password_verify takes measurable time. This can be used by attackers to determine if their password is correct or not.",
+        "Vulnerable: Error message timing also leaks information. This can be used by attackers to determine if their password is correct or not.",
+        "Missing rate limiting on login. This can be used by attackers to perform unlimited login attempts."
+      ],
+      "secure_findings": 7,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 54651.44,
+      "secure_latency_ms": 68986.57
+    },
+    {
+      "id": "authentication-000006-78dbda01",
+      "technique": "Password hashing with argon2",
+      "cwe": "CWE-287",
+      "lang": "rust",
+      "severity": "CRITICAL",
+      "must_match": [
+        "argon2",
+        "hashing",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Fast hash, no salt. Using SHA-256 for password storage is dangerous because it makes brute-force and credential cracking far easier.",
+        "Simple equality comparison. This is vulnerable to timing side channel attacks.",
+        "Hardcoded secret. The password hash is hardcoded in the code."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 60421.59,
+      "secure_latency_ms": 73368.19
+    },
+    {
+      "id": "authentication-000009-a570e254",
+      "technique": "Missing account lockout",
+      "cwe": "CWE-287",
+      "lang": "javascript",
+      "severity": "HIGH",
+      "must_match": [
+        "account",
+        "lockout"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Missing rate limiting on login endpoint, allowing brute-force attacks and credential stuffing.",
+        "No failed attempt tracking, allowing attackers to guess passwords indefinitely."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 55948.32,
+      "secure_latency_ms": 33509.4
+    },
+    {
+      "id": "authentication-000010-41a9a95a",
+      "technique": "Devise security configuration",
+      "cwe": "CWE-287",
+      "lang": "ruby",
+      "severity": "HIGH",
+      "must_match": [
+        "configur",
+        "devise"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 0,
+      "vuln_descriptions": [],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 43190.55,
+      "secure_latency_ms": 36606.56
+    },
+    {
+      "id": "authorization-000001-3308e7ce",
+      "technique": "Privilege escalation (horizontal)",
+      "cwe": "CWE-284",
+      "lang": "python",
+      "severity": "CRITICAL",
+      "must_match": [
+        "escalati",
+        "horizont",
+        "privileg"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Sensitive PII (Social Security Number) is exposed in the response.",
+        "The 'remember me' feature uses a predictable token based on user ID, which can be stolen or forged.",
+        "The database session is not properly validated or sanitized, allowing potential access to other users' authenticated session objects."
+      ],
+      "secure_findings": 5,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 63431.52,
+      "secure_latency_ms": 56932.22
+    },
+    {
+      "id": "authorization-000002-06aa3cc9",
+      "technique": "Strong parameters",
+      "cwe": "CWE-284",
+      "lang": "ruby",
+      "severity": "CRITICAL",
+      "must_match": [
+        "paramete",
+        "strong"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Directly passing `params[:user]` to `@user.update` without validation or sanitization can lead to SQL injection attacks. This is because the `update` method uses a query with user-provided input.",
+        "The `before_action :authenticate_user!` is not sufficient to protect against session fixation attacks. The `session[:user_id] = user.id` line should be replaced with `session[:user_id] = user.id.to_s + rand(1000000).to_s` to rotate the session ID on each login.",
+        "The `skip_before_action :verify_authenticity_token` is not sufficient to protect against CSRF attacks. The `current_user` method should be replaced with a token-based approach."
+      ],
+      "secure_findings": 5,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 58661.39,
+      "secure_latency_ms": 55844.2
+    },
+    {
+      "id": "authorization-000002-54260b4d",
+      "technique": "File upload path traversal",
+      "cwe": "CWE-284",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "file",
+        "path",
+        "traversa",
+        "upload"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "No path validation is performed on the user-supplied filename, allowing an attacker to potentially access sensitive files outside of the intended directory.",
+        "No validation is performed on the user-supplied subfolder, allowing an attacker to potentially access sensitive files outside of the intended directory.",
+        "A hardcoded secret or credential is not present in the provided code."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 57031.21,
+      "secure_latency_ms": 48175.51
+    },
+    {
+      "id": "authorization-000003-1d71fd99",
+      "technique": "GraphQL authorization bypass",
+      "cwe": "CWE-284",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "authoriz",
+        "bypass",
+        "graphql"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The `get` method of the `UserDataFetcher` class does not check if the authenticated user is authorized to access the requested user's data. This could lead to unauthorized access to sensitive information.",
+        "The `get` method of the `OrderDataFetcher` class retrieves all orders for any user the client requests without checking if the authenticated user is authorized to access this specific user's data. This could lead to unauthorized access to sensitive information.",
+        "The `UserDataFetcher` class constructor accepts two repositories without validating their types. This could lead to a security issue if the wrong type of repository is injected."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 52553.98,
+      "secure_latency_ms": 34105.67
+    },
+    {
+      "id": "authorization-000004-d3fda26b",
+      "technique": "Path traversal",
+      "cwe": "CWE-22",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "path",
+        "traversa"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Directly using user input in file path without validation or sanitization, allowing for potential path traversal attacks.",
+        "No validation of the uploaded file's extension or content type, potentially leading to security issues such as code injection or data exposure.",
+        "Using `os.Open` with a potentially malicious filename, which could lead to path traversal attacks or other security issues."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 58081.58,
+      "secure_latency_ms": 56192.87
+    },
+    {
+      "id": "authorization-000008-2c64d0c9",
+      "technique": "Forced browsing",
+      "cwe": "CWE-284",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "browsing",
+        "forced"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "No authorization check on admin routes. Anyone who knows this URL can access it!",
+        "No verification of admin privileges. Any authenticated user can delete any user!",
+        "Sensitive data exposed to anyone. Anyone who knows this URL can access it!"
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 55747.04,
+      "secure_latency_ms": 34893.2
+    },
+    {
+      "id": "authorization-000008-af64fd8f",
+      "technique": "HTTP verb tampering",
+      "cwe": "CWE-284",
+      "lang": "javascript",
+      "severity": "HIGH",
+      "must_match": [
+        "http",
+        "tamperin",
+        "verb"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The `checkAdminAccess` middleware only checks for POST and DELETE methods, allowing any authenticated user to access admin routes. This is a classic example of missing function-level access control.",
+        "The `/api/admin/users/:id` endpoint does not perform any authorization checks on the user making the request. This allows any authenticated user to delete or update other users' accounts.",
+        "The `/api/admin/promote` endpoint does not perform any authorization checks on the user making the request. This allows any authenticated user to promote other users to admin roles."
+      ],
+      "secure_findings": 5,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 53869.5,
+      "secure_latency_ms": 60622.55
+    },
+    {
+      "id": "authorization-000010-429cefdd",
+      "technique": "IDOR (Insecure Direct Object Reference)",
+      "cwe": "CWE-284",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "direct",
+        "idor"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Trusting user-supplied ID without authorization check. An attacker can control the `id` parameter, potentially leading to unauthorized access or data tampering.",
+        "Exposing detailed SQL errors to users. This can reveal sensitive information about the database schema and structure, making it easier for attackers to extract data."
+      ],
+      "secure_findings": 6,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 46149.23,
+      "secure_latency_ms": 61929.23
+    },
+    {
+      "id": "cryptography-000002-a3999dd4",
+      "technique": "Insecure password hashing",
+      "cwe": "CWE-327",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "hashing",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Using fast SHA-256 hash for passwords is insecure and vulnerable to brute force attacks. It's recommended to use a slow, salted algorithm like bcrypt or PBKDF2.",
+        "Simple hash comparison is vulnerable to timing attacks. It's recommended to use a secure comparison function like crypto.timingSafeEqual.",
+        "No salt is used in the password hashing process. While not critical, it's recommended to use a random salt to prevent rainbow table attacks."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 44628.13,
+      "secure_latency_ms": 37332.51
+    },
+    {
+      "id": "cryptography-000003-c0891016",
+      "technique": "Weak TLS versions (SSLv3, TLS 1.0)",
+      "cwe": "CWE-327",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "sslv3",
+        "versions"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Using SSLv3 or TLS 1.0 is insecure and vulnerable to attacks like POODLE.",
+        "Trusting all certificates without verification is insecure and allows man-in-the-middle attacks."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 48598.82,
+      "secure_latency_ms": 60935.38
+    },
+    {
+      "id": "cryptography-000007-2ae1e720",
+      "technique": "Hard-coded encryption keys",
+      "cwe": "CWE-327",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "coded",
+        "encrypti",
+        "hard",
+        "keys"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hard-coded encryption key is exposed in source code.",
+        "ECB mode encryption is used, which is vulnerable to frequency analysis attacks.",
+        "Sensitive data is stored in plaintext in the database."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 55542.3,
+      "secure_latency_ms": 49610.11
+    },
+    {
+      "id": "cryptography-000008-bf9c562c",
+      "technique": "Certificate validation disabled",
+      "cwe": "CWE-295",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "certific",
+        "disabled",
+        "validati"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Disabling certificate validation can lead to man-in-the-middle attacks and exposure of sensitive data. This is a critical security vulnerability.",
+        "Disabling hostname verification can lead to DNS rebinding attacks and exposure of sensitive data. This is a critical security vulnerability.",
+        "Using default SSL/TLS settings can enable vulnerable protocols like SSLv3 and TLS 1.0, which can be exploited by attackers. This is a high security vulnerability."
+      ],
+      "secure_findings": 1,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 56795.17,
+      "secure_latency_ms": 51372.34
+    },
+    {
+      "id": "cryptography-000010-58f44bba",
+      "technique": "Insecure password hashing",
+      "cwe": "CWE-327",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "hashing",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Using SHA256 for password hashing is cryptographically broken. Modern GPUs can compute billions of SHA256 hashes per second, making brute-force attacks trivial.",
+        "Using MD5 for password hashing is extremely dangerous. Modern GPUs can compute billions of MD5 hashes per second, making brute-force attacks trivial.",
+        "Using SHA1 for password hashing is also extremely dangerous. Modern GPUs can compute billions of SHA1 hashes per second, making brute-force attacks trivial."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 37491.89,
+      "secure_latency_ms": 51170.55
+    },
+    {
+      "id": "dependencies-000002-ace40fbd",
+      "technique": "transitive_dependency_vulnerabilities",
+      "cwe": "CWE-1035",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "dependen",
+        "transiti"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 6,
+      "vuln_descriptions": [
+        "The lodash dependency is not pinned to a specific version, making it vulnerable to Prototype Pollution attacks.",
+        "The express dependency is pinned to a very wide range, making it vulnerable to security issues.",
+        "The moment dependency is not pinned to an upper bound, making it vulnerable to security issues.",
+        "The request dependency is pinned to the latest version, making it vulnerable to security issues.",
+        "The event-stream dependency is pinned to a known compromised version, making it vulnerable to security issues.",
+        "The postinstall script is executing arbitrary code, making it vulnerable to security issues."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 69973.96,
+      "secure_latency_ms": 43455.17
+    },
+    {
+      "id": "dependencies-000002-c8435ae0",
+      "technique": "prototype_pollution",
+      "cwe": "CWE-1321",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "pollutio",
+        "prototyp"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Prototype pollution vulnerability in lodash merge function. Using vulnerable versions of lodash (version < 4.17.19) can lead to Remote Code Execution.",
+        "Prototype pollution vulnerability in lodash merge function. Using vulnerable versions of lodash (version < 4.17.19) can lead to Remote Code Execution.",
+        "Prototype pollution vulnerability in lodash merge function. Using vulnerable versions of lodash (version < 4.17.19) can lead to Remote Code Execution."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 44142.5,
+      "secure_latency_ms": 19399.92
+    },
+    {
+      "id": "dependencies-000003-13931f6e",
+      "technique": "Supply chain attacks",
+      "cwe": "CWE-1035",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "chain",
+        "supply"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "The Maven repository URL is untrusted, which can lead to security vulnerabilities.",
+        "The version range for commons-text allows automatic updates to any version 1.0 or higher, which can introduce security vulnerabilities.",
+        "The LATEST keyword in guava allows automatic updates, which can introduce security vulnerabilities.",
+        "The lack of version pinning for spring-core allows automatic updates, which can introduce security vulnerabilities.",
+        "The use of typosquatting risk with similar package names (com.amazonaws/aws-java-sdk-s3) can lead to security vulnerabilities."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 42531.06,
+      "secure_latency_ms": 50078.23
+    },
+    {
+      "id": "dependencies-000009-76cf73ed",
+      "technique": "Dependency confusion",
+      "cwe": "CWE-1035",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "confusio",
+        "dependen"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Default Gin mode is debug, exposing debug information to potential attackers.",
+        "Default database connection with no encryption, allowing unauthorized access to sensitive data.",
+        "Permissive CORS allows all origins, potentially leading to cross-site scripting attacks."
+      ],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 53707.76,
+      "secure_latency_ms": 57877.82
+    },
+    {
+      "id": "dependencies-000010-bb693212",
+      "technique": "Supply chain attacks",
+      "cwe": "CWE-1035",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "chain",
+        "supply"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "The `composer.json` configuration is vulnerable to outdated dependencies. The `guzzlehttp/guzzle` and `monolog/monolog` packages are not locked to specific versions, which can lead to security vulnerabilities.",
+        "The `Application` class uses an unverified HTTP client, which can lead to security vulnerabilities. The `GuzzleHttp.Client` instance is not configured with any authentication or verification mechanisms.",
+        "The `fetchData` method trusts external packages completely, which can lead to security vulnerabilities. The `PHPMailer/PHPMailer` package is vulnerable to CVE-2016-10033 RCE vulnerability.",
+        "The `ContactForm` class uses unvalidated user input, which can lead to security vulnerabilities. The `PHPMailer/PHPMailer` package is vulnerable to CVE-2016-10033 RCE vulnerability.",
+        "The `ConfigManager` class uses recursive merging of untrusted user input, which can lead to security vulnerabilities. This is a prototype pollution-style attack."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 82545.71,
+      "secure_latency_ms": 39452.05
+    },
+    {
+      "id": "design_flaws-000002-40666501",
+      "technique": "Insufficient workflow validation",
+      "cwe": "CWE-840",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "insuffic",
+        "validati",
+        "workflow"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "No workflow state validation in '/api/checkout/confirm' endpoint. An attacker can call this endpoint directly without completing the payment step, potentially leading to unauthorized order creation.",
+        "Hardcoded secret: 'TX' and 'ORD' are used as transaction IDs. This is a security risk if these values are not properly validated and sanitized.",
+        "No input validation for 'userId' and 'items' in '/api/checkout/review' endpoint. This could lead to potential security issues if the input is not properly sanitized."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 60887.35,
+      "secure_latency_ms": 31371.01
+    },
+    {
+      "id": "design_flaws-000003-8b9affbc",
+      "technique": "Race conditions",
+      "cwe": "CWE-362",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "conditio",
+        "race"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "TOCTOU race condition vulnerability: concurrent requests can exploit the time gap between balance check and update.",
+        "Business logic flaw: lack of ownership verification and no balance check before debit.",
+        "Missing encryption at rest: sensitive data is stored in plaintext."
+      ],
+      "secure_findings": 5,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 36063.55,
+      "secure_latency_ms": 59988.21
+    },
+    {
+      "id": "integrity-000010-e9d8f039",
+      "technique": "unsafe_deserialization",
+      "cwe": "CWE-502",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "deserial"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Directly unserializing user-controlled data using `serialize.unserialize()` without proper validation or sanitization, making it vulnerable to Remote Code Execution (RCE).",
+        "Using `eval()` to parse JSON without proper validation, making it vulnerable to Code Injection attacks."
+      ],
+      "secure_findings": 6,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 66883.75,
+      "secure_latency_ms": 87417.84
+    },
+    {
+      "id": "logging-000003-888f16c9",
+      "technique": "No alerting on suspicious activity",
+      "cwe": "CWE-778",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "activity",
+        "alerting",
+        "suspicio"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Hardcoded credentials in source code. The database URL, user name, and password are hardcoded directly in the source code.",
+        "Insecure password change. The current password is not verified before allowing a change, and the operation is not bound to the authenticated session.",
+        "Insecure database connection. The database URL, user name, and password are hardcoded directly in the source code.",
+        "Insecure client IP logging. The client IP address is logged without any sanitization or validation."
+      ],
+      "secure_findings": 6,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 30087.35,
+      "secure_latency_ms": 47900.25
+    },
+    {
+      "id": "logging-000004-ad6f706c",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "lang": "go",
+      "severity": "HIGH",
+      "must_match": [
+        "event",
+        "logging"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Missing TLS encryption in HTTP server. This makes all data transmitted between client and server sent in plaintext, making it trivial for attackers to intercept credentials, session tokens, and sensitive data.",
+        "Insecure password hashing using bcrypt. Bcrypt is not suitable for password storage due to its slow hashing time, which can be exploited by attackers.",
+        "Lack of input validation for username and password. This makes it possible for an attacker to inject malicious data.",
+        "No logging of failed login attempts. This makes it difficult to detect and respond to potential security incidents."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 34139.07,
+      "secure_latency_ms": 50424.32
+    },
+    {
+      "id": "logging-000007-94f9bfd7",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "event",
+        "logging"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded credentials in source code. The database URL, username, and password are hardcoded directly in the source code.",
+        "Insecure password change. The current password is not verified before allowing a change, and the operation is not bound to the authenticated session.",
+        "Insecure database connection. The database URL, username, and password are hardcoded directly in the source code."
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 32613.83,
+      "secure_latency_ms": 37553.02
+    },
+    {
+      "id": "misconfiguration-000003-648ceba4",
+      "technique": "Debug mode in production",
+      "cwe": "CWE-16",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "debug",
+        "mode",
+        "producti"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Running with debug enabled can lead to sensitive information being logged and potentially exposed.",
+        "Allowing all origins can lead to cross-site scripting (XSS) attacks."
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 26843.79,
+      "secure_latency_ms": 32167.57
+    },
+    {
+      "id": "misconfiguration-000006-edef6e04",
+      "technique": "Exposed admin panels",
+      "cwe": "CWE-16",
+      "lang": "yaml",
+      "severity": "CRITICAL",
+      "must_match": [
+        "admin",
+        "exposed",
+        "panels"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 6,
+      "vuln_descriptions": [
+        "Database exposed to internet without proper security measures. This can lead to unauthorized access and data breaches.",
+        "Weak password used for MySQL root user. This can lead to unauthorized access and data breaches.",
+        "Admin panel exposed to internet without proper security measures. This can lead to unauthorized access and data breaches.",
+        "Redis exposed without authentication. This can lead to unauthorized access and data breaches.",
+        "phpMyAdmin exposed to internet without proper security measures. This can lead to unauthorized access and data breaches.",
+        "Kibana exposed without authentication. This can lead to unauthorized access and data breaches."
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 45123.85,
+      "secure_latency_ms": 24308.28
+    },
+    {
+      "id": "mixed-000004-d7d5b617",
+      "technique": "Mustache SSTI",
+      "cwe": "CWE-94",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "mustache",
+        "ssti"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "User input directly used as template, vulnerable to template injection attacks.",
+        "Direct string concatenation without escaping, vulnerable to XSS attacks."
+      ],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 28297.42,
+      "secure_latency_ms": 41192.22
+    },
+    {
+      "id": "sql-000003-90f8c3f3",
+      "technique": "WebView security",
+      "cwe": "CWE-000",
+      "lang": "kotlin",
+      "severity": "CRITICAL",
+      "must_match": [
+        "webview"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Direct string concatenation with untrusted input in `InsecureJsBridge.searchUsers` method. This can lead to SQL injection attacks."
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 27992.94,
+      "secure_latency_ms": 42184.43
+    },
+    {
+      "id": "ssrf-000001-3ffa0dc4",
+      "technique": "SSRF to cloud metadata",
+      "cwe": "CWE-918",
+      "lang": "python",
+      "severity": "CRITICAL",
+      "must_match": [
+        "cloud",
+        "metadata",
+        "ssrf"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "User-controlled URL with no validation",
+        "Directly fetching user-provided URL without validation",
+        "Hardcoded secret: 'timeout=5'"
+      ],
+      "secure_findings": 18,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 28135.03,
+      "secure_latency_ms": 119574.17
+    },
+    {
+      "id": "ssrf-000002-8e4f6380",
+      "error": "OutputParserException: Failed to parse SecurityFindings from completion {\"findings\": [{\"severity\": \"CRITICAL\", \"line_number\": 34, \"description\": \"The `createSecureAgent` function does not properly validate the IP address returned by the DNS lookup. This allows an attacker to bypass the IP blocklist and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the IP address, such as checking if it is a valid IPv4 or IPv6 address.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 42, \"description\": \"The `validateUrl` function does not properly validate the URL. This allows an attacker to bypass the URL validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the URL, such as checking if it is a valid HTTP or HTTPS URL.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 56, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the request body. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the request body, such as checking if the URL is a valid HTTP or HTTPS URL.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 61, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the response. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the response, such as checking if the response is a valid HTTP or HTTPS response.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 67, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 72, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the timeout. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the timeout, such as checking if it is a valid integer value.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 76, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 81, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the response. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the response, such as checking if the response is a valid HTTP or HTTPS response.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 86, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 91, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the timeout. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the timeout, such as checking if it is a valid integer value.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 96, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 101, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the response. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the response, such as checking if the response is a valid HTTP or HTTPS response.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 106, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 111, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the timeout. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the timeout, such as checking if it is a valid integer value.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 116, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 121, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the response. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the response, such as checking if the response is a valid HTTP or HTTPS response.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 126, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the headers. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the headers, such as checking if the User-Agent header is valid.\"}, {\"severity\": \"CRITICAL\", \"line_number\": 131, \"description\": \"The `app.post('/api/webhook/test')` endpoint does not properly validate the timeout. This allows an attacker to bypass the input validation and potentially execute arbitrary code.\", \"fix\": \"Add additional validation checks for the timeout, such as checking if it is a valid integer value.\"}, {\"severity\": \"CRITICAL\"}]}. Got: 3 validation errors for SecurityFindings\nfindings.18.line_number\n  Field required [type=missing, input_value={'severity': 'CRITICAL'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.18.description\n  Field required [type=missing, input_value={'severity': 'CRITICAL'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.18.fix\n  Field required [type=missing, input_value={'severity': 'CRITICAL'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nFor troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/OUTPUT_PARSING_FAILURE "
+    },
+    {
+      "id": "ssrf-000003-ff68f316",
+      "technique": "URL parser bypasses",
+      "cwe": "CWE-918",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "bypasses",
+        "parser"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "The `fetchWebhook` method uses simple string matching to check if the host is blocked. This can be easily bypassed by an attacker.",
+        "The `fetchWebhook` method makes the request without checking for HTTPS. This allows an attacker to intercept sensitive data.",
+        "The `authenticateUser` method uses HTTP instead of HTTPS, which is insecure for transmitting credentials.",
+        "The `WebhookController` class directly fetches user-provided URLs without validation. This can lead to SSRF attacks.",
+        "The `UserDataServlet` class uses the `getParameter` method, which returns only the first value. This can lead to parameter pollution attacks."
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 39574.15,
+      "secure_latency_ms": 41955.37
+    },
+    {
+      "id": "xxe-000004-37fe4417",
+      "technique": "XXE in document parsers (DOCX, XLSX)",
+      "cwe": "CWE-611",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "document",
+        "docx",
+        "parsers",
+        "xlsx"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Default XmlDocument settings allow DTD processing, which can lead to XXE attacks."
+      ],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 27153.13,
+      "secure_latency_ms": 43810.58
+    }
+  ]
+}
