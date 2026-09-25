@@ -75,30 +75,30 @@ secure counterpart must not. The suite drives the shipped nodes - `get_context`,
 `retrieve_examples`, `security_agent` - so the numbers describe the agent the
 webhook calls rather than a reimplementation of it.
 
-**Baseline** - `llama3.2`, top-3 retrieval, 40 cases (39 scored, 1 parse failure):
+**Baseline** - `llama3.2`, top-3 retrieval, 40 cases (39 scored, 1 parse failure).
+Detection is scored by an LLM judge; the false-positive rate is still
+substring-scored pending a re-run (see [Limitations](#limitations)):
 
 | Metric | RAG | No-RAG |
 |---|---:|---:|
-| detection_rate | 0.615 | **0.725** |
+| detection_rate | 0.795 | **0.825** |
 | false_positive_rate | **0.359** | 0.500 |
-| severity_match | **0.750** | 0.655 |
 | findings per vulnerable case | 3.18 | 4.31 |
 
-**Retrieval did not measurably improve detection.** Both arms run the same cases,
+**Retrieval has no measurable effect on detection.** Both arms run the same cases,
 so the comparison is paired and only discordant cases carry information. McNemar's
-exact test gives **p = 0.219** for detection (6 discordant: 1 RAG-only, 5
-no-RAG-only) and **p = 0.267** for false positives (13 discordant). Neither is
-significant at n=39. The point estimate favours the no-RAG arm on recall and the
-RAG arm on precision, and the honest summary is that 39 cases cannot tell them
-apart.
+exact test gives **p = 1.0** for detection (3 discordant: 1 RAG-only, 2 no-RAG-only)
+and **p = 0.267** for false positives (13 discordant, substring-scored). The arms
+differ by one case on recall.
 
-The mechanism is visible in the finding counts: retrieval makes the reviewer more
-conservative, cutting findings per vulnerable case from 4.31 to 3.18. Fewer
-findings buys fewer false positives and costs detections. Of the five cases
-retrieval lost, two produced no findings at all and two reported a different
-vulnerability than the labelled one, which suggests retrieval sometimes pulls the
-model toward the retrieved example's vulnerability class instead of the code in
-front of it.
+What retrieval measurably does is make the reviewer quieter: fewer findings than
+no-RAG in 21 of 39 cases, more in 6, a mean of 3.18 against 4.31, on secure code
+as well as vulnerable. That buys fewer false positives and occasionally costs a
+detection - both cases RAG lost returned **no findings at all**, not a wrong one.
+An earlier reading that retrieval misdirects the model toward the retrieved
+example's class rested on substring-scored cases the judge has since counted as
+correct; it is not supported. Reports now record what was retrieved per case,
+so the silent cases are diagnosable rather than arguable.
 
 Reports are committed under `evals/reports/`; a diff between two of them is the
 record of what a change actually did.
@@ -121,20 +121,36 @@ not every unrelated wart.
 dropped roughly twenty innocent siblings per case and biased the RAG arm downward -
 against the exact thing being measured.
 
-**Scoring is a substring probe, not an LLM judge.** A judge would catch findings
-worded without the technique's vocabulary, but needs its own validation before its
-numbers mean anything. Probes live in `gold.jsonl` where they can be read and
-corrected.
+**Detection is scored by an LLM judge, validated against human labels.** The
+original substring probes marked 16 correct findings as misses and 5 wrong ones
+as hits across both arms - a reviewer that wrote *"no authorization check on
+admin routes"* was scored as missing *forced browsing*. The judge (`gemma4:e4b`,
+deliberately not the reviewing model) asks whether a finding identifies the
+labelled flaw in any wording; a finding that names the right line but claims
+the wrong flaw is a miss. Verdicts are cached by content and prompt hash, so a
+prompt edit cannot serve stale opinions. Against 30 human-labelled findings the
+judge agrees at κ = 0.79, substring at 0.27 - but 8 of those items share a
+technique with the prompt's worked examples, written from these same reports. On
+the 22 that don't, **κ = 0.72 against 0.37**, and that is the number to trust. All
+three judge errors were over-strict, never over-generous, so judged detection
+rates are if anything low. The substring probes are kept (`--scorer substring`)
+as the comparison point.
 
 ### Limitations
 
-1. **n=39 is too small to settle the RAG question.** Six discordant detection pairs
-   is not enough for an 11-point difference to clear significance. The corpus holds
-   1,086 usable pairs; widening the set is the first item in [Next](#next).
-2. **One case in the RAG arm failed to parse**, on a completion truncated mid-JSON
-   by the structured-output token cap.
-3. **Substring scoring can undercount.** A correct finding phrased without the
-   labelled technique's vocabulary reads as a miss.
+1. **n=39 is too small to settle the RAG question.** Three discordant detection
+   pairs cannot resolve anything. The corpus holds 1,086 usable pairs.
+2. **The false-positive rate is still substring-scored.** The original runs did
+   not store secure-snippet findings, so the judge could not re-grade them. The
+   harness now stores both; one fresh run corrects it.
+3. **The judge is validated by one annotator, who is also the author,** on 30
+   items. Two of its three errors are prompt-fixable - it graded a misstated
+   impact instead of the flaw, and missed an alerting failure phrased as error
+   handling - but fixing them against this sheet would spend its only
+   uncontaminated items. The third is a label problem: *WebView security* is
+   CWE-000, a category rather than a flaw.
+4. **One case in the RAG arm failed to parse** under the earlier 1,536-token
+   output cap, since raised to 3,072.
 
 ---
 
@@ -304,6 +320,11 @@ python -m evals.run --label baseline-no-rag --no-rag
 
 # Scoring tests only, no LLM required
 python -m evals.run --self-check
+
+# Re-grade an existing report with the judge; label and score its validation sheet
+python -m evals.judge rescore evals/reports/baseline-rag.json
+python -m evals.judge label
+python -m evals.judge agreement
 ```
 
 `REVIEW_MODEL` selects the reviewing model (default `llama3.2`), and every report
@@ -324,7 +345,7 @@ side.
 | **Web Framework** | Flask |
 | **Dataset** | [scthornton/securecode](https://huggingface.co/datasets/scthornton/securecode) (Hugging Face) |
 | **VCS Integration** | GitHub Webhooks + REST API |
-| **Evaluation** | 40 held-out CWE-labelled cases, McNemar paired test (`evals/`) |
+| **Evaluation** | 40 held-out CWE-labelled cases, LLM-judged, McNemar paired test (`evals/`) |
 
 ---
 
@@ -332,20 +353,18 @@ side.
 
 In order, each measured against the committed baseline, one change at a time:
 
-1. **Raise the structured-output token cap.** One case failed to parse on a
-   completion truncated mid-JSON.
-2. **Widen the gold set to ~200 cases.** Six discordant detection pairs cannot
-   settle whether retrieval helps; the corpus holds 1,086 usable pairs.
-3. **Shorten the retrieved context.** Examples are injected at up to 2,000
-   characters each. If the distraction reading above is right, trimming them - or
-   passing only the vulnerability class and remediation rather than the whole
-   document - should recover detections without giving back the precision.
+1. **Re-run both arms** so false positives are judge-scored and every case
+   records what was retrieved.
+2. **Diagnose the silent cases.** If retrieval returned a different vulnerability
+   class than the one in the code, the suppression has a cause and a fix.
+3. **Widen the gold set to ~200 cases**, dropping CWE-000 labels, and validate a
+   revised judge on a fresh sheet. Three discordant pairs cannot settle
+   whether retrieval helps; the corpus holds 1,086 usable pairs.
 4. **Compare models.** `gemma4:e4b` measures at 74 s/snippet against `llama3.2`'s
    20 s, a 3.3-hour ablation that `REVIEW_MODEL` already supports.
 
 ---
 
 ## License
-
 
 MIT
