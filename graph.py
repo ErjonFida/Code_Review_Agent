@@ -10,7 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from vectorstore import search as vector_search
 
 MODEL = os.getenv("REVIEW_MODEL", "llama3.2")
-MAX_OUTPUT_TOKENS = 1536
+MAX_OUTPUT_TOKENS = 3072
 REQUEST_TIMEOUT_S = 600
 
 

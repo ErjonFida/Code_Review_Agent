@@ -6,3 +6,6 @@ __pycache__/
 
 .env
 venv/
+
+# Judge verdicts, keyed by content; deleting it only costs a re-judge
+evals/.cache/

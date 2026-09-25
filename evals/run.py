@@ -7,6 +7,7 @@ import time
 from datetime import datetime, timezone
 
 from graph import MODEL, get_context, retrieve_examples, security_agent
+from evals import judge
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOLD_PATH = os.path.join(PROJECT_DIR, "evals", "datasets", "gold.jsonl")
@@ -67,8 +68,16 @@ def matching_finding(findings: list[dict], must_match: list[str]) -> dict | None
     return None
 
 
-def review(code: str, case: dict, use_rag: bool, exclude: list[str]) -> tuple[list[dict], float]:
+def _retrieved_technique(example: dict) -> str | None:
+    try:
+        return json.loads(example.get("metadata", {}).get("metadata_str", "")).get("technique")
+    except (json.JSONDecodeError, AttributeError, TypeError):
+        return None
 
+
+def review(code: str, case: dict, use_rag: bool, exclude: list[str]) -> tuple[list[dict], float, list[dict]]:
+    """(findings, latency_ms, retrieved) - retrieved is what RAG put in front of
+    the model for this snippet, so a silent or misdirected case can be diagnosed."""
     filename = f"snippet.{EXT.get(case.get('lang', ''), 'txt')}"
     state = {"raw_diff": as_diff(code, filename), "exclude_snippets": exclude}
 
@@ -79,7 +88,11 @@ def review(code: str, case: dict, use_rag: bool, exclude: list[str]) -> tuple[li
     else:
         state["retrieved_examples"] = []
     findings = security_agent(state)["security_findings"]
-    return findings, (time.perf_counter() - started) * 1000
+    retrieved = [
+        {"id": r["id"], "distance": round(r["distance"], 4), "technique": _retrieved_technique(r)}
+        for r in state["retrieved_examples"]
+    ]
+    return findings, (time.perf_counter() - started) * 1000, retrieved
 
 
 def _percentile(values: list[float], pct: int) -> float:
@@ -150,24 +163,30 @@ def misses(results: list[dict]) -> list[dict]:
     ]
 
 
-def run(cases: list[dict], use_rag: bool) -> list[dict]:
-    
+def score(findings: list[dict], case: dict, scorer: str) -> dict | None:
+    if scorer == "judge":
+        return judge.matching_finding(findings, case["technique"], case.get("cwe", ""))
+    return matching_finding(findings, case["must_match"])
+
+
+def run(cases: list[dict], use_rag: bool, scorer: str = "judge") -> list[dict]:
+
     exclude = [probe for c in cases for probe in c["exclude_probes"]]
     results = []
 
     for index, case in enumerate(cases, start=1):
         print(f"\n--- [{index}/{len(cases)}] {case['case_id']} ({case['technique']}) ---")
         try:
-            vuln_findings, vuln_ms = review(case["vulnerable_code"], case, use_rag, exclude)
-            secure_findings, secure_ms = review(case["secure_code"], case, use_rag, exclude)
+            vuln_findings, vuln_ms, vuln_retrieved = review(case["vulnerable_code"], case, use_rag, exclude)
+            secure_findings, secure_ms, secure_retrieved = review(case["secure_code"], case, use_rag, exclude)
         except Exception as e:
             # A structured-output parse failure should cost one case, not the run.
             print(f"  ERROR: {type(e).__name__}: {e}")
             results.append({"id": case["case_id"], "error": f"{type(e).__name__}: {e}"})
             continue
 
-        hit = matching_finding(vuln_findings, case["must_match"])
-        secure_hit = matching_finding(secure_findings, case["must_match"])
+        hit = score(vuln_findings, case, scorer)
+        secure_hit = score(secure_findings, case, scorer)
         results.append({
             "id": case["case_id"],
             "technique": case["technique"],
@@ -179,6 +198,10 @@ def run(cases: list[dict], use_rag: bool) -> list[dict]:
             "severity_match": bool(hit) and hit.get("severity") == case.get("severity"),
             "vuln_findings": len(vuln_findings),
             "vuln_descriptions": [f.get("description", "") for f in vuln_findings],
+            "vuln_findings_list": vuln_findings,
+            "secure_findings_list": secure_findings,
+            "vuln_retrieved": vuln_retrieved,
+            "secure_retrieved": secure_retrieved,
             "secure_findings": len(secure_findings),
             "secure_flagged": secure_hit is not None,
             "secure_any_finding": len(secure_findings) > 0,
@@ -258,6 +281,8 @@ def main() -> None:
     parser.add_argument("--label", default="baseline-rag")
     parser.add_argument("--no-rag", action="store_true", help="ablation: skip retrieval")
     parser.add_argument("--limit", type=int, default=None, help="first N cases, for a smoke run")
+    parser.add_argument("--scorer", choices=("judge", "substring"), default="judge",
+                        help="judge: LLM grades each finding; substring: technique-word probes")
     parser.add_argument("--self-check", action="store_true", help="scoring tests, no LLM")
     args = parser.parse_args()
 
@@ -268,9 +293,10 @@ def main() -> None:
     if args.limit:
         cases = cases[:args.limit]
     use_rag = not args.no_rag
-    print(f"Loaded {len(cases)} cases | arm={'rag' if use_rag else 'no-rag'} | model={MODEL}")
+    scorer = f"judge/{judge.JUDGE_MODEL}" if args.scorer == "judge" else "substring"
+    print(f"Loaded {len(cases)} cases | arm={'rag' if use_rag else 'no-rag'} | model={MODEL} | scorer={scorer}")
 
-    results = run(cases, use_rag)
+    results = run(cases, use_rag, args.scorer)
     report = {
         "label": args.label,
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -284,6 +310,7 @@ def main() -> None:
             "excluded_from_retrieval": len(cases),
             "exclusion": "content probes",
             "n_retrieved": 3 if use_rag else 0,
+            "scorer": {"detection": scorer, "false_positive": scorer},
         },
         "metrics": aggregate(results),
         "misses": misses(results),
