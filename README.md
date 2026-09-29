@@ -60,7 +60,7 @@ GitHub Push Event
 | **Structured output (Pydantic)** | Every LLM call uses `with_structured_output(PydanticModel)` to guarantee machine-parseable JSON.
 | **ChromaDB (persistent vector store)** | A local, file-backed vector database stores 2,185 embedded vulnerability examples. Persistence avoids re-embedding on every restart (~30 min to build on CPU). |
 | **nomic-embed-text embeddings** | A lightweight embedding model that runs locally via Ollama.
-| **RAG for security guidance** | The pipeline retrieves the 3 most semantically similar vulnerability examples to ground the security agent in real patterns. Whether that helps is measured rather than assumed - on the current baseline it lowers false positives and detections alike, neither significantly. See [Evaluation](#evaluation). |
+| **RAG for security guidance** | The pipeline retrieves the 3 most semantically similar vulnerability examples to ground the security agent in real patterns. Whether that helps is measured rather than assumed. Across two runs it had no measurable effect on detection or false positives; its one replicated effect is fewer findings. See [Evaluation](#evaluation). |
 | **Diff sanitisation before analysis** | Git noise (`+++`, `---`, `@@` headers) is stripped in Node 1 so downstream agents only see meaningful code — improving embedding relevance and LLM focus. |
 
 ---
@@ -75,33 +75,44 @@ secure counterpart must not. The suite drives the shipped nodes - `get_context`,
 `retrieve_examples`, `security_agent` - so the numbers describe the agent the
 webhook calls rather than a reimplementation of it.
 
-**Baseline** - `llama3.2`, top-3 retrieval, 40 cases (39 scored, 1 parse failure).
-Detection is scored by an LLM judge; the false-positive rate is still
-substring-scored pending a re-run (see [Limitations](#limitations)):
+**Results** - `llama3.2`, top-3 retrieval, 40 cases, two runs of each arm, both
+metrics scored by the validated judge. Cases where either arm failed to parse are
+excluded from the paired comparison:
 
-| Metric | RAG | No-RAG |
-|---|---:|---:|
-| detection_rate | 0.795 | **0.825** |
-| false_positive_rate | **0.359** | 0.500 |
-| findings per vulnerable case | 3.18 | 4.31 |
+| Paired cases | RAG | No-RAG | McNemar |
+|---|---:|---:|---|
+| detection, run 1 (n=39) | 0.795 | 0.821 | p = 1.0 (1 vs 2 discordant) |
+| detection, run 2 (n=36) | 0.917 | 0.861 | p = 0.63 (3 vs 1) |
+| false positives, run 2 (n=36) | 0.500 | 0.389 | p = 0.42 (9 vs 5) |
+| findings per fixed snippet, run 2 | 2.92 | 4.78 | |
 
-**Retrieval has no measurable effect on detection.** Both arms run the same cases,
-so the comparison is paired and only discordant cases carry information. McNemar's
-exact test gives **p = 1.0** for detection (3 discordant: 1 RAG-only, 2 no-RAG-only)
-and **p = 0.267** for false positives (13 discordant, substring-scored). The arms
-differ by one case on recall.
+**Retrieval has no measurable effect on detection or false positives.** Both arms
+run the same cases, so the comparison is paired and only discordant cases carry
+information. RAG scored lower on detection in run 1 and higher in run 2, neither
+significantly - a direction that flips between runs is what no effect looks like
+at this sample size.
 
-What retrieval measurably does is make the reviewer quieter: fewer findings than
-no-RAG in 21 of 39 cases, more in 6, a mean of 3.18 against 4.31, on secure code
-as well as vulnerable. That buys fewer false positives and occasionally costs a
-detection - both cases RAG lost returned **no findings at all**, not a wrong one.
-An earlier reading that retrieval misdirects the model toward the retrieved
-example's class rested on substring-scored cases the judge has since counted as
-correct; it is not supported. Reports now record what was retrieved per case,
-so the silent cases are diagnosable rather than arguable.
+**What it does reliably is make the reviewer quieter.** Fewer findings in both
+runs, on vulnerable code (3.18 vs 4.31, then 3.50 vs 3.92) and on fixed code (3.31
+vs 3.92, then 2.92 vs 4.78). Detection does not move, so the findings retrieval
+suppresses are about other vulnerability classes - and the eval, which scores only
+the labelled class, cannot say whether those were real issues or noise.
 
-Reports are committed under `evals/reports/`; a diff between two of them is the
-record of what a change actually did.
+**Only the RAG arm fails to reproduce.** Two runs of the identical configuration,
+scored by the identical judge: no-RAG's detection verdicts matched on all 39 cases,
+RAG's changed on 6 of 37. Temperature 0 is not determinism on this stack. Either
+retrieval amplifies small wobbles - the context step feeds the retrieval query, so
+a slightly different query pulls different examples - or run 1's RAG arm was
+disturbed by a stray evaluation process competing for the CPU. Run 1 did not record
+what was retrieved, so the two cannot yet be told apart.
+
+Three apparent effects have not survived better measurement: that retrieval
+misdirects the model toward the retrieved example's class; that it silences the
+reviewer on specific cases (both such cases were detected in run 2); and a
+false-positive gap at p = 0.09 that came from the judge seeing fix text. Each looked
+real at n = 40 with an unvalidated instrument. Reports are committed under
+`evals/reports/`; a diff between two of them is the record of what a change
+actually did.
 
 ### Decisions worth explaining
 
@@ -133,24 +144,30 @@ judge agrees at κ = 0.79, substring at 0.27 - but 8 of those items share a
 technique with the prompt's worked examples, written from these same reports. On
 the 22 that don't, **κ = 0.72 against 0.37**, and that is the number to trust. All
 three judge errors were over-strict, never over-generous, so judged detection
-rates are if anything low. The substring probes are kept (`--scorer substring`)
-as the comparison point.
+rates are if anything low. The judge sees descriptions only, its validated
+condition: shown the fix text as well, it flipped 4 verdicts on 45 cases with
+word-identical findings, all True to False, 3 of them against human labels. The
+substring probes are kept (`--scorer substring`) as the comparison point.
 
 ### Limitations
 
-1. **n=39 is too small to settle the RAG question.** Three discordant detection
-   pairs cannot resolve anything. The corpus holds 1,086 usable pairs.
-2. **The false-positive rate is still substring-scored.** The original runs did
-   not store secure-snippet findings, so the judge could not re-grade them. The
-   harness now stores both; one fresh run corrects it.
-3. **The judge is validated by one annotator, who is also the author,** on 30
+1. **n = 40 cannot settle the RAG question.** A handful of discordant pairs per run,
+   and a direction that flips between runs. The corpus holds 1,086 usable pairs.
+2. **Single RAG runs are unreliable** - 6 of 37 detection verdicts changed between
+   two identical runs.
+3. **The eval scores only the labelled class.** Findings about other issues in the
+   same code are neither credited nor penalised, so it cannot say whether
+   retrieval's quieter output drops real findings or trims noise.
+4. **The judge is validated by one annotator, who is also the author,** on 30
    items. Two of its three errors are prompt-fixable - it graded a misstated
    impact instead of the flaw, and missed an alerting failure phrased as error
    handling - but fixing them against this sheet would spend its only
    uncontaminated items. The third is a label problem: *WebView security* is
    CWE-000, a category rather than a flaw.
-4. **One case in the RAG arm failed to parse** under the earlier 1,536-token
-   output cap, since raised to 3,072.
+5. **Some reviews hit a repetition loop** - 37 to 45 findings where a normal review
+   has 3 or 4 - and fail to parse: 1 case in run 1, 4 in run 2, excluded from the
+   paired comparisons. The output cap bounds how long a loop runs, not whether it
+   happens.
 
 ---
 
@@ -178,7 +195,7 @@ as the comparison point.
 - Calls `vectorstore.search()` which embeds the query with `nomic-embed-text` and runs a cosine-similarity search against the `vulnerability_examples` collection.
 - Returns the **top 3** most similar examples, including their document text, metadata, and distance scores.
 
-**Why RAG?** The curated security dataset ([scthornton/securecode](https://huggingface.co/datasets/scthornton/securecode)) contains labelled vulnerability examples with OWASP categories, CWE identifiers, severity levels, and remediation guidance, giving the Security Agent concrete patterns to reference instead of relying on parametric knowledge alone. What that is worth is an empirical question. Measured against a held-out set, retrieval made the reviewer *more conservative* - fewer false positives, fewer detections - with neither difference significant at n=39. See [Evaluation](#evaluation).
+**Why RAG?** The curated security dataset ([scthornton/securecode](https://huggingface.co/datasets/scthornton/securecode)) contains labelled vulnerability examples with OWASP categories, CWE identifiers, severity levels, and remediation guidance, giving the Security Agent concrete patterns to reference instead of relying on parametric knowledge alone. What that is worth is an empirical question. Measured against a held-out set over two runs, retrieval had no detectable effect on detection or false positives; what it reliably does is make the reviewer quieter. See [Evaluation](#evaluation).
 
 ---
 
@@ -329,7 +346,9 @@ python -m evals.judge agreement
 
 `REVIEW_MODEL` selects the reviewing model (default `llama3.2`), and every report
 records which model produced it, so results from different models can sit side by
-side.
+side. On a machine that cannot hold the reviewer and the judge in memory together,
+run the pipeline with `--scorer substring` and grade afterwards with
+`evals.judge rescore` - the result is the same, and each model loads once.
 
 ---
 
@@ -353,15 +372,17 @@ side.
 
 In order, each measured against the committed baseline, one change at a time:
 
-1. **Re-run both arms** so false positives are judge-scored and every case
-   records what was retrieved.
-2. **Diagnose the silent cases.** If retrieval returned a different vulnerability
-   class than the one in the code, the suppression has a cause and a fix.
-3. **Widen the gold set to ~200 cases**, dropping CWE-000 labels, and validate a
-   revised judge on a fresh sheet. Three discordant pairs cannot settle
-   whether retrieval helps; the corpus holds 1,086 usable pairs.
-4. **Compare models.** `gemma4:e4b` measures at 74 s/snippet against `llama3.2`'s
-   20 s, a 3.3-hour ablation that `REVIEW_MODEL` already supports.
+1. **A third RAG-only run.** Reports now record retrievals, so comparing it with
+   run 2 shows whether retrieval is where identical runs diverge. A reviewer that
+   gives different verdicts on the same diff is a product problem, not only an
+   eval one.
+2. **Cap `num_ctx`.** Ollama gives `llama3.2` its full 128k context - 17.8 GB for
+   2 GB of weights - which keeps the reviewer and the judge from sharing memory.
+3. **A repeat penalty** for the repetition loops.
+4. **Widen the gold set to ~200 cases**, dropping CWE-000 labels, and validate a
+   revised judge on a fresh sheet.
+5. **Compare models.** `gemma4:e4b` measures at 74 s/snippet against `llama3.2`'s
+   20 s; `REVIEW_MODEL` already supports the comparison.
 
 ---
 
