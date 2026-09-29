@@ -10,7 +10,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from vectorstore import search as vector_search
 
 MODEL = os.getenv("REVIEW_MODEL", "llama3.2")
-MAX_OUTPUT_TOKENS = 3072
+# A normal review is 3-4 findings, a few hundred tokens. What hits this cap is a
+# repetition loop (37-45 findings seen), which no cap makes valid - raising it
+# only makes a runaway burn longer before it fails.
+MAX_OUTPUT_TOKENS = 1536
 REQUEST_TIMEOUT_S = 600
 
 

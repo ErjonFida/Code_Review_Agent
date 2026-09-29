@@ -89,7 +89,10 @@ def _get_chain():
 
 def describes(technique: str, cwe: str, finding: dict) -> dict:
     description = finding.get("description", "") or ""
-    fix = finding.get("fix", "") or ""
+    # Description only: that is the condition the judge was validated in. On 45
+    # cases with word-identical findings, adding the fix text flipped 4 verdicts,
+    # all True -> False, 3 of them against human labels.
+    fix = ""
     key = hashlib.sha256(
         f"{JUDGE_MODEL}|{PROMPT_ID}|{technique}|{cwe}|{description}|{fix}".encode("utf-8")).hexdigest()
 
