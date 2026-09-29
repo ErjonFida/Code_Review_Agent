@@ -1,5 +1,6 @@
 flask>=3.0
 requests>=2.31
+python-dotenv>=1.0
 langchain-ollama>=0.3.0
 langchain-core>=0.3.0
 langgraph>=0.4.0
