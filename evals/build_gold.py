@@ -121,6 +121,8 @@ def main() -> None:
     parser.add_argument("--n", type=int, default=40, help="vulnerable/secure pairs to sample")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--out", default=GOLD_PATH)
+    parser.add_argument("--exclude", default=None,
+                        help="existing set whose cases must not reappear, e.g. gold.jsonl when building a dev set")
     args = parser.parse_args()
 
     if not os.path.exists(DATASET_PATH):
@@ -132,6 +134,14 @@ def main() -> None:
 
     rows = candidates(dataset)
     print(f"{len(rows)} of {len(dataset)} entries carry a distinct, scoreable pair")
+
+    if args.exclude:
+        # By content, not id: corpus ids repeat across unrelated documents.
+        def digest(code): return hashlib.sha256(code.encode("utf-8")).hexdigest()
+        with open(args.exclude, encoding="utf-8") as fh:
+            taken = {digest(json.loads(l)["vulnerable_code"]) for l in fh if l.strip()}
+        rows = [r for r in rows if digest(r["vulnerable_code"]) not in taken]
+        print(f"{len(rows)} remain after excluding the {len(taken)} cases in {os.path.basename(args.exclude)}")
 
     chosen = sample(rows, args.n, args.seed)
     if len(chosen) < args.n:
