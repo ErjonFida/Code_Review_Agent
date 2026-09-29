@@ -15,6 +15,12 @@ MODEL = os.getenv("REVIEW_MODEL", "llama3.2")
 # only makes a runaway burn longer before it fails.
 MAX_OUTPUT_TOKENS = 1536
 REQUEST_TIMEOUT_S = 600
+# Retrieval runs only for diffs at least this long (characters of sanitised code).
+# Below it, the eval measured no detection benefit across two runs, and 14% of
+# findings copying the retrieved examples' vulnerability names against 0% without.
+# Whether it helps on large diffs is untested; the default sits ~10x above the
+# largest diff the eval covers. 0 means always retrieve, a huge value means never.
+RETRIEVAL_MIN_CHARS = int(os.getenv("RETRIEVAL_MIN_CHARS", "20000"))
 
 
 def _reviewer(schema):
@@ -319,6 +325,15 @@ def generate_final_review(state: GraphState) -> Dict[str, Any]:
     return {"final_review": review}
 
 
+def route_after_triage(state: GraphState) -> str | List[str]:
+    # ponytail: the retrieval query reads only the diff's first 500 characters, which
+    # on the large diffs it now serves can miss the vulnerable part. Query per chunk
+    # if a test shows retrieval earns its place there.
+    if len(state.get("sanitized_diff", "")) >= RETRIEVAL_MIN_CHARS:
+        return "retrieve_examples"
+    return ["security_agent", "static_analysis_agent"]
+
+
 def build_review_graph() -> StateGraph:
 
     graph = StateGraph(GraphState)
@@ -331,7 +346,10 @@ def build_review_graph() -> StateGraph:
 
     graph.set_entry_point("triage_router")
 
-    graph.add_edge("triage_router", "retrieve_examples")
+    # Large diffs go through retrieval; everything else straight to the agents.
+    # The eval calls the nodes directly, so its RAG ablation is unaffected.
+    graph.add_conditional_edges("triage_router", route_after_triage,
+                                ["retrieve_examples", "security_agent", "static_analysis_agent"])
 
     graph.add_edge("retrieve_examples", "security_agent")
     graph.add_edge("retrieve_examples", "static_analysis_agent")

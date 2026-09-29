@@ -100,6 +100,27 @@ def test_report_renders_as_github_markdown():
 
 
 
+def test_retrieval_runs_only_for_large_diffs():
+    import graph
+    retrieved_for = []
+
+    def fake_retrieve(state):
+        retrieved_for.append(len(state["sanitized_diff"]))
+        return {"retrieved_examples": []}
+
+    # Real wiring, fake nodes: the graph is rebuilt with these in place.
+    with mock.patch.multiple(
+        graph,
+        get_context=lambda state: {"sanitized_diff": state["raw_diff"], "pr_context": {}},
+        retrieve_examples=fake_retrieve,
+        security_agent=lambda state: {"security_findings": []},
+        static_analysis_agent=lambda state: {"static_findings": []},
+    ):
+        with mock.patch.object(graph, "review_graph", graph.build_review_graph()):
+            small = graph.run_review("x" * (graph.RETRIEVAL_MIN_CHARS - 1), {})
+            large = graph.run_review("x" * graph.RETRIEVAL_MIN_CHARS, {})
+    assert retrieved_for == [graph.RETRIEVAL_MIN_CHARS], retrieved_for
+    assert "APPROVED" in small and "APPROVED" in large, "both paths must reach the final review"
 
 
 if __name__ == "__main__":
