@@ -1,3 +1,4 @@
+import bisect
 import os
 
 from langchain_ollama import ChatOllama
@@ -45,6 +46,8 @@ class GraphState(TypedDict):
     
     static_findings: Annotated[List[Dict[str, Any]], operator.add]
     security_findings: Annotated[List[Dict[str, Any]], operator.add]
+    # Findings dropped because their quoted evidence is not in the diff.
+    unverified_findings: List[Dict[str, Any]]
     final_review: str
 
 # PR context extracted from LLM
@@ -61,9 +64,11 @@ class SecurityFinding(BaseModel):
     """
     Strict JSON schema enforcing the exact output the Security Finder agent must produce.
     """
-    severity: str = Field(description="How severe is the vulnerability: CRITICAL, HIGH, MEDIUM, or LOW")
-    line_number: int = Field(description="Number of the line where the vulnerability is")
+    # Evidence first, so the model quotes the code before it makes a claim about it.
+    # No line number: the model counts lines badly, so it is computed from the quote.
+    evidence: str = Field(description="The exact line of code that contains the vulnerability, copied verbatim from the diff")
     description: str = Field(description="Description of vulnerability")
+    severity: str = Field(description="How severe is the vulnerability: CRITICAL, HIGH, MEDIUM, or LOW")
     fix: str = Field(description="Suggested fix for the vulnerability")
 
 class SecurityFindings(BaseModel):
@@ -165,6 +170,45 @@ def retrieve_examples(state: GraphState) -> Dict[str, Any]:
     return {"retrieved_examples": retrieved}
 
 # Analyze code and retrieved examples, return description of vulnerabilities if any
+def _squash(text: str) -> str:
+    # Whitespace and quote style are what a model changes when it copies code - and
+    # it often rejoins a statement the source splits across lines, so whitespace is
+    # removed entirely rather than collapsed.
+    return "".join(text.replace('"', "'").split())
+
+
+def locate_evidence(evidence: str, code: str) -> int | None:
+    """1-based line where the quoted `evidence` starts in `code`, else None."""
+    joined, starts = "", []
+    for line in code.splitlines():
+        starts.append(len(joined))
+        joined += _squash(line)
+
+    # The whole quote first, then line by line: a quote can carry fences or a
+    # stray line of prose around the real code.
+    candidates = [evidence] + evidence.splitlines()
+    for quoted in candidates:
+        quoted = _squash("\n".join(l.strip().strip("`").lstrip("+- ") for l in quoted.splitlines()))
+        if len(quoted) < 8:  # fences, language tags, lone braces: matches anything
+            continue
+        position = joined.find(quoted)
+        if position >= 0:
+            return bisect.bisect_right(starts, position)
+    return None
+
+
+def verify_findings(findings: List[Dict[str, Any]], code: str) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """(kept, dropped): a finding is kept only if its evidence is really in the code."""
+    kept, dropped = [], []
+    for finding in findings:
+        line = locate_evidence(finding.get("evidence", ""), code)
+        if line is None:
+            dropped.append(finding)
+        else:
+            kept.append({**finding, "line_number": line})
+    return kept, dropped
+
+
 def security_agent(state: GraphState) -> Dict[str, Any]:
 
     print("=== [NODE 3a] SECURITY AGENT ===")
@@ -195,10 +239,13 @@ Focus on:
 - Input validation gaps
 
 For each vulnerability found, provide:
-- severity (CRITICAL / HIGH / MEDIUM / LOW)
-- line_number (approximate line in the diff)
+- evidence (the exact line of code that contains the flaw, copied verbatim from the diff)
 - description (clear explanation of the risk)
+- severity (CRITICAL / HIGH / MEDIUM / LOW)
 - fix (concrete remediation step)
+
+Report only vulnerabilities you can point to in a specific line of this diff. A finding
+whose evidence is not in the diff is discarded.
 
 If the code is secure, return an empty findings list."""
 
@@ -210,12 +257,12 @@ If the code is secure, return an empty findings list."""
     chain = prompt | structured_llm
     result = chain.invoke({"diff": sanitized_diff, "examples": examples_text})
 
-    findings = [f.model_dump() for f in result.findings]
-    print(f"  Found {len(findings)} security issue(s)")
+    findings, unverified = verify_findings([f.model_dump() for f in result.findings], sanitized_diff)
+    print(f"  Found {len(findings)} security issue(s), dropped {len(unverified)} without evidence in the diff")
     for f in findings:
         print(f"    [{f['severity']}] Line {f['line_number']}: {f['description'][:80]}")
 
-    return {"security_findings": findings}
+    return {"security_findings": findings, "unverified_findings": unverified}
 
 # Analyze code for efficinecy/best-practices issues
 def static_analysis_agent(state: GraphState) -> Dict[str, Any]:
@@ -376,6 +423,7 @@ def run_review(raw_diff: str, pr_metadata: Dict[str, Any]) -> str:
         "exclude_snippets": [],
         "static_findings": [],
         "security_findings": [],
+        "unverified_findings": [],
         "final_review": ""
     }
 

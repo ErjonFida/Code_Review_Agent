@@ -87,12 +87,13 @@ def review(code: str, case: dict, use_rag: bool, exclude: list[str]) -> tuple[li
         state.update(retrieve_examples(state))
     else:
         state["retrieved_examples"] = []
-    findings = security_agent(state)["security_findings"]
+    out = security_agent(state)
+    findings = out["security_findings"]
     retrieved = [
         {"id": r["id"], "distance": round(r["distance"], 4), "technique": _retrieved_technique(r)}
         for r in state["retrieved_examples"]
     ]
-    return findings, (time.perf_counter() - started) * 1000, retrieved
+    return findings, (time.perf_counter() - started) * 1000, retrieved, out.get("unverified_findings", [])
 
 
 def _percentile(values: list[float], pct: int) -> float:
@@ -177,8 +178,8 @@ def run(cases: list[dict], use_rag: bool, scorer: str = "judge") -> list[dict]:
     for index, case in enumerate(cases, start=1):
         print(f"\n--- [{index}/{len(cases)}] {case['case_id']} ({case['technique']}) ---")
         try:
-            vuln_findings, vuln_ms, vuln_retrieved = review(case["vulnerable_code"], case, use_rag, exclude)
-            secure_findings, secure_ms, secure_retrieved = review(case["secure_code"], case, use_rag, exclude)
+            vuln_findings, vuln_ms, vuln_retrieved, vuln_dropped = review(case["vulnerable_code"], case, use_rag, exclude)
+            secure_findings, secure_ms, secure_retrieved, secure_dropped = review(case["secure_code"], case, use_rag, exclude)
         except Exception as e:
             # A structured-output parse failure should cost one case, not the run.
             print(f"  ERROR: {type(e).__name__}: {e}")
@@ -202,6 +203,8 @@ def run(cases: list[dict], use_rag: bool, scorer: str = "judge") -> list[dict]:
             "secure_findings_list": secure_findings,
             "vuln_retrieved": vuln_retrieved,
             "secure_retrieved": secure_retrieved,
+            "vuln_unverified": vuln_dropped,
+            "secure_unverified": secure_dropped,
             "secure_findings": len(secure_findings),
             "secure_flagged": secure_hit is not None,
             "secure_any_finding": len(secure_findings) > 0,
