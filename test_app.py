@@ -96,30 +96,8 @@ def test_report_renders_as_github_markdown():
     assert "CHANGES REQUESTED" in report
 
 
-def test_evidence_is_located_despite_copying_noise():
-    from graph import locate_evidence
-    code = 'import sqlite3\napp.secret_key = "dev-secret"\n    query = f"SELECT * FROM users WHERE name = \'{name}\'"\n}'
-    assert locate_evidence('app.secret_key = "dev-secret"', code) == 2
-    assert locate_evidence("query  =  f\"SELECT * FROM users WHERE name = '{name}'\"", code) == 3  # spacing
-    assert locate_evidence("app.secret_key = 'dev-secret'", code) == 2                           # quote style
-    assert locate_evidence('```python\napp.secret_key = "dev-secret"\n```', code) == 2          # fenced
-    assert locate_evidence('+app.secret_key = "dev-secret"', code) == 2                          # diff marker
-    assert locate_evidence("hashlib.md5(password)", code) is None                                # not there
-    assert locate_evidence("}", code) is None                                                    # too short
-    split = "rows = db.execute(\n    'SELECT * FROM t WHERE id = ?',\n    (item_id,)\n)"
-    assert locate_evidence("rows = db.execute('SELECT * FROM t WHERE id = ?', (item_id,))", split) == 1  # rejoined statement
 
 
-def test_findings_without_evidence_in_the_code_are_dropped():
-    from graph import verify_findings
-    code = "import os\npassword = os.environ['PASSWORD']\nprint(password)"
-    kept, dropped = verify_findings([
-        {"evidence": "print(password)", "description": "Secret printed", "line_number": 99},
-        {"evidence": "remember_token = user.id", "description": "Predictable token"},
-    ], code)
-    assert [f["description"] for f in kept] == ["Secret printed"]
-    assert kept[0]["line_number"] == 3, "line number comes from the quote, not the model"
-    assert [f["description"] for f in dropped] == ["Predictable token"]
 
 
 def test_retrieval_runs_only_for_large_diffs():

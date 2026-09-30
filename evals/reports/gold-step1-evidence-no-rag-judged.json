@@ -1,0 +1,3507 @@
+{
+  "label": "gold-step1-evidence-no-rag-judged",
+  "generated_at": "2026-09-29T08:22:32.324255+00:00",
+  "config": {
+    "arm": "no-rag",
+    "model": "llama3.2",
+    "dataset": "gold.jsonl",
+    "gold_fingerprint": "33e33329c8a3e7be",
+    "cases": 40,
+    "excluded_from_retrieval": 40,
+    "exclusion": "content probes",
+    "n_retrieved": 0,
+    "scorer": {
+      "detection": "judge/gemma4:e4b",
+      "false_positive": "judge/gemma4:e4b",
+      "rescored_from": "gold-step1-evidence-no-rag.json"
+    }
+  },
+  "metrics": {
+    "overall": {
+      "cases": 40,
+      "detection_rate": 0.775,
+      "false_positive_rate": 0.425,
+      "secure_any_finding_rate": 0.925,
+      "high_severity_fp_rate": 0.5,
+      "severity_match": 0.7097,
+      "findings_per_vulnerable_case": 2.58,
+      "findings_per_secure_case": 3.05,
+      "p50_latency_ms": 25181.66,
+      "p95_latency_ms": 38881.75
+    },
+    "by_severity": {
+      "CRITICAL": {
+        "cases": 29,
+        "detection_rate": 0.8276
+      },
+      "HIGH": {
+        "cases": 11,
+        "detection_rate": 0.6364
+      }
+    },
+    "by_language": {
+      "csharp": {
+        "cases": 2,
+        "detection_rate": 0.5
+      },
+      "go": {
+        "cases": 6,
+        "detection_rate": 0.6667
+      },
+      "java": {
+        "cases": 9,
+        "detection_rate": 0.6667
+      },
+      "javascript": {
+        "cases": 11,
+        "detection_rate": 1.0
+      },
+      "kotlin": {
+        "cases": 2,
+        "detection_rate": 0.5
+      },
+      "php": {
+        "cases": 3,
+        "detection_rate": 1.0
+      },
+      "python": {
+        "cases": 3,
+        "detection_rate": 0.3333
+      },
+      "ruby": {
+        "cases": 2,
+        "detection_rate": 1.0
+      },
+      "rust": {
+        "cases": 1,
+        "detection_rate": 1.0
+      },
+      "yaml": {
+        "cases": 1,
+        "detection_rate": 1.0
+      }
+    },
+    "errors": 0
+  },
+  "misses": [
+    {
+      "id": "authorization-000001-3308e7ce",
+      "technique": "Privilege escalation (horizontal)",
+      "cwe": "CWE-284",
+      "expected_terms": [
+        "escalati",
+        "horizont",
+        "privileg"
+      ],
+      "said": [
+        "Hardcoded secret key exposed in plain text. This is a critical security risk as it allows an attacker to easily obtain the secret key and use it for authentication bypass or other attacks.",
+        "SQL injection vulnerability. The user ID is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "Lack of input validation. The error message is hardcoded and does not provide any useful information about the error."
+      ]
+    },
+    {
+      "id": "dependencies-000009-76cf73ed",
+      "technique": "Dependency confusion",
+      "cwe": "CWE-1035",
+      "expected_terms": [
+        "confusio",
+        "dependen"
+      ],
+      "said": []
+    },
+    {
+      "id": "design_flaws-000003-8b9affbc",
+      "technique": "Race conditions",
+      "cwe": "CWE-362",
+      "expected_terms": [
+        "conditio",
+        "race"
+      ],
+      "said": [
+        "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "SQL Injection: Similar to the check query, the update query is vulnerable to SQL injection."
+      ]
+    },
+    {
+      "id": "logging-000003-888f16c9",
+      "technique": "No alerting on suspicious activity",
+      "cwe": "CWE-778",
+      "expected_terms": [
+        "activity",
+        "alerting",
+        "suspicio"
+      ],
+      "said": [
+        "Hardcoded secret or credential: The database password is hardcoded in plain text, making it vulnerable to theft or exposure.",
+        "SQL Injection: The prepared statement is vulnerable to SQL injection attacks because user input is directly inserted into the query.",
+        "Data Exposure Risk: The stored password hash is retrieved from the database and returned to the user, potentially exposing sensitive data."
+      ]
+    },
+    {
+      "id": "logging-000004-ad6f706c",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "expected_terms": [
+        "event",
+        "logging"
+      ],
+      "said": [
+        "Hardcoded secret: The query uses a hardcoded SQL value (`$1`) instead of parameterized queries, which makes it vulnerable to SQL injection attacks.",
+        "Hardcoded secret: The query uses a hardcoded password (`hashedPassword`) instead of storing it securely in the database.",
+        "Information disclosure: The log message reveals sensitive information (username) to potential attackers."
+      ]
+    },
+    {
+      "id": "logging-000007-94f9bfd7",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "expected_terms": [
+        "event",
+        "logging"
+      ],
+      "said": [
+        "Hardcoded secret or credential: The database password is hardcoded in plain text, making it easily accessible to anyone with access to the code.",
+        "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "Insecure cryptographic practice: The `BCrypt` library is not properly configured, and the salt value is not stored securely.",
+        "Input validation gap: The `username` parameter is not validated or sanitized, which can lead to SQL injection attacks."
+      ]
+    },
+    {
+      "id": "sql-000003-90f8c3f3",
+      "technique": "WebView security",
+      "cwe": "CWE-000",
+      "expected_terms": [
+        "webview"
+      ],
+      "said": [
+        "Direct string concatenation with untrusted input can lead to SQL injection attacks."
+      ]
+    },
+    {
+      "id": "ssrf-000001-3ffa0dc4",
+      "technique": "SSRF to cloud metadata",
+      "cwe": "CWE-918",
+      "expected_terms": [
+        "cloud",
+        "metadata",
+        "ssrf"
+      ],
+      "said": [
+        "User-controlled URL with no validation, allowing for potential SQL injection or command injection attacks.",
+        "Directly fetching user-provided URL without any validation or sanitization, allowing for potential XSS attacks."
+      ]
+    },
+    {
+      "id": "xxe-000004-37fe4417",
+      "technique": "XXE in document parsers (DOCX, XLSX)",
+      "cwe": "CWE-611",
+      "expected_terms": [
+        "document",
+        "docx",
+        "parsers",
+        "xlsx"
+      ],
+      "said": []
+    }
+  ],
+  "results": [
+    {
+      "id": "authentication-000001-b5c68422",
+      "technique": "Open redirect after login",
+      "cwe": "CWE-601",
+      "lang": "python",
+      "severity": "HIGH",
+      "must_match": [
+        "after",
+        "login",
+        "open",
+        "redirect"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "The application redirects to the next URL without validating its integrity, potentially allowing an attacker to inject malicious URLs.",
+        "The secret key is hardcoded, making it vulnerable to exposure in case of a code dump or disclosure."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "return redirect(next_url)",
+          "description": "The application redirects to the next URL without validating its integrity, potentially allowing an attacker to inject malicious URLs.",
+          "severity": "CRITICAL",
+          "fix": "Validate the `next_url` parameter using a whitelist of allowed URLs or sanitize it before redirection.",
+          "line_number": 25
+        },
+        {
+          "evidence": "app.secret_key = 'your-secret-key'",
+          "description": "The secret key is hardcoded, making it vulnerable to exposure in case of a code dump or disclosure.",
+          "severity": "CRITICAL",
+          "fix": "Use an environment variable or a secrets manager to store the secret key.",
+          "line_number": 5
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "app.secret_key = 'your-secret-key'",
+          "description": "Hardcoded secret key. This makes it easy for an attacker to access the application if they gain access to the server.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secrets manager to store sensitive data.",
+          "line_number": 6
+        },
+        {
+          "evidence": "return render_template('login.html', error='Invalid credentials')",
+          "description": "Error message is displayed in plain text. An attacker could potentially use this information to guess the correct username and password.",
+          "severity": "MEDIUM",
+          "fix": "Use a more secure error message, such as 'Invalid credentials. Please try again.'",
+          "line_number": 45
+        },
+        {
+          "evidence": "if user and check_password_hash(user['password_hash'], password):",
+          "description": "Password is stored in plain text. This makes it easy for an attacker to access the password if they gain access to the database.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure password hashing algorithm, such as bcrypt or PBKDF2.",
+          "line_number": 33
+        },
+        {
+          "evidence": "return redirect(next_url)",
+          "description": "Redirect URL is not validated for SQL injection. An attacker could potentially inject malicious SQL code.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure redirect mechanism, such as using the `url_for` function to generate the URL.",
+          "line_number": 40
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 13913.41,
+      "secure_latency_ms": 23037.5,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000003-03573a2f",
+      "technique": "Encryption and hashing",
+      "cwe": "CWE-287",
+      "lang": "kotlin",
+      "severity": "CRITICAL",
+      "must_match": [
+        "encrypti",
+        "hashing"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Hardcoded secret or credential: The database password is hardcoded in plain text, making it vulnerable to theft or exposure.",
+        "Insecure cryptographic practices: The password hashing function uses SHA-256 with no salt and iteration, making it vulnerable to rainbow table attacks.",
+        "Insecure equality check: The password comparison uses a simple string equality check, which can be vulnerable to timing attacks.",
+        "SQL injection vulnerability: The database URL and credentials are hardcoded in plain text, making it vulnerable to SQL injection attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "private val dbPass = \"apppass\"\n",
+          "description": "Hardcoded secret or credential: The database password is hardcoded in plain text, making it vulnerable to theft or exposure.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secure configuration file to store sensitive credentials.",
+          "line_number": 10
+        },
+        {
+          "evidence": "val hashed = sha256(password) // FAST, UNSALTED HASH\n",
+          "description": "Insecure cryptographic practices: The password hashing function uses SHA-256 with no salt and iteration, making it vulnerable to rainbow table attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure password hashing algorithm like Argon2 or PBKDF2 with sufficient iterations and a random salt.",
+          "line_number": 19
+        },
+        {
+          "evidence": "val stored = rs.getString(\"password_hash\")\n",
+          "description": "Insecure equality check: The password comparison uses a simple string equality check, which can be vulnerable to timing attacks.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure password comparison function like bcrypt or PBKDF2 with a sufficient work factor.",
+          "line_number": 38
+        },
+        {
+          "evidence": "DriverManager.getConnection(dbUrl, dbUser, dbPass).use { conn ->\n",
+          "description": "SQL injection vulnerability: The database URL and credentials are hardcoded in plain text, making it vulnerable to SQL injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters to prevent SQL injection.",
+          "line_number": 20
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "private val dbPass = \"apppass\"\n",
+          "description": "Hardcoded secret or credential: database password is hardcoded in plain text.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables, secure storage, or a secrets manager to store sensitive credentials.",
+          "line_number": 13
+        },
+        {
+          "evidence": "val sql = \"INSERT INTO users (username, password_hash, password_salt, iterations) VALUES (?, ?, ?, ?)\n",
+          "description": "SQL injection vulnerability: user input is directly used in the SQL query without proper sanitization.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters to prevent user input from being executed as part of the SQL code.",
+          "line_number": 41
+        },
+        {
+          "evidence": "val storedHashB64 = rs.getString(\"password_hash\")\n",
+          "description": "Data exposure risk: sensitive data (password hash) is exposed in plain text.",
+          "severity": "MEDIUM",
+          "fix": "Store password hashes securely using a salted hashing algorithm and consider using a secure password storage library.",
+          "line_number": 62
+        },
+        {
+          "evidence": "val storedSaltB64 = rs.getString(\"password_salt\")\n",
+          "description": "Data exposure risk: sensitive data (password salt) is exposed in plain text.",
+          "severity": "MEDIUM",
+          "fix": "Store password salts securely using a secure storage mechanism, such as an environment variable or a secrets manager.",
+          "line_number": 63
+        },
+        {
+          "evidence": "val candidateHash = pbkdf2Hash(password.toCharArray(), salt)\n",
+          "description": "Insecure cryptographic practice: PBKDF2 with a fixed iteration count and key length may not be secure against modern attacks.",
+          "severity": "MEDIUM",
+          "fix": "Use a more secure password hashing algorithm, such as Argon2 or Bcrypt, with adjustable iteration counts and key lengths.",
+          "line_number": 68
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 5,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 28818.56,
+      "secure_latency_ms": 43807.32,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000004-e9a47989",
+      "technique": "Session fixation",
+      "cwe": "CWE-384",
+      "lang": "go",
+      "severity": "HIGH",
+      "must_match": [
+        "fixation",
+        "session"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "The session ID is being reused from the attacker-supplied cookie value, allowing an attacker to hijack the session."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "sessionID = cookie.Value",
+          "description": "The session ID is being reused from the attacker-supplied cookie value, allowing an attacker to hijack the session.",
+          "severity": "CRITICAL",
+          "fix": "Generate a new session ID using `generateSessionID()` instead of reusing the cookie value.",
+          "line_number": 32
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "http.SetCookie(w, &http.Cookie{\n Name:     \"session_id\",\n Value:    newSessionID,\n Path:     \"/\",\n HttpOnly: true,\n Secure:   true,\n SameSite: http.SameSiteStrictMode,\n MaxAge:   3600,\n})",
+          "description": "The session ID is stored in a cookie with the `Secure` attribute, which only allows HTTPS connections. However, this does not prevent an attacker from intercepting the cookie over HTTP.",
+          "severity": "MEDIUM",
+          "fix": "Set the `HttpOnly` attribute to true and use the `SameSite` attribute to prevent CSRF attacks.",
+          "line_number": 56
+        },
+        {
+          "evidence": "http.SetCookie(w, &http.Cookie{\n Name:     \"session_id\",\n Value:    newSessionID,\n Path:     \"/\",\n HttpOnly: true,\n Secure:   true,\n SameSite: http.SameSiteStrictMode,\n MaxAge:   3600,\n})",
+          "description": "The session ID is stored in a cookie with the `SameSite` attribute set to `http.SameSiteStrictMode`. This prevents CSRF attacks, but does not prevent an attacker from intercepting the cookie over HTTP.",
+          "severity": "MEDIUM",
+          "fix": "Set the `Secure` attribute to true and use the `HttpOnly` attribute to prevent JavaScript access.",
+          "line_number": 56
+        },
+        {
+          "evidence": "http.Redirect(w, r, \"/dashboard\", http.StatusFound)",
+          "description": "The redirect URL is hardcoded as `/dashboard`. This could potentially be used to redirect an attacker to a malicious page.",
+          "severity": "LOW",
+          "fix": "Use a parameterized redirect URL or validate the input before redirecting.",
+          "line_number": 66
+        },
+        {
+          "evidence": "func generateSecureSessionID() string {\n b := make([]byte, 32) // 256 bits of entropy\n if _, err := rand.Read(b); err != nil {\n panic(\"crypto/rand failed\")\n }",
+          "description": "The `generateSecureSessionID` function uses `rand.Read` to generate a random byte array. However, this could potentially be vulnerable to a timing attack.",
+          "severity": "LOW",
+          "fix": "Use a cryptographically secure pseudo-random number generator instead of `rand.Read`.",
+          "line_number": 69
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "",
+          "severity": "",
+          "fix": ""
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 20358.7,
+      "secure_latency_ms": 35119.59,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000005-31f3b402",
+      "technique": "Insecure password reset",
+      "cwe": "CWE-287",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "password",
+        "reset"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Predictable token generation using `md5` can be vulnerable to timing attacks. A more secure approach would be to use a cryptographically secure pseudo-random number generator.",
+        "The `resetPassword` method does not validate the token before using it to update the user's password. This makes it vulnerable to SQL injection attacks.",
+        "The `resetPassword` method stores the new password in plain text, making it vulnerable to interception or eavesdropping attacks.",
+        "The `requestReset` method does not implement a mechanism to invalidate the token after it has been used."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "public function requestReset($email) {\n    // VULNERABLE: Predictable token based on timestamp and email\n    $token = md5($email . time());\n\n    // ...",
+          "description": "Predictable token generation using `md5` can be vulnerable to timing attacks. A more secure approach would be to use a cryptographically secure pseudo-random number generator.",
+          "severity": "MEDIUM",
+          "fix": "Use a cryptographically secure pseudo-random number generator, such as `random_bytes()` or `openssl_random_pseudo_bytes()`, to generate the token.",
+          "line_number": 11
+        },
+        {
+          "evidence": "public function resetPassword($token, $newPassword) {\n    // VULNERABLE: No token validation, SQL injection possible\n    $sql = \"SELECT email FROM password_resets WHERE token = '$token'\";\n    $result = $this->pdo->query($sql)->fetch();\n",
+          "description": "The `resetPassword` method does not validate the token before using it to update the user's password. This makes it vulnerable to SQL injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use prepared statements with parameter binding to prevent SQL injection.",
+          "line_number": 26
+        },
+        {
+          "evidence": "public function resetPassword($token, $newPassword) {\n    // VULNERABLE: Password stored in plain text, SQL injection\n    $updateSql = \"UPDATE users SET password = '$newPassword' WHERE email = '$email'\";\n    $this->pdo->exec($updateSql);\n",
+          "description": "The `resetPassword` method stores the new password in plain text, making it vulnerable to interception or eavesdropping attacks.",
+          "severity": "MEDIUM",
+          "fix": "Hash and store the new password securely using a salted hashing algorithm.",
+          "line_number": 26
+        },
+        {
+          "evidence": "public function requestReset($email) {\n    // VULNERABLE: Token never expires\n    $sql = \"INSERT INTO password_resets (email, token) VALUES ('$email', '$token')\";\n    $this->pdo->exec($sql);\n",
+          "description": "The `requestReset` method does not implement a mechanism to invalidate the token after it has been used.",
+          "severity": "LOW",
+          "fix": "Implement a mechanism to invalidate the token after it has been used, such as by setting a TTL (time to live) on the token.",
+          "line_number": 11
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "SELECT id FROM users WHERE email = ?",
+          "description": "SQL Injection: The prepared statement is vulnerable to SQL injection attacks because the `?` placeholder is not properly sanitized. An attacker could inject malicious SQL code by manipulating the `$email` variable.",
+          "severity": "CRITICAL",
+          "fix": "Use a parameterized query with named placeholders, like this: `SELECT id FROM users WHERE email = :email`. This will prevent any user input from being executed as part of the SQL query.",
+          "line_number": 20
+        },
+        {
+          "evidence": "DELETE FROM password_resets WHERE user_id = ?",
+          "description": "SQL Injection: Similar to the previous vulnerability, this prepared statement is also vulnerable to SQL injection attacks. An attacker could inject malicious SQL code by manipulating the `$user['id']` variable.",
+          "severity": "CRITICAL",
+          "fix": "Use a parameterized query with named placeholders, like this: `DELETE FROM password_resets WHERE user_id = :user_id`. This will prevent any user input from being executed as part of the SQL query.",
+          "line_number": 38
+        },
+        {
+          "evidence": "INSERT INTO password_resets (user_id, token_hash, expires_at, created_at) VALUES (?, ?, ?, NOW())",
+          "description": "SQL Injection: Although this prepared statement uses a parameterized query with named placeholders, it is still vulnerable to SQL injection attacks if the `$user['id']` variable is not properly sanitized. An attacker could inject malicious SQL code by manipulating this variable.",
+          "severity": "MEDIUM",
+          "fix": "Use a parameterized query with named placeholders, like this: `INSERT INTO password_resets (user_id, token_hash, expires_at, created_at) VALUES (:user_id, :token_hash, :expires_at, NOW())`. This will prevent any user input from being executed as part of the SQL query.",
+          "line_number": 43
+        },
+        {
+          "evidence": "UPDATE users SET password = ?, updated_at = NOW() WHERE id = ?",
+          "description": "SQL Injection: Similar to the previous vulnerabilities, this prepared statement is vulnerable to SQL injection attacks. An attacker could inject malicious SQL code by manipulating the `$reset['user_id']` variable.",
+          "severity": "CRITICAL",
+          "fix": "Use a parameterized query with named placeholders, like this: `UPDATE users SET password = ?, updated_at = NOW() WHERE id = :id`. This will prevent any user input from being executed as part of the SQL query.",
+          "line_number": 89
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 34851.56,
+      "secure_latency_ms": 45876.37,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000005-38513cf4",
+      "technique": "Timing attacks on login",
+      "cwe": "CWE-208",
+      "lang": "php",
+      "severity": "HIGH",
+      "must_match": [
+        "login",
+        "timing"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Timing Leak: The early return statement without a password verification can leak information about the user's existence.",
+        "Timing Leak: The password verification using `password_verify` takes measurable time, which can leak information about the user's existence.",
+        "Error Message Timing Leak: The error message 'Invalid credentials' can leak information about the user's existence."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "if (!$user) {\nreturn false; // Fast return - no password check\n}",
+          "description": "Timing Leak: The early return statement without a password verification can leak information about the user's existence.",
+          "severity": "MEDIUM",
+          "fix": "Add a brief delay or a placeholder message to obscure the timing difference.",
+          "line_number": 16
+        },
+        {
+          "evidence": "if (password_verify($password, $user['password_hash'])) {\nsession_regenerate_id(true);\n$_SESSION['user_id'] = $user['id'];\nreturn true;}",
+          "description": "Timing Leak: The password verification using `password_verify` takes measurable time, which can leak information about the user's existence.",
+          "severity": "MEDIUM",
+          "fix": "Use a placeholder message or a brief delay to obscure the timing difference.",
+          "line_number": 21
+        },
+        {
+          "evidence": "if ($this->authenticate($username, $password)) {\nheader('Location: /dashboard');}",
+          "description": "Error Message Timing Leak: The error message 'Invalid credentials' can leak information about the user's existence.",
+          "severity": "MEDIUM",
+          "fix": "Use a generic error message or a placeholder to obscure the timing difference.",
+          "line_number": 35
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "public function authenticate(string $username, string $password): bool {\n$hashToCheck = $user ? $user['password_hash'] : $this->fakePasswordHash;\n}",
+          "description": "Potential timing attack vulnerability due to using a pre-computed hash for constant-time comparison on non-existent users. This could allow an attacker to determine if the user exists or not by measuring the time it takes to compare the password.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure pseudo-random value instead of a pre-computed hash for constant-time comparison.",
+          "line_number": 12
+        },
+        {
+          "evidence": "public function login(): void {\n$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING) ?? '';\n$password = $_POST['password'] ?? '';\n}",
+          "description": "Potential SQL injection vulnerability due to using a user-provided input ($username) directly in the SQL query without proper sanitization.",
+          "severity": "LOW",
+          "fix": "Use prepared statements with parameterized queries to prevent SQL injection.",
+          "line_number": 31
+        },
+        {
+          "evidence": "public function login(): void {\nusleep(random_int(10000, 50000)); // 10-50ms random delay\n}",
+          "description": "Potential denial-of-service (DoS) vulnerability due to adding a small random delay to the login process. This could make it difficult for legitimate users to log in.",
+          "severity": "LOW",
+          "fix": "Remove or minimize the random delay to prevent potential DoS attacks.",
+          "line_number": 31
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 21846.62,
+      "secure_latency_ms": 25181.66,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000006-78dbda01",
+      "technique": "Password hashing with argon2",
+      "cwe": "CWE-287",
+      "lang": "rust",
+      "severity": "CRITICAL",
+      "must_match": [
+        "argon2",
+        "hashing",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "The comparison of the hashed password with the stored hash is done using a simple equality operator, which can reveal timing information about the password."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "// Also vulnerable: simple equality (timing side channel)",
+          "description": "The comparison of the hashed password with the stored hash is done using a simple equality operator, which can reveal timing information about the password.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure comparison function like `std::cmp::Ordering` or a library like `rand::Rng` to mask the timing side channel",
+          "line_number": 34
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "let argon2 = Argon2::default();",
+          "description": "The `Argon2` instance is created with default parameters, which may not be suitable for production use. Hardcoded parameters can lead to predictable and insecure password hashing.",
+          "severity": "MEDIUM",
+          "fix": "Configure the `Argon2` instance with reasonable parameters (e.g., memory size, parallelism) for server-side use.",
+          "line_number": 26
+        },
+        {
+          "evidence": "let argon2 = Argon2::default(); // can be tuned further in production",
+          "description": "The comment suggests that the default parameters may not be sufficient for production use. However, it does not provide a clear solution or configuration.",
+          "severity": "LOW",
+          "fix": "Update the code to configure the `Argon2` instance with reasonable parameters (e.g., memory size, parallelism) for server-side use.",
+          "line_number": 26
+        },
+        {
+          "evidence": "let argon2 = Argon2::default(); // can be tuned further in production",
+          "description": "The comment suggests that the default parameters may not be sufficient for production use. However, it does not provide a clear solution or configuration.",
+          "severity": "LOW",
+          "fix": "Update the code to configure the `Argon2` instance with reasonable parameters (e.g., memory size, parallelism) for server-side use.",
+          "line_number": 26
+        },
+        {
+          "evidence": "let argon2 = Argon2::default(); // can be tuned further in production",
+          "description": "The comment suggests that the default parameters may not be sufficient for production use. However, it does not provide a clear solution or configuration.",
+          "severity": "LOW",
+          "fix": "Update the code to configure the `Argon2` instance with reasonable parameters (e.g., memory size, parallelism) for server-side use.",
+          "line_number": 26
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "let hash = format(\"{:x}\", hasher.finalize());",
+          "description": "The password is hashed using SHA-256 without any salt, making it vulnerable to rainbow table attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a salted hashing algorithm like PBKDF2 or Argon2"
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 17826.58,
+      "secure_latency_ms": 30184.98,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000009-a570e254",
+      "technique": "Missing account lockout",
+      "cwe": "CWE-287",
+      "lang": "javascript",
+      "severity": "HIGH",
+      "must_match": [
+        "account",
+        "lockout"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "No rate limiting is implemented, allowing attackers to try unlimited passwords. This can lead to a denial-of-service (DoS) attack or brute-force attacks on the login endpoint.",
+        "No failed attempt tracking is implemented, allowing attackers to continue guessing the password indefinitely. This can lead to a significant increase in login attempts and potential DoS attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "const result = await pool.query('SELECT id, username, password_hash FROM users WHERE username = $1', [username]);",
+          "description": "No rate limiting is implemented, allowing attackers to try unlimited passwords. This can lead to a denial-of-service (DoS) attack or brute-force attacks on the login endpoint.",
+          "severity": "CRITICAL",
+          "fix": "Implement rate limiting using a library like `express-rate-limit` to prevent excessive requests.",
+          "line_number": 13
+        },
+        {
+          "evidence": "// No failed attempt tracking - attackers can guess forever",
+          "description": "No failed attempt tracking is implemented, allowing attackers to continue guessing the password indefinitely. This can lead to a significant increase in login attempts and potential DoS attacks.",
+          "severity": "CRITICAL",
+          "fix": "Implement failed attempt tracking using a library like `bcrypt`'s built-in tracking or a custom solution to limit the number of failed attempts.",
+          "line_number": 26
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const MAX_FAILED_ATTEMPTS = 5;",
+          "description": "The maximum number of failed login attempts allowed before locking the account is hardcoded. An attacker could exploit this by attempting to brute-force the password.",
+          "severity": "LOW",
+          "fix": "Consider using a configurable value for `MAX_FAILED_ATTEMPTS` or implementing a more sophisticated rate limiting strategy.",
+          "line_number": 12
+        },
+        {
+          "evidence": "const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes",
+          "description": "The lockout duration is hardcoded in seconds. An attacker could exploit this by attempting to brute-force the password within the lockout period.",
+          "severity": "LOW",
+          "fix": "Consider using a configurable value for `LOCKOUT_DURATION_MS` or implementing a more sophisticated rate limiting strategy.",
+          "line_number": 13
+        },
+        {
+          "evidence": "const ATTEMPT_WINDOW_MS = 60 * 60 * 1000; // 1 hour",
+          "description": "The attempt window is hardcoded in seconds. An attacker could exploit this by attempting to brute-force the password within the attempt window.",
+          "severity": "LOW",
+          "fix": "Consider using a configurable value for `ATTEMPT_WINDOW_MS` or implementing a more sophisticated rate limiting strategy.",
+          "line_number": 14
+        },
+        {
+          "evidence": "const result = await pool.query('SELECT id, username, password_hash FROM users WHERE username = $1', [username]);",
+          "description": "The SQL query is vulnerable to SQL injection attacks. An attacker could exploit this by passing malicious input as the `username` parameter.",
+          "severity": "MEDIUM",
+          "fix": "Use prepared statements or parameterized queries to prevent SQL injection attacks.",
+          "line_number": 78
+        },
+        {
+          "evidence": "const validPassword = await bcrypt.compare(password, user.password_hash);",
+          "description": "The password comparison is vulnerable to timing attacks. An attacker could exploit this by measuring the time it takes for the comparison to fail.",
+          "severity": "MEDIUM",
+          "fix": "Use a constant-time comparison function or implement a more secure password verification strategy.",
+          "line_number": 89
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 5,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 18302.32,
+      "secure_latency_ms": 38881.75,
+      "detected_substring": false,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authentication-000010-41a9a95a",
+      "technique": "Devise security configuration",
+      "cwe": "CWE-287",
+      "lang": "ruby",
+      "severity": "HIGH",
+      "must_match": [
+        "configur",
+        "devise"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 9,
+      "vuln_descriptions": [
+        "Predictable and short pepper value, making it easier for attackers to guess or brute-force.",
+        "Hardcoded secret key in the code, making it easily accessible to anyone with access to the repository.",
+        "Insecure password stretching setting, allowing weak passwords in production environment.",
+        "Weak password length limit, allowing simple passwords in production environment.",
+        "Long user session timeout, making it easier for attackers to maintain sessions without being detected.",
+        "Long rememberable token expiration, making it easier for attackers to maintain tokens without being detected.",
+        "Insecure mailer sender address, making it easier for attackers to forge emails.",
+        "Missing secure modules like :lockable and :confirmable in the User model.",
+        "Custom validation that weakens Devise default password policies."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "config.pepper = \"12345\"\n",
+          "description": "Predictable and short pepper value, making it easier for attackers to guess or brute-force.",
+          "severity": "CRITICAL",
+          "fix": "Use a cryptographically secure random number generator to generate a unique pepper value.",
+          "line_number": 4
+        },
+        {
+          "evidence": "config.secret_key = \"hardcoded_devise_secret_key_in_code\"\n",
+          "description": "Hardcoded secret key in the code, making it easily accessible to anyone with access to the repository.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secrets manager to store sensitive configuration values.",
+          "line_number": 5
+        },
+        {
+          "evidence": "config.stretches = 1 if Rails.env.production?\n",
+          "description": "Insecure password stretching setting, allowing weak passwords in production environment.",
+          "severity": "MEDIUM",
+          "fix": "Increase the number of stretches or use a more secure algorithm like Argon2.",
+          "line_number": 8
+        },
+        {
+          "evidence": "config.password_length = 4..72\n",
+          "description": "Weak password length limit, allowing simple passwords in production environment.",
+          "severity": "MEDIUM",
+          "fix": "Increase the minimum password length to at least 12 characters.",
+          "line_number": 9
+        },
+        {
+          "evidence": "config.timeout_in = 72.hours\n",
+          "description": "Long user session timeout, making it easier for attackers to maintain sessions without being detected.",
+          "severity": "MEDIUM",
+          "fix": "Decrease the timeout value to a more reasonable duration, such as 1 hour or less.",
+          "line_number": 12
+        },
+        {
+          "evidence": "config.remember_for = 1.year\n",
+          "description": "Long rememberable token expiration, making it easier for attackers to maintain tokens without being detected.",
+          "severity": "MEDIUM",
+          "fix": "Decrease the rememberable token expiration value to a more reasonable duration, such as 30 days or less.",
+          "line_number": 15
+        },
+        {
+          "evidence": "config.mailer_sender = \"no-reply@example.com\"\n",
+          "description": "Insecure mailer sender address, making it easier for attackers to forge emails.",
+          "severity": "MEDIUM",
+          "fix": "Use a more secure mailer sender address or implement SPF/DKIM/DMARC record management.",
+          "line_number": 18
+        },
+        {
+          "evidence": "class User < ApplicationRecord\n  devise :database_authenticatable, :registerable,\n         :recoverable, :rememberable, :validatable\nend\n",
+          "description": "Missing secure modules like :lockable and :confirmable in the User model.",
+          "severity": "MEDIUM",
+          "fix": "Add missing secure modules to the User model configuration.",
+          "line_number": 32
+        },
+        {
+          "evidence": "def password_not_strict\n  # Accept any password Devise already accepted, no extra checks.\n  true\nend\n",
+          "description": "Custom validation that weakens Devise default password policies.",
+          "severity": "MEDIUM",
+          "fix": "Remove or modify the custom validation to enforce stronger password policies.",
+          "line_number": 42
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "config.pepper = Rails.application.credentials.dig(:devise, :pepper)",
+          "description": "Hardcoded secret stored in plain text. This is a critical security risk as it allows an attacker to access the pepper value and potentially decrypt or tamper with sensitive data.",
+          "severity": "CRITICAL",
+          "fix": "Use environment-managed secrets (Rails credentials / ENV) instead of literals, e.g., config.pepper = Rails.application.secrets.devise_pepper",
+          "line_number": 4
+        },
+        {
+          "evidence": "config.secret_key = Rails.application.credentials.dig(:devise, :secret_key)",
+          "description": "Hardcoded secret stored in plain text. This is a critical security risk as it allows an attacker to access the secret key and potentially decrypt or tamper with sensitive data.",
+          "severity": "CRITICAL",
+          "fix": "Use environment-managed secrets (Rails credentials / ENV) instead of literals, e.g., config.secret_key = Rails.application.secrets.devise_secret_key",
+          "line_number": 5
+        },
+        {
+          "evidence": "config.navigational_formats = ['*/*', :html]",
+          "description": "Insecure navigational formats. This is a medium security risk as it allows an attacker to potentially bypass security measures by manipulating the navigational format.",
+          "severity": "MEDIUM",
+          "fix": "Restrict navigational formats to reduce attack surface, e.g., config.navigational_formats = ['*/*', :json]",
+          "line_number": 36
+        },
+        {
+          "evidence": "config.remember_for = 7.days",
+          "description": "Insecure remember period. This is a medium security risk as it allows an attacker to potentially maintain access to the user's account for an extended period.",
+          "severity": "MEDIUM",
+          "fix": "Use a shorter remember period, e.g., config.remember_for = 1.day",
+          "line_number": 21
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 41921.29,
+      "secure_latency_ms": 32802.74,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authorization-000001-3308e7ce",
+      "technique": "Privilege escalation (horizontal)",
+      "cwe": "CWE-284",
+      "lang": "python",
+      "severity": "CRITICAL",
+      "must_match": [
+        "escalati",
+        "horizont",
+        "privileg"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded secret key exposed in plain text. This is a critical security risk as it allows an attacker to easily obtain the secret key and use it for authentication bypass or other attacks.",
+        "SQL injection vulnerability. The user ID is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "Lack of input validation. The error message is hardcoded and does not provide any useful information about the error."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "app.secret_key = 'super-secret-key'",
+          "description": "Hardcoded secret key exposed in plain text. This is a critical security risk as it allows an attacker to easily obtain the secret key and use it for authentication bypass or other attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secrets manager to store sensitive keys",
+          "line_number": 6
+        },
+        {
+          "evidence": "cursor.execute('SELECT id, username, email, ssn, address, phone FROM users WHERE id = ?', (user_id,))",
+          "description": "SQL injection vulnerability. The user ID is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters",
+          "line_number": 22
+        },
+        {
+          "evidence": "return jsonify({'error': 'User not found'}), 404",
+          "description": "Lack of input validation. The error message is hardcoded and does not provide any useful information about the error.",
+          "severity": "MEDIUM",
+          "fix": "Use a more informative error message or return a JSON object with an error code",
+          "line_number": 35
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "app.secret_key = 'super-secret-key'",
+          "description": "Hardcoded secret or credential",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secrets manager to store sensitive data",
+          "line_number": 7
+        },
+        {
+          "evidence": "cursor.execute('SELECT id, username, email, address, phone FROM users WHERE id = ?', (user_id,))",
+          "description": "SQL injection vulnerability",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements to prevent user input from being executed as SQL",
+          "line_number": 49
+        },
+        {
+          "evidence": "return jsonify({'error': 'Access denied'}), 403",
+          "description": "Lack of error handling and logging for unauthorized access attempts",
+          "severity": "MEDIUM",
+          "fix": "Implement logging and error handling to track and respond to unauthorized access attempts",
+          "line_number": 37
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "return jsonify({'id': user[0], 'username': user[1], 'email': user[2], 'ssn': user[3], 'address': user[4], 'phone': user[5]})",
+          "description": "Sensitive PII exposed. The social security number is returned in the response, which is a serious privacy risk.",
+          "severity": "CRITICAL",
+          "fix": "Remove sensitive fields from the response or use encryption"
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "security_logger.warning(f\"UNAUTHORIZED_ACCESS_ATTEMPT: user={current_user_id} ...\")",
+          "description": "Insecure logging of sensitive information (user ID)",
+          "severity": "MEDIUM",
+          "fix": "Use a secure logging mechanism, such as logging to a centralized log server with access controls"
+        }
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 25292.28,
+      "secure_latency_ms": 23007.74,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "authorization-000002-06aa3cc9",
+      "technique": "Strong parameters",
+      "cwe": "CWE-284",
+      "lang": "ruby",
+      "severity": "CRITICAL",
+      "must_match": [
+        "paramete",
+        "strong"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Directly passing user input to `@user.update` without validation or sanitization, potentially allowing for SQL injection or command injection attacks.",
+        "The `authenticate_user!` action only checks for authentication, but does not perform authorization on attributes. This could allow an authenticated user with insufficient permissions to update sensitive attributes.",
+        "Hardcoded logging statement with sensitive information (`@user.id`) exposed in the log output."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "params[:user]",
+          "description": "Directly passing user input to `@user.update` without validation or sanitization, potentially allowing for SQL injection or command injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a strong parameter method like `strong_params` to whitelist and sanitize the user input.",
+          "line_number": 8
+        },
+        {
+          "evidence": "before_action :authenticate_user!",
+          "description": "The `authenticate_user!` action only checks for authentication, but does not perform authorization on attributes. This could allow an authenticated user with insufficient permissions to update sensitive attributes.",
+          "severity": "MEDIUM",
+          "fix": "Implement role-based access control or attribute-level authorization to ensure that only authorized users can update specific attributes.",
+          "line_number": 3
+        },
+        {
+          "evidence": "Rails.logger.info(",
+          "description": "Hardcoded logging statement with sensitive information (`@user.id`) exposed in the log output.",
+          "severity": "LOW",
+          "fix": "Use a more secure logging mechanism, such as `Rails.logger.debug` or `ActiveSupport::Logger`, to avoid exposing sensitive information.",
+          "line_number": 11
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "params.require(:user).permit(:name, :email)",
+          "description": "Insecure parameter whitelisting. Only `:name` and `:email` are allowed, but no validation is performed on the input data.",
+          "severity": "MEDIUM",
+          "fix": "Use strong parameters with default values to ensure all required fields are present in the request.",
+          "line_number": 43
+        },
+        {
+          "evidence": "unless current_user.id == @user.id",
+          "description": "Lack of validation for `current_user` object. If `current_user` is not an instance of `User`, this condition will always be true.",
+          "severity": "LOW",
+          "fix": "Add a check to ensure `current_user` is an instance of `User` before comparing it with `@user.id`. Use `instance_of?` method.",
+          "line_number": 48
+        },
+        {
+          "evidence": "errors.add(:base, 'Not allowed to change role or admin flag here')",
+          "description": "Hardcoded error message. This can be used for debugging purposes, but should not be exposed in production.",
+          "severity": "LOW",
+          "fix": "Use a more secure error message that does not reveal sensitive information.",
+          "line_number": 72
+        },
+        {
+          "evidence": "Current.admin_context",
+          "description": "Hardcoded secret or credential. The `admin_context` attribute is set without any validation or sanitization.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure method to retrieve the `admin_context`, such as using an environment variable or a configuration file.",
+          "line_number": 71
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 18140.04,
+      "secure_latency_ms": 26170.37,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authorization-000002-54260b4d",
+      "technique": "File upload path traversal",
+      "cwe": "CWE-284",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "file",
+        "path",
+        "traversa",
+        "upload"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "The code does not validate the `subfolder` parameter from the request body. This can lead to a directory traversal vulnerability where an attacker can access sensitive files."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "const userPath = req.body.subfolder || ''; const finalPath = path.join('uploads', userPath, req.file.filename);",
+          "description": "The code does not validate the `subfolder` parameter from the request body. This can lead to a directory traversal vulnerability where an attacker can access sensitive files.",
+          "severity": "CRITICAL",
+          "fix": "Use a whitelist of allowed subfolders and validate user input",
+          "line_number": 23
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const finalPath = path.join(UPLOAD_DIR, req.file.filename);",
+          "description": "The `finalPath` is constructed by joining the `UPLOAD_DIR` with the user-uploaded file name. This could lead to a directory traversal attack if an attacker can manipulate the filename.",
+          "severity": "CRITICAL",
+          "fix": "Use path.join(UPLOAD_DIR, req.file.filename) and check if the resulting path starts with UPLOAD_DIR before proceeding.",
+          "line_number": 70
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "filename: function (req, file, cb) { cb(null, file.originalname); }",
+          "description": "The code trusts user-supplied filename without sanitization or validation. This can lead to a path traversal vulnerability where an attacker can manipulate the filename to access sensitive files.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure filename generation mechanism, such as UUID or hash the original filename"
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "",
+          "description": "No authentication or authorization checks are performed on the uploaded file. This could lead to unauthorized access to sensitive data.",
+          "severity": "MEDIUM",
+          "fix": "Implement authentication and authorization checks for uploaded files, such as checking if the user is authenticated before allowing them to upload a file."
+        },
+        {
+          "evidence": "",
+          "description": "No validation is performed on the `MAX_FILE_SIZE` variable. This could lead to an attacker uploading a large file that exceeds the allowed size.",
+          "severity": "MEDIUM",
+          "fix": "Validate the `MAX_FILE_SIZE` variable and ensure it is set to a reasonable value."
+        },
+        {
+          "evidence": "",
+          "description": "No error handling is performed when deleting files from the upload directory. This could lead to issues if an error occurs while deleting a file.",
+          "severity": "LOW",
+          "fix": "Implement try-catch blocks when deleting files from the upload directory."
+        }
+      ],
+      "secure_findings": 1,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 17050.54,
+      "secure_latency_ms": 28171.82,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authorization-000003-1d71fd99",
+      "technique": "GraphQL authorization bypass",
+      "cwe": "CWE-284",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "authoriz",
+        "bypass",
+        "graphql"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "This code does not validate the input provided by the client, making it vulnerable to SQL injection attacks. An attacker could pass a malicious ID to retrieve sensitive data.",
+        "This code does not check if the authenticated user has permission to access this specific user's data, making it vulnerable to unauthorized data exposure.",
+        "This code does not check if the authenticated user has permission to access this specific user's data, making it vulnerable to unauthorized data exposure."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "String requestedUserId = environment.getArgument(\"id\");",
+          "description": "This code does not validate the input provided by the client, making it vulnerable to SQL injection attacks. An attacker could pass a malicious ID to retrieve sensitive data.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements to prevent SQL injection.",
+          "line_number": 21
+        },
+        {
+          "evidence": "return userRepository.findById(requestedUserId);",
+          "description": "This code does not check if the authenticated user has permission to access this specific user's data, making it vulnerable to unauthorized data exposure.",
+          "severity": "CRITICAL",
+          "fix": "Implement role-based access control or use a more fine-grained authorization mechanism.",
+          "line_number": 24
+        },
+        {
+          "evidence": "User parentUser = environment.getSource();",
+          "description": "This code does not check if the authenticated user has permission to access this specific user's data, making it vulnerable to unauthorized data exposure.",
+          "severity": "CRITICAL",
+          "fix": "Implement role-based access control or use a more fine-grained authorization mechanism.",
+          "line_number": 36
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "String requestedUserId = environment.getArgument(\"id\");",
+          "description": "Potential SQL injection vulnerability if the `id` argument is not properly sanitized.",
+          "severity": "MEDIUM",
+          "fix": "Use parameterized queries or prepared statements to prevent SQL injection.",
+          "line_number": 28
+        },
+        {
+          "evidence": "if (!authService.canAccessUser(currentUser, requestedUserId)) {",
+          "description": "Potential authorization issue if the `canAccessUser` method does not properly validate permissions.",
+          "severity": "MEDIUM",
+          "fix": "Implement additional permission checks and validation to ensure correct authorization.",
+          "line_number": 31
+        },
+        {
+          "evidence": "User user = userRepository.findById(requestedUserId);",
+          "description": "Potential data exposure risk if the `findById` method returns sensitive information.",
+          "severity": "MEDIUM",
+          "fix": "Implement pagination or limit the amount of data returned by the `findById` method to prevent excessive data exposure.",
+          "line_number": 37
+        },
+        {
+          "evidence": "public User filterSensitiveFields(User user, AuthenticatedUser requester) {",
+          "description": "Potential XSS vulnerability if the `filterSensitiveFields` method does not properly sanitize sensitive fields.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure sanitization mechanism to prevent XSS attacks.",
+          "line_number": 64
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [
+        {
+          "evidence": "private final Logger auditLog = LoggerFactory.getLogger(\"AUDIT\");",
+          "description": "Hardcoded secret: the logger name is hardcoded, which could be a security risk if the logger is not properly secured.",
+          "severity": "LOW",
+          "fix": "Use a secure logging mechanism or configure the logger to use a secure log file."
+        }
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 20478.08,
+      "secure_latency_ms": 28470.66,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authorization-000004-d3fda26b",
+      "technique": "Path traversal",
+      "cwe": "CWE-22",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "path",
+        "traversa"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Directly using user input in file path without validation or sanitization, allowing potential directory traversal attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "filename := r.URL.Query().Get(\"file\")\nfilePath := filepath.Join(uploadDir, filename)\n",
+          "description": "Directly using user input in file path without validation or sanitization, allowing potential directory traversal attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a validated and sanitized version of the filename, such as `filepath.Join(uploadDir, filepath.Base(filename))`",
+          "line_number": 14
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "filename := r.URL.Query().Get(",
+          "description": "The `filename` variable is directly retrieved from the URL query string without any validation or sanitization. This makes it vulnerable to path traversal attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a whitelist of allowed paths and validate the input against it",
+          "line_number": 15
+        },
+        {
+          "evidence": "absPath, err := filepath.Abs(filePath)",
+          "description": "The `filepath.Abs` function is used without checking if the resulting path is absolute. This could lead to a situation where an attacker can manipulate the upload directory.",
+          "severity": "MEDIUM",
+          "fix": "Use `filepath.Rel` instead of `filepath.Abs` to get the relative path from the upload directory",
+          "line_number": 37
+        },
+        {
+          "evidence": "fileInfo, err := os.Lstat(absPath)",
+          "description": "The `os.Lstat` function is used without checking if the resulting file information is valid. This could lead to a situation where an attacker can manipulate the file type.",
+          "severity": "MEDIUM",
+          "fix": "Check the error for specific conditions and handle them accordingly",
+          "line_number": 52
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "",
+          "severity": "",
+          "fix": ""
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 13657.65,
+      "secure_latency_ms": 22934.77,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "authorization-000008-2c64d0c9",
+      "technique": "Forced browsing",
+      "cwe": "CWE-284",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "browsing",
+        "forced"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Insecure database query. An attacker could potentially inject malicious SQL code by manipulating the `users` parameter.",
+        "No authorization check on admin routes. An attacker could potentially access sensitive data by knowing the URL.",
+        "Critical action with no authorization. An attacker could potentially delete sensitive data by manipulating the `id` parameter.",
+        "Sensitive data exposed to anyone. An attacker could potentially access sensitive information by knowing the URL."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "const users = db.query('SELECT * FROM users');",
+          "description": "Insecure database query. An attacker could potentially inject malicious SQL code by manipulating the `users` parameter.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements to prevent SQL injection.",
+          "line_number": 9
+        },
+        {
+          "evidence": "const settings = db.query('SELECT * FROM system_settings');",
+          "description": "No authorization check on admin routes. An attacker could potentially access sensitive data by knowing the URL.",
+          "severity": "CRITICAL",
+          "fix": "Implement proper authorization checks for admin routes.",
+          "line_number": 15
+        },
+        {
+          "evidence": "db.query('DELETE FROM users WHERE id = ?', [req.params.id]);",
+          "description": "Critical action with no authorization. An attacker could potentially delete sensitive data by manipulating the `id` parameter.",
+          "severity": "CRITICAL",
+          "fix": "Implement proper authorization checks for critical actions.",
+          "line_number": 21
+        },
+        {
+          "evidence": "const reports = db.query('SELECT * FROM financial_reports');",
+          "description": "Sensitive data exposed to anyone. An attacker could potentially access sensitive information by knowing the URL.",
+          "severity": "CRITICAL",
+          "fix": "Implement proper authorization checks for sensitive routes.",
+          "line_number": 27
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const token = authHeader && authHeader.split(' ')[1];",
+          "description": "Hardcoded secret or credential: JWT_SECRET is stored in a process environment variable, but its value should be kept secret and not hardcoded.",
+          "severity": "LOW",
+          "fix": "Use a secrets manager to store the JWT_SECRET value securely.",
+          "line_number": 10
+        },
+        {
+          "evidence": "const users = db.query('SELECT id, username, email, role FROM users');",
+          "description": "SQL Injection: The query string is directly concatenated with user input (req.path), which can lead to SQL injection attacks.",
+          "severity": "MEDIUM",
+          "fix": "Use parameterized queries or prepared statements to prevent SQL injection.",
+          "line_number": 50
+        },
+        {
+          "evidence": "console.error(`Unauthorized access attempt: User ${req.user.id} tried to access ${req.path}`);",
+          "description": "Data Exposure Risk: Logging sensitive information like user IDs and request paths can expose sensitive data.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure logging mechanism or remove sensitive information from logs.",
+          "line_number": 37
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 22349.1,
+      "secure_latency_ms": 22061.53,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "authorization-000008-af64fd8f",
+      "technique": "HTTP verb tampering",
+      "cwe": "CWE-284",
+      "lang": "javascript",
+      "severity": "HIGH",
+      "must_match": [
+        "http",
+        "tamperin",
+        "verb"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "This code only checks for POST and DELETE methods, but does not handle other HTTP methods like GET or PUT. This could lead to unintended access to sensitive data.",
+        "This code returns a 405 status code when an unsupported HTTP method is used, but does not provide any additional information about the intended method. This could lead to confusion and security issues."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "if (req.method === 'POST' || req.method === 'DELETE')",
+          "description": "This code only checks for POST and DELETE methods, but does not handle other HTTP methods like GET or PUT. This could lead to unintended access to sensitive data.",
+          "severity": "MEDIUM",
+          "fix": "Expand the condition to include all HTTP methods: `if (req.method === 'POST' || req.method === 'DELETE' || req.method === 'GET' || req.method === 'PUT') { ... }`",
+          "line_number": 7
+        },
+        {
+          "evidence": "res.status(405).json({ error: 'Method not allowed' });",
+          "description": "This code returns a 405 status code when an unsupported HTTP method is used, but does not provide any additional information about the intended method. This could lead to confusion and security issues.",
+          "severity": "LOW",
+          "fix": "Return a more informative error message, such as `res.status(405).json({ error: 'Unsupported HTTP method' });`",
+          "line_number": 37
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "console.warn(`Unauthorized admin access attempt: user=${req.user.id}, method=${req.method}, path=${req.path}`);",
+          "description": "Logging sensitive information to the console can be a security risk. An attacker could potentially use this information to gain insight into the application's internal workings.",
+          "severity": "LOW",
+          "fix": "Replace the `console.warn` statement with a more secure logging mechanism, such as sending the log data to a centralized logging service or using a logging library that provides a secure way to log sensitive information.",
+          "line_number": 12
+        },
+        {
+          "evidence": "adminRouter.all('/users/:id', (req, res) => { res.status(405).json({ error: 'Method not allowed' }); });",
+          "description": "Using `app.all()` instead of `app.use()` for a specific route can lead to unexpected behavior and potential security vulnerabilities. It's better to use `app.use()` with the correct middleware.",
+          "severity": "MEDIUM",
+          "fix": "Replace `adminRouter.all('/users/:id', (req, res) => { res.status(405).json({ error: 'Method not allowed' }); });` with `adminRouter.get('/users/:id', (req, res) => { ... }); adminRouter.delete('/users/:id', (req, res) => { ... }); adminRouter.patch('/users/:id', (req, res) => { ... });`",
+          "line_number": 59
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 2,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 19232.99,
+      "secure_latency_ms": 25594.57,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "authorization-000010-429cefdd",
+      "technique": "IDOR (Insecure Direct Object Reference)",
+      "cwe": "CWE-284",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "direct",
+        "idor"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "The `userID` variable is assigned the value of a user-supplied input (`vars["
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "userID := vars[",
+          "description": "The `userID` variable is assigned the value of a user-supplied input (`vars[",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries to prevent SQL injection attacks. Replace `$1` with `:id` and update the database driver to use named parameters.",
+          "line_number": 26
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "",
+          "severity": "LOW",
+          "fix": ""
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "db.QueryRow(\"SELECT id, email, full_name, ssn, balance FROM users WHERE id = $1\", authUserID, )",
+          "description": "Hardcoded secret: The database connection string is hardcoded in the code. If this file is accessed directly or if an attacker gains access to the server, they can obtain the database credentials.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secrets manager to store sensitive data like database credentials."
+        },
+        {
+          "evidence": "vars := mux.Vars(r); requestedID, err := strconv.Atoi(vars[\"id\"])",
+          "description": "Input validation gap: The code does not validate the input of the URL parameter 'id'. An attacker could potentially inject malicious data by manipulating this parameter.",
+          "severity": "MEDIUM",
+          "fix": "Use a whitelist approach to validate and sanitize user input."
+        },
+        {
+          "evidence": "var user User; err = db.QueryRow(\"SELECT id, email, full_name, ssn, balance FROM users WHERE id = $1\", authUserID, ).Scan(&user.ID, &user.Email, &user.FullName, &user.SSN, &user.Balance)",
+          "description": "SQL injection vulnerability: The code uses a raw SQL query with user input. An attacker could potentially inject malicious SQL by manipulating the 'id' parameter.",
+          "severity": "CRITICAL",
+          "fix": "Use prepared statements to separate SQL from user input."
+        }
+      ],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 15836.84,
+      "secure_latency_ms": 28960.85,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "cryptography-000002-a3999dd4",
+      "technique": "Insecure password hashing",
+      "cwe": "CWE-327",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "hashing",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Using fast SHA-256 hash for passwords is insecure. An attacker could use a brute-force attack to guess the password.",
+        "Simple hash comparison is insecure. An attacker could use a timing attack or precomputed tables to guess the password."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "function hashPassword(password) {\n  return crypto.createHash('sha256').update(password).digest('hex');\n}",
+          "description": "Using fast SHA-256 hash for passwords is insecure. An attacker could use a brute-force attack to guess the password.",
+          "severity": "CRITICAL",
+          "fix": "Use a slow and secure hashing algorithm like bcrypt or Argon2, and add a salt value to prevent rainbow table attacks.",
+          "line_number": 8
+        },
+        {
+          "evidence": "if (user && user.password === hashPassword(password)) {\n  res.json({ message: 'Login successful' });\n}",
+          "description": "Simple hash comparison is insecure. An attacker could use a timing attack or precomputed tables to guess the password.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure password verification function like bcrypt.compare() or Argon2.verify(), and avoid direct comparisons of hashed passwords.",
+          "line_number": 29
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const SALT_ROUNDS = 12; // Adjustable work factor (2^12 iterations)",
+          "description": "Hardcoded secret: The salt rounds value is hardcoded, making it vulnerable to being discovered or modified by an attacker.",
+          "severity": "LOW",
+          "fix": "Consider using a secure configuration file or environment variable to store the salt rounds value.",
+          "line_number": 7
+        },
+        {
+          "evidence": "const hashedPassword = await hashPassword(password);",
+          "description": "Lack of input validation: The `hashPassword` function does not validate the input password length, which could lead to a weak password being generated.",
+          "severity": "MEDIUM",
+          "fix": "Consider adding input validation to ensure passwords are at least 12 characters long.",
+          "line_number": 29
+        },
+        {
+          "evidence": "const user = await getUserByUsername(username);",
+          "description": "Lack of authentication: The `/api/login` endpoint does not perform any authentication checks on the username, making it vulnerable to username injection attacks.",
+          "severity": "MEDIUM",
+          "fix": "Consider adding authentication checks, such as verifying the username against a database or using a token-based system.",
+          "line_number": 42
+        },
+        {
+          "evidence": "res.status(401).json({ error: 'Invalid credentials' });",
+          "description": "Lack of error handling: The `/api/login` endpoint does not handle errors properly, which could lead to sensitive information being exposed.",
+          "severity": "MEDIUM",
+          "fix": "Consider adding proper error handling and logging mechanisms.",
+          "line_number": 48
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 18211.41,
+      "secure_latency_ms": 25188.76,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "cryptography-000003-c0891016",
+      "technique": "Weak TLS versions (SSLv3, TLS 1.0)",
+      "cwe": "CWE-327",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "sslv3",
+        "versions"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Using SSLv3 is insecure and should be updated to TLS 1.2 or higher.",
+        "Using a default socket factory without certificate validation can lead to man-in-the-middle attacks.",
+        "Using a default random number generator without secure settings can lead to predictable key generation."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "SSLContext.getInstance(\"SSLv3\");",
+          "description": "Using SSLv3 is insecure and should be updated to TLS 1.2 or higher.",
+          "severity": "CRITICAL",
+          "fix": "Update the SSL version to a secure one, e.g., `SSLContext.getInstance(\"TLSv1.2\");`",
+          "line_number": 11
+        },
+        {
+          "evidence": "HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());",
+          "description": "Using a default socket factory without certificate validation can lead to man-in-the-middle attacks.",
+          "severity": "CRITICAL",
+          "fix": "Implement certificate validation using `TrustManager` or `SSLContext` with secure settings.",
+          "line_number": 14
+        },
+        {
+          "evidence": "sc.init(null, trustAllCerts, new java.security.SecureRandom());",
+          "description": "Using a default random number generator without secure settings can lead to predictable key generation.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure random number generator, e.g., `SecureRandom.getInstanceStrong();`",
+          "line_number": 45
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "private static final String[] SECURE_PROTOCOLS = {\"TLSv1.3\", \"TLSv1.2\"};",
+          "description": "The secure protocols are hardcoded, but TLS 1.0 is not included in the list.",
+          "severity": "LOW",
+          "fix": "Add TLS 1.0 to the SECURE_PROTOCOLS array.",
+          "line_number": 10
+        },
+        {
+          "evidence": "URL url = new URL(urlString);",
+          "description": "The URL is not validated, which could lead to a denial-of-service attack if an attacker provides a malformed URL.",
+          "severity": "MEDIUM",
+          "fix": "Validate the URL using a library like URI or URL.",
+          "line_number": 28
+        },
+        {
+          "evidence": "HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();",
+          "description": "The HTTPS connection is not verified, which could lead to a man-in-the-middle attack if an attacker intercepts the connection.",
+          "severity": "MEDIUM",
+          "fix": "Verify the HTTPS connection using the `HttpsURLConnection` constructor with the `allowUserAuthentication` parameter set to `false`.",
+          "line_number": 29
+        },
+        {
+          "evidence": "conn.setSSLSocketFactory(factory);",
+          "description": "The SSLSocketFactory is not validated, which could lead to a denial-of-service attack if an attacker provides a malicious factory.",
+          "severity": "MEDIUM",
+          "fix": "Validate the SSLSocketFactory using a library like SSLToolbox or JSSE.",
+          "line_number": 30
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "TrustManager[] trustAllCerts = new TrustManager[]{...",
+          "description": "Trusting all certificates without verification can lead to a man-in-the-middle attack.",
+          "severity": "CRITICAL",
+          "fix": "Implement certificate validation using `TrustManager` or `SSLContext` with secure settings."
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "private static final String[] SECURE_CIPHER_SUITES = {\"TLS_AES_256_GCM_SHA384\", \"TLS_AES_128_GCM_SHA256\", \"TLS_CHACHA20_POLY1305_SHA256\", ...};",
+          "description": "The secure cipher suites are hardcoded, but some may be insecure against certain attacks.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a more comprehensive list of secure cipher suites or implementing a mechanism to dynamically update the list."
+        }
+      ],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 25042.67,
+      "secure_latency_ms": 37678.33,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "cryptography-000007-2ae1e720",
+      "technique": "Hard-coded encryption keys",
+      "cwe": "CWE-327",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "coded",
+        "encrypti",
+        "hard",
+        "keys"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded encryption key is exposed in plain text, making it vulnerable to interception or theft by unauthorized parties.",
+        "Hardcoded initialization vector (IV) is exposed in plain text, making it vulnerable to interception or theft by unauthorized parties.",
+        "Sensitive data is not properly sanitized before encryption, making it vulnerable to XSS attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "static ENCRYPTION_KEY = 'MySecretKey12345MySecretKey12345';",
+          "description": "Hardcoded encryption key is exposed in plain text, making it vulnerable to interception or theft by unauthorized parties.",
+          "severity": "CRITICAL",
+          "fix": "Generate a random encryption key and store it securely using a secrets manager.",
+          "line_number": 5
+        },
+        {
+          "evidence": "static IV = 'InitVector123456';",
+          "description": "Hardcoded initialization vector (IV) is exposed in plain text, making it vulnerable to interception or theft by unauthorized parties.",
+          "severity": "CRITICAL",
+          "fix": "Generate a random IV and store it securely using a secrets manager.",
+          "line_number": 6
+        },
+        {
+          "evidence": "let encrypted = cipher.update(JSON.stringify(userData), 'utf8', 'hex');",
+          "description": "Sensitive data is not properly sanitized before encryption, making it vulnerable to XSS attacks.",
+          "severity": "MEDIUM",
+          "fix": "Use a parameterized query or prepared statement to prevent user input from being executed as code.",
+          "line_number": 15
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "this.encryptionKey = Buffer.from(keyBase64, 'base64');",
+          "description": "Hardcoded secret or credential: The encryption key is hardcoded in the environment variable `DATA_ENCRYPTION_KEY`. This makes it vulnerable to exposure if the environment variable is not properly secured.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure method to load and store the encryption key, such as using a secrets manager or an encrypted configuration file.",
+          "line_number": 16
+        },
+        {
+          "evidence": "const cipher = crypto.createCipheriv(SecureUserDataEncryptor.ALGORITHM, this.encryptionKey, iv);",
+          "description": "Insecure use of environment variables: The `ALGORITHM` constant is set to `'aes-256-gcm'`, but it's not clear if the algorithm used in production will be the same as in development. This could lead to issues if the algorithm is changed without proper testing.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a more secure algorithm, such as `'aes-256-gcm-siv'`, and ensure that the algorithm used in production matches the one used in development.",
+          "line_number": 27
+        },
+        {
+          "evidence": "const authTag = cipher.getAuthTag();",
+          "description": "Insecure use of environment variables: The `AUTH_TAG_LENGTH` constant is set to `16`, but it's not clear if this value will be sufficient for all use cases. This could lead to issues if the authentication tag length is changed without proper testing.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a more secure authentication tag length, such as `32` or `64`, and ensure that the length used in production matches the one used in development.",
+          "line_number": 38
+        },
+        {
+          "evidence": "const decipher = crypto.createDecipheriv(SecureUserDataEncryptor.ALGORITHM, this.encryptionKey, iv);",
+          "description": "Insecure use of environment variables: The `ALGORITHM` constant is set to `'aes-256-gcm'`, but it's not clear if the algorithm used in production will be the same as in development. This could lead to issues if the algorithm is changed without proper testing.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a more secure algorithm, such as `'aes-256-gcm-siv'`, and ensure that the algorithm used in production matches the one used in development.",
+          "line_number": 52
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 19047.54,
+      "secure_latency_ms": 35251.91,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "cryptography-000008-bf9c562c",
+      "technique": "Certificate validation disabled",
+      "cwe": "CWE-295",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "certific",
+        "disabled",
+        "validati"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Disabling certificate validation can lead to man-in-the-middle attacks, where an attacker can intercept and modify sensitive data. This vulnerability is critical because it allows an attacker to impersonate a legitimate server.",
+        "Disabling hostname verification can allow an attacker to intercept and modify sensitive data. This vulnerability is critical because it allows an attacker to impersonate a legitimate server."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "TrustManager[] trustAllCerts = new TrustManager[] {\n",
+          "description": "Disabling certificate validation can lead to man-in-the-middle attacks, where an attacker can intercept and modify sensitive data. This vulnerability is critical because it allows an attacker to impersonate a legitimate server.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure trust manager that validates certificates properly.",
+          "line_number": 12
+        },
+        {
+          "evidence": "HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);",
+          "description": "Disabling hostname verification can allow an attacker to intercept and modify sensitive data. This vulnerability is critical because it allows an attacker to impersonate a legitimate server.",
+          "severity": "CRITICAL",
+          "fix": "Implement a proper hostname verifier that checks the domain name of the server.",
+          "line_number": 31
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "conn.setSSLSocketFactory(sslSocketFactory);",
+          "description": "The `setSSLSocketFactory` method does not validate the server's identity, allowing a man-in-the-middle (MITM) attack. An attacker could intercept and modify the communication between the client and server.",
+          "severity": "CRITICAL",
+          "fix": "Use `conn.setSSLSocketFactory(sslSocketFactory)` with a proper hostname verifier to ensure the server's identity is validated.",
+          "line_number": 44
+        },
+        {
+          "evidence": "this.hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();",
+          "description": "Using the default hostname verifier from `HttpsURLConnection` may not be sufficient for all use cases. An attacker could potentially bypass this verification by using a self-signed certificate.",
+          "severity": "MEDIUM",
+          "fix": "Implement a custom hostname verifier that checks the server's identity against the truststore.",
+          "line_number": 34
+        },
+        {
+          "evidence": "trustStore.load(fis, truststorePassword);",
+          "description": "Hardcoding the `truststorePassword` in plain text is a security risk. An attacker with access to the truststore file could obtain the password.",
+          "severity": "MEDIUM",
+          "fix": "Use environment variables or secure storage mechanisms to store sensitive credentials.",
+          "line_number": 21
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [
+        {
+          "evidence": "",
+          "description": "No data exposure risks were found in this code snippet.",
+          "severity": "N/A",
+          "fix": "N/A"
+        },
+        {
+          "evidence": "",
+          "description": "No input validation gaps were found in this code snippet.",
+          "severity": "N/A",
+          "fix": "N/A"
+        }
+      ],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 19439.0,
+      "secure_latency_ms": 28373.53,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "cryptography-000010-58f44bba",
+      "technique": "Insecure password hashing",
+      "cwe": "CWE-327",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "hashing",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "The comparison of the computed hash with the stored hash is vulnerable to timing attacks. An attacker could measure the time it takes for the comparison to return true or false, allowing them to determine whether the password is correct or not."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "return computedHash == storedHash;",
+          "description": "The comparison of the computed hash with the stored hash is vulnerable to timing attacks. An attacker could measure the time it takes for the comparison to return true or false, allowing them to determine whether the password is correct or not.",
+          "severity": "CRITICAL",
+          "fix": "Use a constant-time comparison function, such as `Equals` or `StringComparison.Ordinal`, to prevent timing attacks.",
+          "line_number": 23
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "private const int SaltSize = 16; // 128 bits",
+          "description": "The salt size is hardcoded. This could be a problem if the application needs to support different salt sizes in the future.",
+          "severity": "LOW",
+          "fix": "Consider making the salt size configurable or using a more flexible approach, such as using a random value.",
+          "line_number": 9
+        },
+        {
+          "evidence": "public bool VerifyPassword(string password, string storedHash)",
+          "description": "The `VerifyPassword` method does not perform input validation on the `password` parameter. This could lead to a denial-of-service attack if an attacker can provide a large amount of data.",
+          "severity": "MEDIUM",
+          "fix": "Add input validation to ensure that the `password` parameter is within a reasonable length.",
+          "line_number": 36
+        },
+        {
+          "evidence": "public string HashPassword(string password)",
+          "description": "The `HashPassword` method uses PBKDF2 with SHA256, which is a secure algorithm. However, it does not use a secure random number generator to generate the salt.",
+          "severity": "MEDIUM",
+          "fix": "Use a cryptographically secure random number generator to generate the salt.",
+          "line_number": 13
+        },
+        {
+          "evidence": "public bool VerifyPassword(string password, string storedHash)",
+          "description": "The `VerifyPassword` method uses a constant-time comparison to prevent timing attacks. However, it does not handle the case where the input data is null or empty.",
+          "severity": "MEDIUM",
+          "fix": "Add checks for null or empty input data and throw an exception if necessary.",
+          "line_number": 36
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "The code uses SHA256 for password hashing, which is considered insecure. It's recommended to use a stronger hash algorithm like Argon2, PBKDF2, or Bcrypt.",
+          "severity": "CRITICAL",
+          "fix": "Update the `HashPassword` method to use a stronger hash algorithm."
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 15568.54,
+      "secure_latency_ms": 26656.86,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "dependencies-000002-ace40fbd",
+      "technique": "transitive_dependency_vulnerabilities",
+      "cwe": "CWE-1035",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "dependen",
+        "transiti"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Using a wildcard (`*`) in the `lodash` dependency allows for any version to be installed, making it vulnerable to arbitrary code execution and potential security risks.",
+        "The wide range of versions for `express` (`^4.0.0`) may not be suitable for all environments, making it vulnerable to potential security risks.",
+        "The lack of an upper bound for `moment` (``>=2.0.0``) allows for any version greater than or equal to 2.0.0 to be installed, which may introduce security risks.",
+        "Using `latest` for the `request` dependency makes it unpredictable and vulnerable to security risks.",
+        "The `postinstall` script executes arbitrary code (`node setup.js`), making it vulnerable to code injection attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "  \"lodash\": \"*\",",
+          "description": "Using a wildcard (`*`) in the `lodash` dependency allows for any version to be installed, making it vulnerable to arbitrary code execution and potential security risks.",
+          "severity": "CRITICAL",
+          "fix": "Pin the `lodash` version to a specific range (e.g., `^4.0.0`) or use a specific version number.",
+          "line_number": 6
+        },
+        {
+          "evidence": "  \"express\": \"^4.0.0\",",
+          "description": "The wide range of versions for `express` (`^4.0.0`) may not be suitable for all environments, making it vulnerable to potential security risks.",
+          "severity": "MEDIUM",
+          "fix": "Narrow the version range or use a specific version number.",
+          "line_number": 7
+        },
+        {
+          "evidence": "  \"moment\": \">=2.0.0\",",
+          "description": "The lack of an upper bound for `moment` (``>=2.0.0``) allows for any version greater than or equal to 2.0.0 to be installed, which may introduce security risks.",
+          "severity": "MEDIUM",
+          "fix": "Add a specific upper bound (e.g., ``<3.0.0``) or use a specific version number.",
+          "line_number": 8
+        },
+        {
+          "evidence": "  \"request\": \"latest\",",
+          "description": "Using `latest` for the `request` dependency makes it unpredictable and vulnerable to security risks.",
+          "severity": "MEDIUM",
+          "fix": "Pin the `request` version to a specific range (e.g., ``^2.7.1``) or use a specific version number.",
+          "line_number": 9
+        },
+        {
+          "evidence": "  \"scripts\": {",
+          "description": "The `postinstall` script executes arbitrary code (`node setup.js`), making it vulnerable to code injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Remove or sanitize the `setup.js` file and ensure only trusted code is executed during installation.",
+          "line_number": 12
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "  \"event-stream\": \"3.3.6\",",
+          "description": "Using a known compromised version of `event-stream` (`3.3.6`) introduces security risks.",
+          "severity": "MEDIUM",
+          "fix": "Update to the latest version or use a specific version number."
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 30721.97,
+      "secure_latency_ms": 8568.37,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "dependencies-000002-c8435ae0",
+      "technique": "prototype_pollution",
+      "cwe": "CWE-1321",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "pollutio",
+        "prototyp"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The Lodash library is being used with an outdated version (< 4.17.19), which may contain vulnerabilities in its `merge` function.",
+        "The `_.merge` function is being used with untrusted user input (`userSettings`), which makes it vulnerable to prototype pollution attacks.",
+        "The `user` object is being polluted with untrusted data (`user.isAdmin`) from the request body, which can lead to unexpected behavior or security issues."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "_ = require('lodash'); // version < 4.17.19",
+          "description": "The Lodash library is being used with an outdated version (< 4.17.19), which may contain vulnerabilities in its `merge` function.",
+          "severity": "MEDIUM",
+          "fix": "Update the Lodash library to a version >= 4.17.19",
+          "line_number": 2
+        },
+        {
+          "evidence": "const mergedConfig = _.merge({}, defaultConfig, userSettings);",
+          "description": "The `_.merge` function is being used with untrusted user input (`userSettings`), which makes it vulnerable to prototype pollution attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a safer merge function like `_.assignIn` or validate and sanitize user input before merging",
+          "line_number": 18
+        },
+        {
+          "evidence": "const user = {}; if (user.isAdmin) { // Polluted prototype makes this true! grantAdminAccess(); }",
+          "description": "The `user` object is being polluted with untrusted data (`user.isAdmin`) from the request body, which can lead to unexpected behavior or security issues.",
+          "severity": "MEDIUM",
+          "fix": "Validate and sanitize user input before assigning it to sensitive properties like `isAdmin`",
+          "line_number": 21
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const sanitized = sanitizeObject(req.body, ALLOWED_SETTINGS);",
+          "description": "Prototype pollution vulnerability in `sanitizeObject` function. The function does not properly handle nested objects or arrays, allowing an attacker to inject malicious properties.",
+          "severity": "CRITICAL",
+          "fix": "Update the `sanitizeObject` function to recursively sanitize all properties of the object, including nested ones.",
+          "line_number": 59
+        },
+        {
+          "evidence": "const validated = {};",
+          "description": "Hardcoded secret or credential in `defaultConfig` object. The `notifications` property is set to `true`, which may be considered sensitive information.",
+          "severity": "LOW",
+          "fix": "Update the `defaultConfig` object to use a secure default value for the `notifications` property, such as `false`.",
+          "line_number": 39
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [
+        {
+          "evidence": "if (settings.fontSize >= 10 && settings.fontSize <= 24) {",
+          "description": "Input validation gap in `validateSettings` function. The `fontSize` value is not validated against a specific format or range, allowing an attacker to inject invalid values.",
+          "severity": "MEDIUM",
+          "fix": "Update the `validateSettings` function to validate the `fontSize` value against a specific format (e.g., integer) and range."
+        }
+      ],
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 18368.7,
+      "secure_latency_ms": 22846.43,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "dependencies-000003-13931f6e",
+      "technique": "Supply chain attacks",
+      "cwe": "CWE-1035",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "chain",
+        "supply"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Using an untrusted third-party repository can lead to security vulnerabilities, as the repository may contain malicious artifacts.",
+        "Using version ranges with no upper bound can lead to automatic updates of vulnerable versions.",
+        "Using the LATEST keyword can lead to automatic updates of vulnerable versions.",
+        "No version pinning can lead to automatic updates of vulnerable versions.",
+        "Using a version with typosquatting risk can lead to security vulnerabilities."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "<repository>\n<id>random-repo</id>\n<url>http://untrusted-maven-repo.com/maven2</url>\n</repository>",
+          "description": "Using an untrusted third-party repository can lead to security vulnerabilities, as the repository may contain malicious artifacts.",
+          "severity": "CRITICAL",
+          "fix": "Use a trusted and reputable repository, such as Maven Central or a company-managed repository.",
+          "line_number": 11
+        },
+        {
+          "evidence": "<dependency>\n<groupId>org.apache.commons</groupId>\n<artifactId>commons-text</artifactId>\n<version>[1.0,)</version>",
+          "description": "Using version ranges with no upper bound can lead to automatic updates of vulnerable versions.",
+          "severity": "CRITICAL",
+          "fix": "Use a specific version range, such as <version>1.0.0</version>, or use a wildcard with an upper bound, such as <version>[1.0,)</version>.",
+          "line_number": 19
+        },
+        {
+          "evidence": "<dependency>\n<groupId>com.google.guava</groupId>\n<artifactId>guava</artifactId>\n<version>LATEST</version>",
+          "description": "Using the LATEST keyword can lead to automatic updates of vulnerable versions.",
+          "severity": "CRITICAL",
+          "fix": "Use a specific version range, such as <version>30.1-jre</version>, or use a wildcard with an upper bound, such as <version>[29.0,)</version>.",
+          "line_number": 26
+        },
+        {
+          "evidence": "<dependency>\n<groupId>org.springframework</groupId>\n<artifactId>spring-core</artifactId>",
+          "description": "No version pinning can lead to automatic updates of vulnerable versions.",
+          "severity": "CRITICAL",
+          "fix": "Use a specific version range, such as <version>5.3.10</version>, or use a wildcard with an upper bound, such as <version>[4.3,)</version>.",
+          "line_number": 33
+        },
+        {
+          "evidence": "<dependency>\n<groupId>com.amazonaws</groupId>\n<artifactId>aws-java-sdk-s3</artifactId>\n<version>1.12.400</version>",
+          "description": "Using a version with typosquatting risk can lead to security vulnerabilities.",
+          "severity": "CRITICAL",
+          "fix": "Use the correct package name and version, such as <groupId>com.amazonaws</groupId><artifactId>aws-java-sdk-s3</artifactId><version>1.12.401</version>.",
+          "line_number": 39
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "<url>https://repo.maven.apache.org/maven2</url>",
+          "description": "The repository URL is hardcoded, which could be used to inject malicious content if an attacker gains access to the repository.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure placeholder or environment variable for the repository URL.",
+          "line_number": 13
+        },
+        {
+          "evidence": "<version>6.1.3</version>",
+          "description": "The dependency version is hardcoded, which could be used to inject malicious content if an attacker gains access to the project.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure placeholder or environment variable for the dependency version.",
+          "line_number": 30
+        },
+        {
+          "evidence": "<groupId>org.apache.commons</groupId><artifactId>commons-text</artifactId><version>1.11.0</version>",
+          "description": "The dependency version is hardcoded, which could be used to inject malicious content if an attacker gains access to the project.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a dependency management tool like Maven or Gradle to manage versions.",
+          "line_number": 40
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 37781.0,
+      "secure_latency_ms": 25697.94,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "dependencies-000009-76cf73ed",
+      "technique": "Dependency confusion",
+      "cwe": "CWE-1035",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "confusio",
+        "dependen"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 0,
+      "vuln_descriptions": [],
+      "vuln_findings_list": [],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "Hardcoded secret or credential: Private package versions are hardcoded in the go.mod file. This makes it easy for an attacker to guess or discover these versions, potentially leading to exploitation.",
+          "severity": "LOW",
+          "fix": "Consider using a more secure approach, such as using environment variables or a secrets manager, to store sensitive information."
+        },
+        {
+          "evidence": "",
+          "description": "Lack of authentication/authorization: No authentication mechanism is implemented in the code. This makes it accessible to anyone with access to the server.",
+          "severity": "CRITICAL",
+          "fix": "Implement a secure authentication mechanism, such as OAuth or JWT, and ensure proper authorization checks are in place."
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 14044.33,
+      "secure_latency_ms": 5406.23,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "dependencies-000010-bb693212",
+      "technique": "Supply chain attacks",
+      "cwe": "CWE-1035",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "chain",
+        "supply"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The `autoload.php` file is not properly verified, which could lead to a malicious package being installed.",
+        "Log files are written to a potentially insecure location, making them vulnerable to unauthorized access.",
+        "PHPUnit files are accessible in production, which could lead to code injection attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "require_once __DIR__ . '/../vendor/autoload.php';",
+          "description": "The `autoload.php` file is not properly verified, which could lead to a malicious package being installed.",
+          "severity": "CRITICAL",
+          "fix": "Verify the integrity of the `autoload.php` file by using a secure composer configuration and enabling composer's built-in verification",
+          "line_number": 16
+        },
+        {
+          "evidence": "/var/log/app.log",
+          "description": "Log files are written to a potentially insecure location, making them vulnerable to unauthorized access.",
+          "severity": "MEDIUM",
+          "fix": "Configure log files to be written to a secure location (e.g. /var/log/app.log with proper permissions)",
+          "line_number": 29
+        },
+        {
+          "evidence": "/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php",
+          "description": "PHPUnit files are accessible in production, which could lead to code injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Move PHPUnit files out of the production directory or restrict access to them",
+          "line_number": 42
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "if (!file_exists($lockFile) || !file_exists($hashFile)) {\n  throw new RuntimeException('Dependency integrity files missing');\n}",
+          "description": "The `RuntimeException` class is thrown without proper error handling, which could lead to a denial-of-service attack if the dependency integrity check fails.",
+          "severity": "LOW",
+          "fix": "Use a try-catch block to handle exceptions and provide more informative error messages.",
+          "line_number": 63
+        },
+        {
+          "evidence": "if (!hash_equals($expectedHash, $actualHash)) {\n  $this->emergencyLog('Dependency integrity check failed');\n  throw new RuntimeException('Dependency tampering detected');\n}",
+          "description": "The `hash_equals` function is used to compare hashes, but it's not the recommended way to do so. This could lead to a timing attack vulnerability.",
+          "severity": "MEDIUM",
+          "fix": "Use the `hash_equals` alternative or implement a proper hash comparison mechanism.",
+          "line_number": 70
+        },
+        {
+          "evidence": "require_once __DIR__ . '/../vendor/autoload.php';\n",
+          "description": "The `require_once` statement is used to load the autoloader, but it's not necessary. This could lead to a security vulnerability if the autoloader is compromised.",
+          "severity": "LOW",
+          "fix": "Use a more secure way to load the autoloader, such as using a dependency injection container.",
+          "line_number": 32
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "use GuzzleHttp.Client;",
+          "description": "The HTTP client is not properly configured to prevent injection attacks.",
+          "severity": "MEDIUM",
+          "fix": "Configure the HTTP client to use a secure connection (HTTPS) and validate user input"
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "error_log(sprintf('[SECURITY] %s at %s', $message, date('Y-m-d H:i:s'));\n",
+          "description": "The `error_log` function is used to log security-related messages. However, this could potentially be an injection vulnerability if the `$message` variable is not properly sanitized.",
+          "severity": "MEDIUM",
+          "fix": "Use a prepared statement or sanitize the `$message` variable to prevent potential injection attacks."
+        }
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 20842.17,
+      "secure_latency_ms": 32256.3,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "design_flaws-000002-40666501",
+      "technique": "Insufficient workflow validation",
+      "cwe": "CWE-840",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "insuffic",
+        "validati",
+        "workflow"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "No verification of previous steps. An attacker can call the `/api/checkout/confirm` endpoint directly without completing payment, potentially leading to unauthorized order confirmation."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "orders[userId] = {\n  items: carts[userId]?.items || [],\n  status: 'confirmed',\n  transactionId: transactionId\n};",
+          "description": "No verification of previous steps. An attacker can call the `/api/checkout/confirm` endpoint directly without completing payment, potentially leading to unauthorized order confirmation.",
+          "severity": "CRITICAL",
+          "fix": "Implement a workflow state validation mechanism to ensure that orders are only confirmed after successful payment processing.",
+          "line_number": 30
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const SECRET_KEY = process.env.WORKFLOW_SECRET || crypto.randomBytes(32);",
+          "description": "Hardcoded secret or credential. The `WORKFLOW_SECRET` environment variable is not validated, allowing an attacker to potentially access the workflow state machine.",
+          "severity": "LOW",
+          "fix": "Use a secure method to generate and store the secret key, such as using a secrets manager or an environment variable with proper validation.",
+          "line_number": 10
+        },
+        {
+          "evidence": "const paymentResult = processPayment(paymentMethod, verification.data.total);",
+          "description": "Insecure cryptographic practices. The `processPayment` function is not shown in this code snippet, but it should be reviewed to ensure that it uses secure cryptographic practices.",
+          "severity": "MEDIUM",
+          "fix": "Review the `processPayment` function to ensure that it uses secure cryptographic practices, such as using a secure random number generator and proper key management.",
+          "line_number": 82
+        },
+        {
+          "evidence": "const verification = verifyWorkflowToken(workflowToken, 'cart_reviewed', userId);",
+          "description": "Insecure timing attack vulnerability. The `verifyWorkflowToken` function uses `crypto.timingSafeEqual` to compare the signature, but it does not prevent timing attacks.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure method to compare the signature, such as using a constant-time comparison function.",
+          "line_number": 75
+        },
+        {
+          "evidence": "const paymentToken = generateWorkflowToken(userId, 'payment_completed', { transactionId: paymentResult.transactionId, cartData: verification.data });",
+          "description": "Insecure token generation. The `generateWorkflowToken` function generates a new token for each request, which can lead to token reuse attacks.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure method to generate tokens, such as using a token expiration mechanism and proper key management.",
+          "line_number": 95
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 15223.49,
+      "secure_latency_ms": 38902.73,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "design_flaws-000003-8b9affbc",
+      "technique": "Race conditions",
+      "cwe": "CWE-362",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "conditio",
+        "race"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "SQL Injection: Similar to the check query, the update query is vulnerable to SQL injection."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "String checkSql = \"SELECT balance FROM wallets WHERE user_id = ?\";\n",
+          "description": "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries instead of concatenating user input into the query string.",
+          "line_number": 13
+        },
+        {
+          "evidence": "String updateSql = \"UPDATE wallets SET balance = balance - ? WHERE user_id = ?\";\n",
+          "description": "SQL Injection: Similar to the check query, the update query is vulnerable to SQL injection.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries instead of concatenating user input into the query string.",
+          "line_number": 24
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "stmt.setBigDecimal(3, amount);",
+          "description": "Potential SQL injection vulnerability due to the use of string concatenation for building the SQL query. An attacker could manipulate the input values to inject malicious SQL code.",
+          "severity": "HIGH",
+          "fix": "Use parameterized queries instead of string concatenation: `stmt.setBigDecimal(3, amount);` should be replaced with `stmt.setBigDecimal(3, amount);` is correct but it's better to use `stmt.setBigDecimal(3, amount); stmt.setString(4, amount.toString());` if you want to concatenate the values.",
+          "line_number": 27
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "Hardcoded credentials: The database URL, username, and password are hardcoded in plain text.",
+          "severity": "MEDIUM",
+          "fix": "Store sensitive data such as database credentials securely using environment variables or a secrets manager."
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "String atomicUpdateSql = \"UPDATE wallets SET balance = balance - ?, updated_at = NOW() WHERE user_id = ? AND balance >= ? RETURNING balance\"",
+          "description": "Potential SQL injection vulnerability due to the use of string concatenation for building the SQL query. An attacker could manipulate the input values to inject malicious SQL code.",
+          "severity": "HIGH",
+          "fix": "Use parameterized queries instead of string concatenation: `String atomicUpdateSql = \"UPDATE wallets SET balance = balance - ? WHERE user_id = ? AND balance >= ? RETURNING balance\"; PreparedStatement stmt = conn.prepareStatement(atomicUpdateSql);"
+        },
+        {
+          "evidence": "",
+          "description": "No authentication or authorization checks are performed on the user before allowing them to withdraw funds.",
+          "severity": "MEDIUM",
+          "fix": "Add authentication and authorization checks to ensure only authorized users can withdraw funds. For example, check if the user has sufficient balance and permissions."
+        },
+        {
+          "evidence": "",
+          "description": "Hardcoded credentials are used for database connections. This is a security risk as these credentials could be exposed in source code or configuration files.",
+          "severity": "MEDIUM",
+          "fix": "Use environment variables, secure storage, or a secrets manager to store sensitive credentials like DB_URL, DB_USER, and DB_PASS."
+        },
+        {
+          "evidence": "",
+          "description": "No input validation is performed on the amount parameter. This could lead to unexpected behavior if an attacker provides a malicious value.",
+          "severity": "MEDIUM",
+          "fix": "Add input validation to ensure the amount parameter is within expected ranges and formats."
+        }
+      ],
+      "secure_findings": 1,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 20716.97,
+      "secure_latency_ms": 37815.66,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "integrity-000010-e9d8f039",
+      "technique": "unsafe_deserialization",
+      "cwe": "CWE-502",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "deserial"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Directly unserializing user-controlled data can lead to code injection attacks. The `node-serialize` library executes JavaScript functions during deserialization, allowing an attacker to inject malicious code.",
+        "Using `eval` to parse JSON is insecure because it can execute arbitrary JavaScript code. An attacker could inject malicious code by manipulating the `configString`."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "const userData = serialize.unserialize(sessionData);",
+          "description": "Directly unserializing user-controlled data can lead to code injection attacks. The `node-serialize` library executes JavaScript functions during deserialization, allowing an attacker to inject malicious code.",
+          "severity": "CRITICAL",
+          "fix": "Use a secure deserialization method, such as using a whitelist of allowed functions or classes, and validate user input thoroughly.",
+          "line_number": 13
+        },
+        {
+          "evidence": "const config = eval('(' + configString + ')');",
+          "description": "Using `eval` to parse JSON is insecure because it can execute arbitrary JavaScript code. An attacker could inject malicious code by manipulating the `configString`.",
+          "severity": "CRITICAL",
+          "fix": "Use a JSON parsing library that does not use `eval`, such as `json-stringify-safe` or `js-yaml`, and validate user input thoroughly.",
+          "line_number": 25
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const sessionData = req.body.sessionData;\nif (typeof sessionData !== 'object' || sessionData === null) {\n  return res.status(400).json({ error: 'Invalid session data format' });\n}",
+          "description": "Potential SQL Injection vulnerability if `sessionData` is not properly sanitized before being used in a database query.",
+          "severity": "MEDIUM",
+          "fix": "Use a library like `sanitize-html` to sanitize user input and ensure it conforms to a safe format.",
+          "line_number": 28
+        },
+        {
+          "evidence": "const safeUserData = {\n  username: String(sessionData.username),\n  userId: Number(sessionData.userId),\n  role: sessionData.role || 'user',\n  lastAccess: sessionData.lastAccess || new Date().toISOString()\n};",
+          "description": "Potential Cross-Site Scripting (XSS) vulnerability if `sessionData` contains user-controlled input that is not properly sanitized.",
+          "severity": "MEDIUM",
+          "fix": "Use a library like `sanitize-html` to sanitize user input and ensure it conforms to a safe format.",
+          "line_number": 41
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [
+        {
+          "evidence": "",
+          "description": "No hardcoded secrets or credentials found in the provided code snippet.",
+          "severity": "LOW",
+          "fix": ""
+        },
+        {
+          "evidence": "",
+          "description": "No insecure cryptographic practices found in the provided code snippet.",
+          "severity": "LOW",
+          "fix": ""
+        },
+        {
+          "evidence": "",
+          "description": "No data exposure risks found in the provided code snippet.",
+          "severity": "LOW",
+          "fix": ""
+        },
+        {
+          "evidence": "",
+          "description": "Input validation gaps found in the `sessionSchema` definition. The `pattern` property for the `username` field does not cover all possible valid username formats (e.g., usernames with special characters).",
+          "severity": "MEDIUM",
+          "fix": "Update the `sessionSchema` to include a more comprehensive pattern for the `username` field, such as `^[a-zA-Z0-9_.-]+$`. This will help prevent potential username injection attacks."
+        }
+      ],
+      "secure_findings": 2,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 17175.66,
+      "secure_latency_ms": 32052.52,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "logging-000003-888f16c9",
+      "technique": "No alerting on suspicious activity",
+      "cwe": "CWE-778",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "activity",
+        "alerting",
+        "suspicio"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded secret or credential: The database password is hardcoded in plain text, making it vulnerable to theft or exposure.",
+        "SQL Injection: The prepared statement is vulnerable to SQL injection attacks because user input is directly inserted into the query.",
+        "Data Exposure Risk: The stored password hash is retrieved from the database and returned to the user, potentially exposing sensitive data."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "private static final String DB_PASS = \"password\";",
+          "description": "Hardcoded secret or credential: The database password is hardcoded in plain text, making it vulnerable to theft or exposure.",
+          "severity": "CRITICAL",
+          "fix": "Use environment variables or a secure configuration file to store sensitive credentials.",
+          "line_number": 10
+        },
+        {
+          "evidence": "PreparedStatement stmt = conn.prepareStatement(\"SELECT password_hash FROM users WHERE username = ?\");",
+          "description": "SQL Injection: The prepared statement is vulnerable to SQL injection attacks because user input is directly inserted into the query.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters.",
+          "line_number": 16
+        },
+        {
+          "evidence": "String storedHash = rs.getString(\"password_hash\");",
+          "description": "Data Exposure Risk: The stored password hash is retrieved from the database and returned to the user, potentially exposing sensitive data.",
+          "severity": "MEDIUM",
+          "fix": "Only retrieve necessary data for authentication purposes and do not return sensitive information.",
+          "line_number": 22
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "private static final String DB_PASS = \"password\";",
+          "description": "Hardcoded secret or credential. The database password is hardcoded in plain text, making it vulnerable to interception or disclosure.",
+          "severity": "HIGH",
+          "fix": "Use environment variables or a secure configuration file to store sensitive credentials.",
+          "line_number": 18
+        },
+        {
+          "evidence": "private static final String DB_URL = \"jdbc:postgresql://localhost/appdb\";",
+          "description": "Hardcoded secret or credential. The database URL is hardcoded in plain text, making it vulnerable to interception or disclosure.",
+          "severity": "HIGH",
+          "fix": "Use environment variables or a secure configuration file to store sensitive credentials.",
+          "line_number": 16
+        },
+        {
+          "evidence": "private static final String DB_USER = \"appuser\";",
+          "description": "Hardcoded secret or credential. The database username is hardcoded in plain text, making it vulnerable to interception or disclosure.",
+          "severity": "HIGH",
+          "fix": "Use environment variables or a secure configuration file to store sensitive credentials.",
+          "line_number": 17
+        },
+        {
+          "evidence": "private static final int ALERT_THRESHOLD_MINUTES = 15;",
+          "description": "Insecure threshold-based alerting. The alert threshold is set in minutes, which may not be suitable for all use cases.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a more flexible threshold-based alerting system, such as one that takes into account the rate of failed attempts.",
+          "line_number": 15
+        },
+        {
+          "evidence": "private static final int FAILED_ATTEMPTS_THRESHOLD = 5;",
+          "description": "Insecure threshold-based authentication. The number of failed attempts required to trigger an alert is set at 5, which may not be sufficient to prevent brute-force attacks.",
+          "severity": "MEDIUM",
+          "fix": "Consider increasing the threshold for failed attempts or using a more sophisticated authentication mechanism.",
+          "line_number": 14
+        },
+        {
+          "evidence": "private void blockIp(String ip) {",
+          "description": "Potential SQL injection vulnerability. The `blockIp` method does not validate user input, which may lead to SQL injection attacks.",
+          "severity": "MEDIUM",
+          "fix": "Validate user input and use prepared statements to prevent SQL injection attacks.",
+          "line_number": 93
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 6,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 20645.15,
+      "secure_latency_ms": 38544.68,
+      "detected_substring": false,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "logging-000004-ad6f706c",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "lang": "go",
+      "severity": "HIGH",
+      "must_match": [
+        "event",
+        "logging"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded secret: The query uses a hardcoded SQL value (`$1`) instead of parameterized queries, which makes it vulnerable to SQL injection attacks.",
+        "Hardcoded secret: The query uses a hardcoded password (`hashedPassword`) instead of storing it securely in the database.",
+        "Information disclosure: The log message reveals sensitive information (username) to potential attackers."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "var hashedPassword string\nerr := s.db.QueryRow(\"SELECT password_hash FROM users WHERE username = $1\", req.Username).Scan(&hashedPassword)",
+          "description": "Hardcoded secret: The query uses a hardcoded SQL value (`$1`) instead of parameterized queries, which makes it vulnerable to SQL injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries by replacing `$1` with `?` and using the `sql.QueryRow` method's built-in support for parameter binding.",
+          "line_number": 29
+        },
+        {
+          "evidence": "if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(req.Password)); err != nil {",
+          "description": "Hardcoded secret: The query uses a hardcoded password (`hashedPassword`) instead of storing it securely in the database.",
+          "severity": "CRITICAL",
+          "fix": "Store passwords securely using bcrypt's `HashAndCompare` function, and retrieve only the hashed value from the database.",
+          "line_number": 36
+        },
+        {
+          "evidence": "log.Printf(\"User %s logged in\", req.Username)",
+          "description": "Information disclosure: The log message reveals sensitive information (username) to potential attackers.",
+          "severity": "MEDIUM",
+          "fix": "Use a more secure logging mechanism, such as logging only the user's ID or a generic success message.",
+          "line_number": 42
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "var hashedPassword string\nerr := s.db.QueryRowContext(ctx, \"SELECT id, password_hash FROM users WHERE username = $1\", req.Username).Scan(&userID, &hashedPassword)",
+          "description": "Hardcoded secret: The password hash is not parameterized, making it vulnerable to SQL injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a parameterized query instead of concatenating the username directly into the SQL string.",
+          "line_number": 70
+        },
+        {
+          "evidence": "var userID int\nerr := s.db.QueryRowContext(ctx, \"SELECT id, password_hash FROM users WHERE username = $1\", req.Username).Scan(&userID, &hashedPassword)",
+          "description": "Hardcoded secret: The database connection string is not parameterized, making it vulnerable to SQL injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a parameterized query instead of concatenating the username directly into the SQL string.",
+          "line_number": 71
+        },
+        {
+          "evidence": "var hashedPassword string\nif err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(req.Password)); err != nil {",
+          "description": "Insecure cryptographic practice: The password is not salted or hashed before comparison.",
+          "severity": "MEDIUM",
+          "fix": "Use a secure password hashing algorithm like Argon2, PBKDF2, or Bcrypt with a sufficient work factor.",
+          "line_number": 70
+        },
+        {
+          "evidence": "var req LoginRequest\nif err := json.NewDecoder(r.Body).Decode(&req); err != nil {",
+          "description": "Input validation gap: The request body is not validated for potential security issues.",
+          "severity": "MEDIUM",
+          "fix": "Implement input validation using a library like `github.com/go-playground/validator` to ensure the request body conforms to expected formats.",
+          "line_number": 60
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 22546.97,
+      "secure_latency_ms": 34474.46,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "logging-000007-94f9bfd7",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "event",
+        "logging"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Hardcoded secret or credential: The database password is hardcoded in plain text, making it easily accessible to anyone with access to the code.",
+        "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+        "Insecure cryptographic practice: The `BCrypt` library is not properly configured, and the salt value is not stored securely.",
+        "Input validation gap: The `username` parameter is not validated or sanitized, which can lead to SQL injection attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "private static final String DB_PASS = \"password\";",
+          "description": "Hardcoded secret or credential: The database password is hardcoded in plain text, making it easily accessible to anyone with access to the code.",
+          "severity": "CRITICAL",
+          "fix": "Replace hardcoded password with environment variable or secure storage mechanism.",
+          "line_number": 8
+        },
+        {
+          "evidence": "String sql = \"SELECT password_hash FROM users WHERE username = ?\";",
+          "description": "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters.",
+          "line_number": 12
+        },
+        {
+          "evidence": "PreparedStatement stmt = conn.prepareStatement(sql);",
+          "description": "SQL Injection: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters.",
+          "line_number": 13
+        },
+        {
+          "evidence": "stmt.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt()));",
+          "description": "Insecure cryptographic practice: The `BCrypt` library is not properly configured, and the salt value is not stored securely.",
+          "severity": "MEDIUM",
+          "fix": "Store the salt value securely, such as using a secure random number generator.",
+          "line_number": 32
+        },
+        {
+          "evidence": "String storedHash = rs.getString(\"password_hash\");",
+          "description": "Input validation gap: The `username` parameter is not validated or sanitized, which can lead to SQL injection attacks.",
+          "severity": "MEDIUM",
+          "fix": "Validate and sanitize user input parameters, such as using a whitelist of allowed characters.",
+          "line_number": 18
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "private static final String DB_PASS = \"password\";",
+          "description": "Hardcoded secret or credential: The database password is hardcoded in plain text, making it vulnerable to theft or exposure.",
+          "severity": "HIGH",
+          "fix": "Use environment variables or a secure configuration file to store sensitive credentials.",
+          "line_number": 13
+        },
+        {
+          "evidence": "String sql = \"SELECT user_id, password_hash, account_locked FROM users WHERE username = ?\";",
+          "description": "SQL injection vulnerability: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters.",
+          "line_number": 26
+        },
+        {
+          "evidence": "PreparedStatement stmt = conn.prepareStatement(sql);",
+          "description": "SQL injection vulnerability: The query string is not properly sanitized, allowing an attacker to inject malicious SQL code.",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries or prepared statements with bound parameters.",
+          "line_number": 27
+        },
+        {
+          "evidence": "String storedHash = rs.getString(\"password_hash\");",
+          "description": "Data exposure risk: The password hash is retrieved from the database and returned to the user, potentially exposing sensitive data.",
+          "severity": "MEDIUM",
+          "fix": "Store only the salt value or a hashed version of the password in the database.",
+          "line_number": 43
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "catch (SQLException e) { // Silent failure - no logging }",
+          "description": "Silent error handling: The exception is caught and logged silently, which can make it difficult to detect and debug issues.",
+          "severity": "MEDIUM",
+          "fix": "Log exceptions properly, including the error message and any relevant context."
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "if (BCrypt.checkpw(password, storedHash)) { ... }",
+          "description": "Insecure cryptographic practice: The `BCrypt` library is used to compare passwords, but it's not clear if the correct configuration and salt value are being used.",
+          "severity": "MEDIUM",
+          "fix": "Verify that the `BCrypt` library is configured correctly and using the recommended salt value."
+        }
+      ],
+      "secure_findings": 4,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 31889.13,
+      "secure_latency_ms": 32681.31,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "misconfiguration-000003-648ceba4",
+      "technique": "Debug mode in production",
+      "cwe": "CWE-16",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "debug",
+        "mode",
+        "producti"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Running the application with debug enabled can expose sensitive information about the underlying system.",
+        "Allowing all origins can lead to cross-site scripting (XSS) attacks and other security vulnerabilities."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "System.setProperty(\"spring.profiles.active\", \"dev\");",
+          "description": "Running the application with debug enabled can expose sensitive information about the underlying system.",
+          "severity": "CRITICAL",
+          "fix": "Set the spring.profiles.active property to a non-debug value, such as 'prod' or 'test', when running the application.",
+          "line_number": 12
+        },
+        {
+          "evidence": "registry.addMapping(\"/**\").allowedOrigins(\"*\");",
+          "description": "Allowing all origins can lead to cross-site scripting (XSS) attacks and other security vulnerabilities.",
+          "severity": "CRITICAL",
+          "fix": "Restrict the allowed origins to only trusted domains or IP addresses.",
+          "line_number": 22
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "registry.addMapping(\"/api/**\").allowedOrigins(\"https://app.example.com\", \"https://admin.example.com\")",
+          "description": "Insecure CORS configuration: allowing multiple origins without proper validation. An attacker could exploit this by sending a request to the API with an origin that is not expected, potentially leading to cross-site scripting (XSS) attacks.",
+          "severity": "MEDIUM",
+          "fix": "Restrict allowed origins to only trusted domains using a whitelist approach.",
+          "line_number": 24
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 1,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 14958.76,
+      "secure_latency_ms": 11597.64,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "misconfiguration-000006-edef6e04",
+      "technique": "Exposed admin panels",
+      "cwe": "CWE-16",
+      "lang": "yaml",
+      "severity": "CRITICAL",
+      "must_match": [
+        "admin",
+        "exposed",
+        "panels"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 6,
+      "vuln_descriptions": [
+        "Database exposed to internet, allowing potential attackers to access the database directly.",
+        "Weak password for MySQL root user, allowing potential attackers to gain unauthorized access to the database.",
+        "Admin panel exposed to internet, allowing potential attackers to access the admin panel directly.",
+        "Redis exposed without authentication, allowing potential attackers to access and modify Redis data.",
+        "phpMyAdmin exposed to internet, allowing potential attackers to access the phpMyAdmin interface directly.",
+        "Kibana exposed without authentication, allowing potential attackers to access and modify Kibana data."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "ports:\n  - \"3306:3306\"",
+          "description": "Database exposed to internet, allowing potential attackers to access the database directly.",
+          "severity": "CRITICAL",
+          "fix": "Restrict database access to only allow connections from within the container or a trusted network.",
+          "line_number": 17
+        },
+        {
+          "evidence": "environment:\n  MYSQL_ROOT_PASSWORD: admin123",
+          "description": "Weak password for MySQL root user, allowing potential attackers to gain unauthorized access to the database.",
+          "severity": "CRITICAL",
+          "fix": "Use a stronger password or consider using a password manager.",
+          "line_number": 18
+        },
+        {
+          "evidence": "ports:\n  - \"8080:8080\"",
+          "description": "Admin panel exposed to internet, allowing potential attackers to access the admin panel directly.",
+          "severity": "CRITICAL",
+          "fix": "Restrict admin panel access to only allow connections from within the container or a trusted network.",
+          "line_number": 25
+        },
+        {
+          "evidence": "ports:\n  - \"6379:6379\"",
+          "description": "Redis exposed without authentication, allowing potential attackers to access and modify Redis data.",
+          "severity": "CRITICAL",
+          "fix": "Enable Redis authentication using a password or other secure mechanism.",
+          "line_number": 31
+        },
+        {
+          "evidence": "ports:\n  - \"8081:80\"",
+          "description": "phpMyAdmin exposed to internet, allowing potential attackers to access the phpMyAdmin interface directly.",
+          "severity": "CRITICAL",
+          "fix": "Restrict phpMyAdmin access to only allow connections from within the container or a trusted network.",
+          "line_number": 37
+        },
+        {
+          "evidence": "environment:\n  ELASTICSEARCH_HOSTS: http://elasticsearch:9200",
+          "description": "Kibana exposed without authentication, allowing potential attackers to access and modify Kibana data.",
+          "severity": "CRITICAL",
+          "fix": "Enable Kibana authentication using a password or other secure mechanism.",
+          "line_number": 47
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "command: redis-server --requirepass ${REDIS_PASSWORD}",
+          "description": "The `redis-password` secret is not properly validated before being used in the command. An attacker could potentially inject malicious commands by manipulating the secret.",
+          "severity": "HIGH",
+          "fix": "Use a more secure method to validate and use the `redis_password` secret, such as using a environment variable or a secure configuration file.",
+          "line_number": 48
+        },
+        {
+          "evidence": "ports: - \"127.0.0.1:8080:80\"  # SECURE: Only localhost access",
+          "description": "The `admin-proxy` service is exposed to the internal network, which could potentially allow unauthorized access if not properly secured.",
+          "severity": "MEDIUM",
+          "fix": "Consider using a more secure method of exposing the service, such as using a reverse proxy with authentication and authorization.",
+          "line_number": 57
+        },
+        {
+          "evidence": "environment: MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password",
+          "description": "The `db_root_password` secret is not properly validated before being used in the environment. An attacker could potentially inject malicious values by manipulating the secret.",
+          "severity": "MEDIUM",
+          "fix": "Use a more secure method to validate and use the `db_root_password` secret, such as using an environment variable or a secure configuration file.",
+          "line_number": 26
+        },
+        {
+          "evidence": "volumes: - db_data:/var/lib/mysql",
+          "description": "The `db_data` volume is not properly secured, which could potentially allow unauthorized access to sensitive data.",
+          "severity": "LOW",
+          "fix": "Consider using a more secure method of securing the volume, such as using a encrypted file system or a secure container runtime.",
+          "line_number": 31
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 28520.55,
+      "secure_latency_ms": 29512.34,
+      "detected_substring": true,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "mixed-000004-d7d5b617",
+      "technique": "Mustache SSTI",
+      "cwe": "CWE-94",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "mustache",
+        "ssti"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "The `userTemplate` variable is set to the value of the `template` query parameter, which allows a user-controlled input to be used as the template structure. This can lead to an XSS vulnerability if the template contains user-inputted data.",
+        "The secret API key is hardcoded in plain text, making it easily accessible to unauthorized parties."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "userTemplate := r.URL.Query().Get(\"template\")",
+          "description": "The `userTemplate` variable is set to the value of the `template` query parameter, which allows a user-controlled input to be used as the template structure. This can lead to an XSS vulnerability if the template contains user-inputted data.",
+          "severity": "CRITICAL",
+          "fix": "Use a whitelisted list of allowed templates or validate and sanitize user-inputted template values before rendering.",
+          "line_number": 10
+        },
+        {
+          "evidence": "getSecretKey() string { return \"super-secret-api-key-12345\" }",
+          "description": "The secret API key is hardcoded in plain text, making it easily accessible to unauthorized parties.",
+          "severity": "CRITICAL",
+          "fix": "Store the secret API key securely, such as using environment variables or a secrets manager.",
+          "line_number": 31
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "templateID := r.URL.Query().Get(",
+          "description": "The `templateID` variable is not validated for SQL injection attacks. An attacker could manipulate the URL to inject malicious template IDs.",
+          "severity": "CRITICAL",
+          "fix": "Use a whitelist of allowed template IDs and validate them against this list.",
+          "line_number": 26
+        },
+        {
+          "evidence": "sanitizedName := sanitizeInput(userName)",
+          "description": "The `sanitizeInput` function uses a regular expression to remove potential template syntax from user input. However, it does not prevent command injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a more comprehensive sanitization function that prevents both template and command injection attacks.",
+          "line_number": 37
+        },
+        {
+          "evidence": "JoinDate: \"2024-01-15\"",
+          "description": "The `JoinDate` field is hardcoded with a fixed value. This could potentially expose sensitive information about the system.",
+          "severity": "MEDIUM",
+          "fix": "Use environment variables or a secure configuration file to store sensitive data.",
+          "line_number": 43
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "No authentication or authorization checks are performed on the request, allowing any user to access sensitive data.",
+          "severity": "MEDIUM",
+          "fix": "Implement authentication and authorization checks for the request, such as checking for valid session tokens or authenticated users."
+        },
+        {
+          "evidence": "",
+          "description": "No input validation checks are performed on user-inputted data, making it vulnerable to injection attacks.",
+          "severity": "MEDIUM",
+          "fix": "Implement input validation checks for user-inputted data, such as checking for valid email addresses or phone numbers."
+        },
+        {
+          "evidence": "",
+          "description": "Sensitive data, such as database credentials, is exposed in the template context.",
+          "severity": "HIGH",
+          "fix": "Remove sensitive data from the template context or use a secure way to access it, such as using environment variables or a secrets manager."
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "",
+          "description": "No authentication or authorization checks are performed on the user's input. An attacker could potentially manipulate the `userName` variable to gain unauthorized access.",
+          "severity": "MEDIUM",
+          "fix": "Implement authentication and authorization checks for the user's input."
+        },
+        {
+          "evidence": "",
+          "description": "No input validation checks are performed on the `userName` variable. An attacker could potentially manipulate this value to gain unauthorized access.",
+          "severity": "MEDIUM",
+          "fix": "Implement input validation checks for the `userName` variable."
+        }
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 27312.66,
+      "secure_latency_ms": 26290.81,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "sql-000003-90f8c3f3",
+      "technique": "WebView security",
+      "cwe": "CWE-000",
+      "lang": "kotlin",
+      "severity": "CRITICAL",
+      "must_match": [
+        "webview"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Direct string concatenation with untrusted input can lead to SQL injection attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "val query = \"SELECT id, name, email FROM users WHERE $whereClause\"",
+          "description": "Direct string concatenation with untrusted input can lead to SQL injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a prepared statement or parameterized queries instead of string concatenation.",
+          "line_number": 28
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "val sql = \"SELECT id, name, email FROM users WHERE name = ?\"",
+          "description": "SQL injection vulnerability: raw query with user input",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries instead of concatenating user input into the SQL string",
+          "line_number": 45
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "",
+          "severity": "",
+          "fix": ""
+        }
+      ],
+      "secure_unverified": [
+        {
+          "evidence": "var cursor = db.rawQuery(sql, arrayOf(name))",
+          "description": "SQL injection vulnerability: using raw query with user input",
+          "severity": "CRITICAL",
+          "fix": "Use parameterized queries instead of concatenating user input into the SQL string"
+        },
+        {
+          "evidence": "",
+          "description": "No authentication or authorization checks are performed on the WebView's JavaScript interface.",
+          "severity": "MEDIUM",
+          "fix": "Implement authentication and authorization checks for the WebView's JavaScript interface to prevent unauthorized access."
+        }
+      ],
+      "secure_findings": 1,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 15942.52,
+      "secure_latency_ms": 23032.04,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "ssrf-000001-3ffa0dc4",
+      "technique": "SSRF to cloud metadata",
+      "cwe": "CWE-918",
+      "lang": "python",
+      "severity": "CRITICAL",
+      "must_match": [
+        "cloud",
+        "metadata",
+        "ssrf"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "User-controlled URL with no validation, allowing for potential SQL injection or command injection attacks.",
+        "Directly fetching user-provided URL without any validation or sanitization, allowing for potential XSS attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "target_url = request.args.get('url')",
+          "description": "User-controlled URL with no validation, allowing for potential SQL injection or command injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Validate and sanitize user-provided URLs using a whitelist of trusted domains or protocols.",
+          "line_number": 9
+        },
+        {
+          "evidence": "response = requests.get(target_url, timeout=5)",
+          "description": "Directly fetching user-provided URL without any validation or sanitization, allowing for potential XSS attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use a library like `urllib.parse` to parse and validate the URL before fetching it.",
+          "line_number": 16
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "app.logger.warning(f\"SSRF attempt blocked: {url} -> {ip}\")",
+          "description": "Potential SSRF (Server-Side Request Forgery) vulnerability due to logging of internal IP addresses. This could be used for lateral movement or other malicious activities.",
+          "severity": "MEDIUM",
+          "fix": "Replace `app.logger.warning` with a more secure logging mechanism, such as sending the warning to a separate log file or a centralized logging service.",
+          "line_number": 47
+        },
+        {
+          "evidence": "app.logger.warning(f\"Blocked URL request from {request.remote_addr}: {target_url} - {reason}\")",
+          "description": "Potential information disclosure vulnerability due to logging of sensitive information (e.g., `request.remote_addr`, `target_url`, and error messages). This could be used for reconnaissance or other malicious activities.",
+          "severity": "LOW",
+          "fix": "Remove sensitive information from log messages or use a more secure logging mechanism.",
+          "line_number": 64
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [
+        {
+          "evidence": "requests.get(target_url, timeout=5, allow_redirects=False)",
+          "description": "Potential vulnerability in handling redirects. If an attacker can manipulate the `target_url` to include a redirect, this could lead to unintended behavior.",
+          "severity": "MEDIUM",
+          "fix": "Use `requests.get(target_url, timeout=5, allow_redirects=True)` and implement additional checks to prevent redirect-based bypasses."
+        }
+      ],
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 13682.19,
+      "secure_latency_ms": 28787.88,
+      "detected_substring": false,
+      "secure_flagged_substring": true
+    },
+    {
+      "id": "ssrf-000002-8e4f6380",
+      "technique": "DNS rebinding",
+      "cwe": "CWE-918",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "rebindin"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "DNS rebinding bypass vulnerability: The `isInternalIP` function checks if the hostname starts with specific IP prefixes, but it does not account for DNS rebinding attacks where an attacker can redirect the request to a different internal IP address. This allows an attacker to bypass the check and access internal resources.",
+        "Time gap between DNS check and request vulnerability: The `axios.get` call has a 5-second timeout, which allows an attacker to perform a DNS rebinding attack. An attacker can redirect the request to a different internal IP address during this time window."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "if (addr.address.startsWith('127.') ||\n          addr.address.startsWith('10.') ||\n          addr.address.startsWith('192.168.') ||\n          addr.address.startsWith('169.254.')) {\n    return true;\n  }",
+          "description": "DNS rebinding bypass vulnerability: The `isInternalIP` function checks if the hostname starts with specific IP prefixes, but it does not account for DNS rebinding attacks where an attacker can redirect the request to a different internal IP address. This allows an attacker to bypass the check and access internal resources.",
+          "severity": "CRITICAL",
+          "fix": "Use a more secure method to validate the hostname, such as checking the `A` record or using a DNS-based validation service like Google's reCAPTCHA.",
+          "line_number": 14
+        },
+        {
+          "evidence": "const response = await axios.get(url, { timeout: 5000 });",
+          "description": "Time gap between DNS check and request vulnerability: The `axios.get` call has a 5-second timeout, which allows an attacker to perform a DNS rebinding attack. An attacker can redirect the request to a different internal IP address during this time window.",
+          "severity": "CRITICAL",
+          "fix": "Increase the timeout value or use a more secure method to validate the hostname, such as checking the `A` record or using a DNS-based validation service like Google's reCAPTCHA.",
+          "line_number": 40
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "const agent = createSecureAgent(parsedUrl.protocol);\nconst client = parsedUrl.protocol === 'https:' ? https : http;\n",
+          "description": "The `createSecureAgent` function does not validate the protocol against a whitelist of allowed protocols. An attacker could potentially pass an invalid protocol to the function, leading to a denial-of-service or other issues.",
+          "severity": "MEDIUM",
+          "fix": "Add a check to ensure that the protocol is one of the whitelisted values (e.g., 'http:', 'https:').",
+          "line_number": 68
+        },
+        {
+          "evidence": "const agent = createSecureAgent(parsedUrl.protocol);\nconst client = parsedUrl.protocol === 'https:' ? https : http;\n",
+          "description": "The `createSecureAgent` function does not validate the protocol against a whitelist of allowed protocols. An attacker could potentially pass an invalid protocol to the function, leading to a denial-of-service or other issues.",
+          "severity": "MEDIUM",
+          "fix": "Add a check to ensure that the protocol is one of the whitelisted values (e.g., 'http:', 'https:').",
+          "line_number": 68
+        },
+        {
+          "evidence": "const agent = createSecureAgent(parsedUrl.protocol);\nconst client = parsedUrl.protocol === 'https:' ? https : http;\n",
+          "description": "The `createSecureAgent` function does not validate the protocol against a whitelist of allowed protocols. An attacker could potentially pass an invalid protocol to the function, leading to a denial-of-service or other issues.",
+          "severity": "MEDIUM",
+          "fix": "Add a check to ensure that the protocol is one of the whitelisted values (e.g., 'http:', 'https:').",
+          "line_number": 68
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [
+        {
+          "evidence": "",
+          "description": "No obvious security vulnerabilities found in this code snippet.",
+          "severity": "LOW",
+          "fix": ""
+        }
+      ],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 23369.85,
+      "secure_latency_ms": 34897.41,
+      "detected_substring": true,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "ssrf-000003-ff68f316",
+      "technique": "URL parser bypasses",
+      "cwe": "CWE-918",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "bypasses",
+        "parser"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Simple string matching is easily bypassed. An attacker could manipulate the `url` parameter to include a blocked host, causing the service to throw an exception."
+      ],
+      "vuln_findings_list": [
+        {
+          "evidence": "String host = url.getHost().toLowerCase();",
+          "description": "Simple string matching is easily bypassed. An attacker could manipulate the `url` parameter to include a blocked host, causing the service to throw an exception.",
+          "severity": "CRITICAL",
+          "fix": "Use a more secure method of checking hosts, such as using a whitelist or a regex pattern",
+          "line_number": 19
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "evidence": "String scheme = uri.getScheme();",
+          "description": "The code does not validate the scheme against a whitelist of allowed schemes, making it vulnerable to scheme injection attacks.",
+          "severity": "CRITICAL",
+          "fix": "Add a check to ensure the scheme is in the ALLOWED_SCHEMES set before proceeding.",
+          "line_number": 25
+        },
+        {
+          "evidence": "String host = uri.getHost();",
+          "description": "The code does not validate the hostname against a whitelist of allowed hosts, making it vulnerable to DNS rebinding attacks.",
+          "severity": "CRITICAL",
+          "fix": "Add a check to ensure the host is in the ALLOWED_HOSTS set before proceeding.",
+          "line_number": 38
+        },
+        {
+          "evidence": "InetAddress[] addresses = InetAddress.getAllByName(host);",
+          "description": "The code uses `InetAddress.getAllByName()` which can return multiple IP addresses, including those that are not valid for the given hostname. This makes it vulnerable to DNS rebinding attacks.",
+          "severity": "CRITICAL",
+          "fix": "Use `InetAddress.getByName()` instead of `InetAddress.getAllByName()` to get a single IP address.",
+          "line_number": 62
+        },
+        {
+          "evidence": "String ip = addr.getHostAddress();",
+          "description": "The code does not validate the IP address against a whitelist of allowed IPs, making it vulnerable to IP spoofing attacks.",
+          "severity": "CRITICAL",
+          "fix": "Add a check to ensure the IP is in the ALLOWED_IPS set before proceeding.",
+          "line_number": 75
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "",
+          "description": "",
+          "severity": "",
+          "fix": ""
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 14130.1,
+      "secure_latency_ms": 31432.43,
+      "detected_substring": false,
+      "secure_flagged_substring": false
+    },
+    {
+      "id": "xxe-000004-37fe4417",
+      "technique": "XXE in document parsers (DOCX, XLSX)",
+      "cwe": "CWE-611",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "document",
+        "docx",
+        "parsers",
+        "xlsx"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 0,
+      "vuln_descriptions": [],
+      "vuln_findings_list": [],
+      "secure_findings_list": [
+        {
+          "evidence": "var xmlDoc = new XmlDocument();\nxmlDoc.XmlResolver = null;  // Additional protection\n",
+          "description": "Hardcoded secret: The `XmlDocument` instance is created without any validation or sanitization, which could lead to a denial-of-service (DoS) attack by consuming excessive resources.",
+          "severity": "LOW",
+          "fix": "Create the `XmlDocument` instance with a secure configuration, such as using a factory method that takes into account XXE protections.",
+          "line_number": 60
+        },
+        {
+          "evidence": "var textNodes = xmlDoc.SelectNodes(\"//w:t\", namespaceManager);\n",
+          "description": "XSS vulnerability: The `SelectNodes` method is vulnerable to XSS attacks because it allows the execution of arbitrary XML code.",
+          "severity": "MEDIUM",
+          "fix": "Use a safer alternative, such as `XmlDocument.SelectNodes` with the `XmlResolver` set to null.",
+          "line_number": 71
+        },
+        {
+          "evidence": "var namespaceManager = new XmlNamespaceManager(xmlDoc.NameTable);\nnamespaceManager.AddNamespace(\"w\", \"http://schemas.openxmlformats.org/wordprocessingml/2006/main\");",
+          "description": "Hardcoded secret: The `XmlNamespaceManager` instance is created without any validation or sanitization, which could lead to a denial-of-service (DoS) attack by consuming excessive resources.",
+          "severity": "LOW",
+          "fix": "Create the `XmlNamespaceManager` instance with a secure configuration, such as using a factory method that takes into account XXE protections.",
+          "line_number": 67
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [
+        {
+          "evidence": "using var xmlDoc = new XmlDocument();",
+          "description": "The `XmlDocument` class has a default setting to allow DTD processing, which can lead to XML External Entity (XXE) attacks. An attacker could inject malicious XML code by manipulating the document's contents.",
+          "severity": "CRITICAL",
+          "fix": "Use `XmlDocument.Load(XmlReader)` instead of `XmlDocument.Load(Stream)` and specify a valid XML reader or parser."
+        },
+        {
+          "evidence": "",
+          "description": "",
+          "severity": "",
+          "fix": ""
+        }
+      ],
+      "secure_unverified": [],
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 16329.22,
+      "secure_latency_ms": 29327.8,
+      "detected_substring": false,
+      "secure_flagged_substring": true
+    }
+  ],
+  "scorer_agreement": {
+    "detection_cases": 40,
+    "substring_agrees_with_judge": 32,
+    "rate": 0.8
+  }
+}
