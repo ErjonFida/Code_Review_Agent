@@ -4,11 +4,14 @@ A security reviewer for GitHub pull requests that runs entirely on your machine.
 It reviews every changed file with a local LLM and posts its findings as a comment
 on the pull request - no code leaves the machine.
 
+![A review comment on a pull request: verdict "changes requested", with a critical SQL injection, a critical hardcoded secret key and a high-severity plaintext password comparison, each with a concrete fix](docs/review-comment.png)
+
+*A real review, on [this pull request](https://github.com/ErjonFida/Code_Review_Agent/pull/1) - the full comment there also lists code-quality findings.*
+
 | Measured on 40 held-out, expert-labelled vulnerabilities | |
 |---|---:|
 | vulnerabilities caught | **97%** |
 | fixed code wrongly flagged for the same flaw | **18%** (from 44% with the previous model, McNemar p = 0.04) |
-| agreement of the automated scorer with human labels | Cohen's kappa **0.89** (0.84 including the items its prompt was tuned on) |
 
 Full method, results and experiment history: [evals/README.md](evals/README.md).
 
