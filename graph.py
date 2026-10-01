@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from vectorstore import search as vector_search
 
-MODEL = os.getenv("REVIEW_MODEL", "llama3.2")
+MODEL = os.getenv("REVIEW_MODEL", "qwen3.5:9b")
 # A normal review is 3-4 findings, a few hundred tokens. What hits this cap is a
 # repetition loop (37-45 findings seen), which no cap makes valid - raising it
 # only makes a runaway burn longer before it fails.
@@ -21,7 +21,7 @@ REQUEST_TIMEOUT_S = 600
 # Whether it helps on large diffs is untested; the default sits ~10x above the
 # largest diff the eval covers. 0 means always retrieve, a huge value means never.
 RETRIEVAL_MIN_CHARS = int(os.getenv("RETRIEVAL_MIN_CHARS", "20000"))
-REVIEW_THINK = os.getenv("REVIEW_THINK", "")            # "off": no hidden reasoning
+REVIEW_THINK = os.getenv("REVIEW_THINK", "off")
 REVIEW_STRUCTURED = os.getenv("REVIEW_STRUCTURED", "")  # "function_calling": tool-call output
 
 
