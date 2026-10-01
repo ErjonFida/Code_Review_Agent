@@ -45,6 +45,21 @@ labelled vulnerability - the same underlying flaw, in any wording.
 PROMPT_ID = hashlib.sha256(SYSTEM_PROMPT.encode("utf-8")).hexdigest()[:12]
 
 
+def _runtime() -> str:
+    # The runtime is part of the judge too: on Ollama 0.35.0 it changed 5 of the 30
+    # validation verdicts that 0.30.10 gave. Keying on it stops a cache from mixing
+    # two judges inside one comparison.
+    try:
+        import urllib.request
+        with urllib.request.urlopen("http://localhost:11434/api/version", timeout=5) as r:
+            return json.load(r)["version"]
+    except (OSError, ValueError, KeyError):
+        return "unknown"
+
+
+RUNTIME = _runtime()
+
+
 class Verdict(BaseModel):
     describes: bool = Field(
         description="True only if the finding identifies the same underlying flaw as the labelled class.")
@@ -94,7 +109,7 @@ def describes(technique: str, cwe: str, finding: dict) -> dict:
     # all True -> False, 3 of them against human labels.
     fix = ""
     key = hashlib.sha256(
-        f"{JUDGE_MODEL}|{PROMPT_ID}|{technique}|{cwe}|{description}|{fix}".encode("utf-8")).hexdigest()
+        f"{JUDGE_MODEL}|{PROMPT_ID}|{RUNTIME}|{technique}|{cwe}|{description}|{fix}".encode("utf-8")).hexdigest()
 
     cache = _load_cache()
     if key in cache:
