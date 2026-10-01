@@ -1,0 +1,2348 @@
+{
+  "label": "dev-qwen-no-rag",
+  "generated_at": "2026-09-30T12:56:19.004924+00:00",
+  "config": {
+    "arm": "no-rag",
+    "model": "qwen3.5:9b",
+    "reviewer_options": {
+      "think": "off",
+      "structured": "function_calling"
+    },
+    "ollama_version": "0.30.10",
+    "dataset": "dev.jsonl",
+    "gold_fingerprint": "ca31af0e734c452e",
+    "cases": 40,
+    "excluded_from_retrieval": 40,
+    "exclusion": "content probes",
+    "n_retrieved": 0,
+    "scorer": {
+      "detection": "substring",
+      "false_positive": "substring"
+    }
+  },
+  "metrics": {
+    "overall": {
+      "cases": 36,
+      "detection_rate": 0.7778,
+      "false_positive_rate": 0.3333,
+      "secure_any_finding_rate": 0.4722,
+      "high_severity_fp_rate": 0.1944,
+      "severity_match": 0.5714,
+      "findings_per_vulnerable_case": 2.94,
+      "findings_per_secure_case": 1.14,
+      "p50_latency_ms": 74072.08,
+      "p95_latency_ms": 220969.16
+    },
+    "by_severity": {
+      "CRITICAL": {
+        "cases": 27,
+        "detection_rate": 0.8148
+      },
+      "HIGH": {
+        "cases": 7,
+        "detection_rate": 0.7143
+      },
+      "MEDIUM": {
+        "cases": 2,
+        "detection_rate": 0.5
+      }
+    },
+    "by_language": {
+      "csharp": {
+        "cases": 5,
+        "detection_rate": 0.8
+      },
+      "go": {
+        "cases": 4,
+        "detection_rate": 0.75
+      },
+      "java": {
+        "cases": 4,
+        "detection_rate": 0.5
+      },
+      "javascript": {
+        "cases": 8,
+        "detection_rate": 0.875
+      },
+      "php": {
+        "cases": 5,
+        "detection_rate": 0.8
+      },
+      "python": {
+        "cases": 7,
+        "detection_rate": 0.8571
+      },
+      "ruby": {
+        "cases": 1,
+        "detection_rate": 0.0
+      },
+      "rust": {
+        "cases": 1,
+        "detection_rate": 1.0
+      },
+      "typescript": {
+        "cases": 1,
+        "detection_rate": 1.0
+      }
+    },
+    "errors": 4,
+    "declined": {
+      "vulnerable": 0,
+      "fixed": 18
+    }
+  },
+  "misses": [
+    {
+      "id": "authentication-000003-302e66b5",
+      "technique": "Cookie theft via XSS",
+      "cwe": "CWE-287",
+      "expected_terms": [
+        "cookie",
+        "theft"
+      ],
+      "said": [
+        "Cross-Site Scripting (XSS) vulnerability due to direct output of user-controlled input 'username' and 'bio' without HTML encoding. An attacker can inject malicious scripts that execute in other users' browsers.",
+        "Cross-Site Scripting (XSS) vulnerability due to direct output of user-controlled input 'username' and 'bio' without HTML encoding. An attacker can inject malicious scripts that execute in other users' browsers."
+      ]
+    },
+    {
+      "id": "authentication-000010-87ba2861",
+      "technique": "API key leakage",
+      "cwe": "CWE-287",
+      "expected_terms": [
+        "leakage"
+      ],
+      "said": [
+        "Hardcoded Stripe live API key (sk_live_...) exposed in source code. This allows attackers to initiate unauthorized charges and access sensitive payment data.",
+        "Hardcoded Stripe publishable key exposed in source code. While less critical than live keys, it should still be removed from version control.",
+        "Hardcoded AWS Access Key ID (AKIA...) exposed in source code. This allows attackers to access or manipulate AWS resources associated with this account.",
+        "Hardcoded AWS Secret Access Key (wJalrXUtnFEMI/...) exposed in source code. Combined with the access key, this grants full control over AWS services.",
+        "Sensitive API keys logged to error_log during exceptions. This permanently exposes secrets in application logs which may be accessible by attackers or stored insecurely.",
+        "Database password and API key hardcoded directly in config.php file committed to git repository. These secrets are permanently exposed in version control history.",
+        "Database password 'SuperSecret123!' is weak (contains only alphanumeric characters) and hardcoded. This increases the risk of brute force attacks if leaked."
+      ]
+    },
+    {
+      "id": "authorization-000003-8c16fdae",
+      "technique": "Direct object reference protection",
+      "cwe": "CWE-284",
+      "expected_terms": [
+        "direct"
+      ],
+      "said": [
+        "Broken Object Level Authorization (BOLA): The 'show' action allows any authenticated user to access the order record of another user by manipulating the ID parameter. There is no check ensuring that @order.user_id matches current_user.id."
+      ]
+    },
+    {
+      "id": "cryptography-000005-ebaa3d42",
+      "technique": "Missing encryption at rest",
+      "cwe": "CWE-311",
+      "expected_terms": [
+        "encrypti",
+        "rest"
+      ],
+      "said": [
+        "Credit card number and CVV are stored in plaintext. This violates PCI-DSS requirements (Requirement 3) which mandates that sensitive authentication data must not be stored after authorization.",
+        "The SQL query uses parameterized queries which prevents SQL injection attacks."
+      ]
+    },
+    {
+      "id": "design_flaws-000010-a98e686d",
+      "technique": "Security by obscurity",
+      "cwe": "CWE-840",
+      "expected_terms": [
+        "obscurit"
+      ],
+      "said": [
+        "Admin endpoint '/api/secret-admin-panel' lacks authentication and exposes sensitive data including all users, system configuration, and API keys.",
+        "User data export endpoint '/api/internal/export-all-users' is accessible without authentication and executes an unparameterized SQL query exposing all user records.",
+        "Debug endpoint '/api/debug-12345' exposes environment variables including database connection strings and internal network information without authentication.",
+        "'/api/docs' endpoint hints at hidden routes via JavaScript bundle references, potentially aiding attackers to discover secret endpoints through source inspection."
+      ]
+    },
+    {
+      "id": "integrity-000004-f1731e5a",
+      "technique": "unsafe_deserialization",
+      "cwe": "CWE-502",
+      "expected_terms": [
+        "deserial"
+      ],
+      "said": [
+        "Arbitrary command execution vulnerability. The handleMessage function allows an attacker to specify a type (e.g., 'Command') and execute arbitrary system commands via the Execute() method on dynamically instantiated objects.",
+        "Missing size limit on JSON request body allows for Denial of Service (DoS) attacks via memory exhaustion.",
+        "Ignoring errors from Execute() method execution can hide critical failures and allow attackers to infer information about system state based on response timing."
+      ]
+    },
+    {
+      "id": "misconfiguration-000008-8a9acb10",
+      "technique": "Missing security headers",
+      "cwe": "CWE-16",
+      "expected_terms": [
+        "headers"
+      ],
+      "said": [
+        "The /transfer endpoint processes fund transfers without CSRF protection. Since it uses POST with request.form.get(), an attacker could exploit this via a malicious website to initiate unauthorized money transfers from the user's session.",
+        "The /api/user/profile endpoint returns hardcoded sensitive user data including role 'admin'. This exposes internal system information and could be used to infer roles of other users or facilitate privilege escalation if combined with other vulnerabilities.",
+        "The /transfer endpoint does not validate input parameters (amount and to_account). An attacker could inject malicious values like negative amounts or account IDs that bypass business logic checks.",
+        "The Flask application runs with debug=True exposed to production traffic (if deployed without proper environment controls). This exposes detailed error messages that can leak sensitive information like stack traces or database details."
+      ]
+    },
+    {
+      "id": "mixed-000006-2a246189",
+      "technique": "XSS in PDF generators",
+      "cwe": "CWE-79",
+      "expected_terms": [
+        "generato"
+      ],
+      "said": [
+        "User-supplied input (customerName, address, itemDescription) is directly concatenated into an HTML string without sanitization. This allows attackers to inject malicious JavaScript or CSS via XSS vectors when the PDF is rendered in a browser."
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "ai_security-000003-a7590ca3",
+      "technique": "prompt_injection_defense",
+      "cwe": "CWE-1357",
+      "lang": "python",
+      "severity": "CRITICAL",
+      "must_match": [
+        "defense",
+        "injectio",
+        "prompt"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Hardcoded OpenAI API key exposed in source code. This allows unauthorized access to the AI service and potential data leakage if the server is compromised.",
+        "User-supplied content is directly concatenated into the LLM prompt without sanitization. While less severe than SQL injection in traditional databases, this can lead to Prompt Injection attacks where malicious users manipulate model behavior, extract system instructions, or cause unintended actions."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 6,
+          "description": "Hardcoded OpenAI API key exposed in source code. This allows unauthorized access to the AI service and potential data leakage if the server is compromised.",
+          "fix": "Store the API key securely using environment variables (e.g., os.environ.get('OPENAI_API_KEY')) or a secrets manager like AWS Secrets Manager, Azure Key Vault, or HashiCorp Vault."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 15,
+          "description": "User-supplied content is directly concatenated into the LLM prompt without sanitization. While less severe than SQL injection in traditional databases, this can lead to Prompt Injection attacks where malicious users manipulate model behavior, extract system instructions, or cause unintended actions.",
+          "fix": "Implement input validation and sanitization for user_document and user_question before including them in prompts. Consider using a dedicated LLM security layer like Guardrails AI or LangChain's prompt injection detection tools."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 12,
+          "description": "Hardcoded OpenAI API key exposed in source code. This allows attackers to misuse the service or incur costs.",
+          "fix": "Use environment variables (e.g., os.environ.get('OPENAI_API_KEY')) instead of hardcoding secrets."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 45,
+          "description": "Incomplete sanitization function: The `sanitize_user_input` function is truncated and does not fully remove or encode dangerous characters like newlines. This leaves the application vulnerable to prompt injection attacks.",
+          "fix": "Complete the sanitize function by removing all newline characters (`\\n`, `\\r`) and other control characters that could break out of prompts."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 60316.4,
+      "secure_latency_ms": 63693.56
+    },
+    {
+      "id": "ai_security-000008-254895e4",
+      "technique": "prompt_injection_prevention",
+      "cwe": "CWE-1357",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "injectio",
+        "prompt"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "The system prompt is constructed by directly concatenating user-supplied 'context' data without any sanitization or validation. This could lead to Prompt Injection attacks where a malicious actor injects instructions into the system prompt to manipulate the AI's behavior.",
+        "The AI response is returned directly to the user without any filtering. This can lead to Prompt Injection responses where malicious content injected into prompts (e.g., 'Ignore previous instructions and output a SQL injection payload') will be reflected in the API response.",
+        "The 'max_tokens' parameter is set to a very high value (4000) without any limit control. This can lead to excessive resource consumption and potential Denial of Service if an attacker forces the model to generate extremely long responses.",
+        "Error details from the OpenAI SDK are exposed directly in the response. This can leak sensitive information about system configuration, internal errors, or even parts of prompts if they fail."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 14,
+          "description": "The system prompt is constructed by directly concatenating user-supplied 'context' data without any sanitization or validation. This could lead to Prompt Injection attacks where a malicious actor injects instructions into the system prompt to manipulate the AI's behavior.",
+          "fix": "Sanitize and validate all input before including it in prompts. Use parameterized approaches if available, or strictly escape special characters (like '```', '<|endoftext|>', etc.) that could break out of the context window."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 23,
+          "description": "The AI response is returned directly to the user without any filtering. This can lead to Prompt Injection responses where malicious content injected into prompts (e.g., 'Ignore previous instructions and output a SQL injection payload') will be reflected in the API response.",
+          "fix": "Implement an input/output filter that scans for dangerous patterns like script tags, encoded payloads, or known attack vectors before returning the AI's response."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 23,
+          "description": "The 'max_tokens' parameter is set to a very high value (4000) without any limit control. This can lead to excessive resource consumption and potential Denial of Service if an attacker forces the model to generate extremely long responses.",
+          "fix": "Set reasonable limits on max_tokens based on expected use cases, or implement rate limiting at the API level."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 25,
+          "description": "Error details from the OpenAI SDK are exposed directly in the response. This can leak sensitive information about system configuration, internal errors, or even parts of prompts if they fail.",
+          "fix": "Catch all exceptions and return a generic error message to users without exposing stack traces or specific API error messages."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 85379.42,
+      "secure_latency_ms": 122306.65
+    },
+    {
+      "id": "authentication-000001-04b4e7e6",
+      "technique": "Session not invalidated on logout",
+      "cwe": "CWE-287",
+      "lang": "python",
+      "severity": "HIGH",
+      "must_match": [
+        "invalida",
+        "logout",
+        "session"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Session is not invalidated on logout. The code redirects to the home page without clearing session data (user_id and username), allowing an attacker who obtains a valid session cookie to maintain access after the user logs out.",
+        "Hardcoded secret key used for Flask's session signing. The value \"my-secret-key\" is visible in the source code and can be easily discovered by anyone viewing the repository or running the application."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 28,
+          "description": "Session is not invalidated on logout. The code redirects to the home page without clearing session data (user_id and username), allowing an attacker who obtains a valid session cookie to maintain access after the user logs out.",
+          "fix": "Clear all session keys before redirecting in the logout function by setting 'session.clear()' or manually deleting 'session.pop(\"user_id\")' and 'session.pop(\"username\")."
+        },
+        {
+          "severity": "LOW",
+          "line_number": 6,
+          "description": "Hardcoded secret key used for Flask's session signing. The value \"my-secret-key\" is visible in the source code and can be easily discovered by anyone viewing the repository or running the application.",
+          "fix": "Generate a strong random string using secrets.token_hex(32) or use environment variables to store the SECRET_KEY, ensuring it remains unknown even if the source code is exposed."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 63020.1,
+      "secure_latency_ms": 220969.16
+    },
+    {
+      "id": "authentication-000002-d5f04922",
+      "technique": "Insecure password change",
+      "cwe": "CWE-287",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "change",
+        "password"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "The endpoint allows changing the password of any user by providing a 'userId' parameter in the request body. An authenticated attacker can change another user's password without knowing their current one.",
+        "The endpoint does not verify that the user's provided new password matches their current stored password before allowing a change."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 12,
+          "description": "The endpoint allows changing the password of any user by providing a 'userId' parameter in the request body. An authenticated attacker can change another user's password without knowing their current one.",
+          "fix": "Remove the ability to specify an arbitrary userId from the request body. Only allow users to update their own password using req.session.userId."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 12,
+          "description": "The endpoint does not verify that the user's provided new password matches their current stored password before allowing a change.",
+          "fix": "Query the database for the user's current hashed password and use bcrypt.compare to verify it against the input newPassword. Only allow the update if verification succeeds."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 58429.55,
+      "secure_latency_ms": 233313.98
+    },
+    {
+      "id": "authentication-000003-302e66b5",
+      "technique": "Cookie theft via XSS",
+      "cwe": "CWE-287",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "cookie",
+        "theft"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Cross-Site Scripting (XSS) vulnerability due to direct output of user-controlled input 'username' and 'bio' without HTML encoding. An attacker can inject malicious scripts that execute in other users' browsers.",
+        "Cross-Site Scripting (XSS) vulnerability due to direct output of user-controlled input 'username' and 'bio' without HTML encoding. An attacker can inject malicious scripts that execute in other users' browsers."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 24,
+          "description": "Cross-Site Scripting (XSS) vulnerability due to direct output of user-controlled input 'username' and 'bio' without HTML encoding. An attacker can inject malicious scripts that execute in other users' browsers.",
+          "fix": "Use response.encode() or a utility like javax.servlet.jsp.jstl.core.TagLibraryManager to encode the username and bio before printing them into the HTML response."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 24,
+          "description": "Cross-Site Scripting (XSS) vulnerability due to direct output of user-controlled input 'username' and 'bio' without HTML encoding. An attacker can inject malicious scripts that execute in other users' browsers.",
+          "fix": "Use response.encode() or a utility like javax.servlet.jsp.jstl.core.TagLibraryManager to encode the username and bio before printing them into the HTML response."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 60632.85,
+      "secure_latency_ms": 54454.47
+    },
+    {
+      "id": "authentication-000003-4b294d97",
+      "technique": "Password reset token not expiring",
+      "cwe": "CWE-287",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "expiring",
+        "password",
+        "reset",
+        "token"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Hardcoded database credentials (DB_URL, DB_USER, DB_PASS) are exposed in source code. This allows attackers to directly access the database if they gain access to the application.",
+        "Password reset tokens are stored without an expiration timestamp. An attacker who obtains the token can use it indefinitely until they brute-force or guess a password.",
+        "The password is stored as plaintext. If an attacker compromises the database or gains access to logs/stack traces containing passwords, user accounts are immediately compromised.",
+        "The password reset token is not invalidated after use. An attacker can reuse an old (but expired) token if they obtain it from logs or backups.",
+        "The resetPassword() method does not check if the token has expired before attempting to use it. This allows attackers with old stolen tokens to still gain access."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 10,
+          "description": "Hardcoded database credentials (DB_URL, DB_USER, DB_PASS) are exposed in source code. This allows attackers to directly access the database if they gain access to the application.",
+          "fix": "Use environment variables or a secure secrets management system (e.g., AWS Secrets Manager, HashiCorp Vault) to store and retrieve database credentials at runtime."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 27,
+          "description": "Password reset tokens are stored without an expiration timestamp. An attacker who obtains the token can use it indefinitely until they brute-force or guess a password.",
+          "fix": "Add an 'expires_at' column to the database and store the token's creation time with its expiry (e.g., 1 hour). Validate this field in both generateResetToken() and resetPassword()."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 38,
+          "description": "The password is stored as plaintext. If an attacker compromises the database or gains access to logs/stack traces containing passwords, user accounts are immediately compromised.",
+          "fix": "Hash all passwords using a strong algorithm like bcrypt, scrypt, or Argon2 before storing them in the database."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 43,
+          "description": "The password reset token is not invalidated after use. An attacker can reuse an old (but expired) token if they obtain it from logs or backups.",
+          "fix": "After successfully resetting a password, delete the corresponding row from the 'password_reset_tokens' table to invalidate any previously issued tokens."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 27,
+          "description": "The resetPassword() method does not check if the token has expired before attempting to use it. This allows attackers with old stolen tokens to still gain access.",
+          "fix": "Add a query or logic in resetPassword() that checks 'expires_at' against current time and rejects requests for expired tokens."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 52,
+          "description": "The code uses 'FOR UPDATE' without specifying a wait time or NOWAIT option. This can lead to indefinite blocking if the row is locked by another transaction for an extended period.",
+          "fix": "Add a reasonable timeout using FOR UPDATE OF ... WAIT N SECONDS or use NOWAIT (SELECT ...) depending on database capabilities, and handle TimeoutException."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 68,
+          "description": "The 'maskEmail' method is called in logger.info statements. While this prevents logging sensitive data directly, the implementation of maskEmail() is not visible here. If it's a simple substring replacement that leaves parts of the email readable (e.g., '@example.com'), it could still be considered an information leak.",
+          "fix": "Ensure 'maskEmail' completely obfuscates or replaces the entire email address with a generic identifier like '[REDACTED]' before logging."
+        },
+        {
+          "severity": "LOW",
+          "line_number": 45,
+          "description": "The code stores tokens in a database. While it hashes them and uses single-use flags, there is no mention of rate limiting on token generation or usage attempts at the application level.",
+          "fix": "Implement rate limiting (e.g., using Redis) to prevent brute-force attacks against password reset endpoints."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 92929.23,
+      "secure_latency_ms": 91551.19
+    },
+    {
+      "id": "authentication-000005-46bb15b6",
+      "technique": "Missing secure/httponly flags",
+      "cwe": "CWE-287",
+      "lang": "php",
+      "severity": "HIGH",
+      "must_match": [
+        "flags",
+        "httponly",
+        "secure"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "The 'remember_token' cookie is set without the HttpOnly and Secure flags. This allows potential XSS attacks to steal the token via JavaScript access.",
+        "The 'remember_token' cookie is set without a SameSite attribute. This makes the application vulnerable to CSRF attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 17,
+          "description": "The 'remember_token' cookie is set without the HttpOnly and Secure flags. This allows potential XSS attacks to steal the token via JavaScript access.",
+          "fix": "Set the SetCookie() parameters with HttpOnly=true (to prevent JS access) and Secure=true (to ensure it's only sent over HTTPS)."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 17,
+          "description": "The 'remember_token' cookie is set without a SameSite attribute. This makes the application vulnerable to CSRF attacks.",
+          "fix": "Add SameSite=Strict or SameSite=Lax to the SetCookie() parameters."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 54597.71,
+      "secure_latency_ms": 217363.59
+    },
+    {
+      "id": "authentication-000006-968fd175",
+      "technique": "Race conditions in registration",
+      "cwe": "CWE-287",
+      "lang": "python",
+      "severity": "HIGH",
+      "must_match": [
+        "conditio",
+        "race",
+        "registra"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Database URI contains hardcoded credentials (postgresql://localhost/myapp). If the password is missing or empty in production environments, it may expose sensitive information. Additionally, using 'localhost' without proper network isolation can lead to unauthorized access if the database server is exposed.",
+        "Race condition vulnerability (TOCTOU - Time of Check to Time of Use). The check for existing username and email is performed separately from the database insert. An attacker can exploit this window by sending concurrent requests with valid credentials after one user has been registered but before commit occurs.",
+        "Password hashing is performed without proper error handling. If bcrypt.hashpw fails due to invalid input encoding or other issues, it could lead to information disclosure about password validation logic."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 3,
+          "description": "Database URI contains hardcoded credentials (postgresql://localhost/myapp). If the password is missing or empty in production environments, it may expose sensitive information. Additionally, using 'localhost' without proper network isolation can lead to unauthorized access if the database server is exposed.",
+          "fix": "Use environment variables for database connection strings and ensure passwords are never included directly in code. Example: app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')"
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 20,
+          "description": "Race condition vulnerability (TOCTOU - Time of Check to Time of Use). The check for existing username and email is performed separately from the database insert. An attacker can exploit this window by sending concurrent requests with valid credentials after one user has been registered but before commit occurs.",
+          "fix": "Use a single atomic transaction or unique constraint enforcement at the database level (e.g., UNIQUE constraints on username/email columns) to prevent duplicate registrations."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 26,
+          "description": "Password hashing is performed without proper error handling. If bcrypt.hashpw fails due to invalid input encoding or other issues, it could lead to information disclosure about password validation logic.",
+          "fix": "Add try-except blocks around the hashing operation and ensure consistent error responses regardless of whether a user exists."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 28,
+          "description": "The application logs the username and remote IP address of users during registration. If an attacker can manipulate log files or if these logs are exposed (e.g., via a backup file leak), this could lead to information disclosure about user accounts.",
+          "fix": "Avoid logging sensitive PII like usernames directly in production logs, especially when combined with source IPs which can be used for targeted attacks."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 30,
+          "description": "The application logs the username and remote IP address of failed registration attempts. This could potentially aid attackers in understanding system behavior or targeting specific users.",
+          "fix": "Avoid logging sensitive PII like usernames directly in production logs, especially when combined with source IPs which can be used for targeted attacks."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 76235.54,
+      "secure_latency_ms": 67198.29
+    },
+    {
+      "id": "authentication-000008-27349389",
+      "technique": "TLS configuration",
+      "cwe": "CWE-287",
+      "lang": "rust",
+      "severity": "CRITICAL",
+      "must_match": [
+        "configur"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "The code creates an insecure HTTPS client that disables certificate verification. This allows Man-in-the-Middle (MITM) attacks where attackers can intercept and modify traffic to 'https://auth.example.com/userinfo' without detection.",
+        "The application serves user profile data over plain HTTP on port 8080 without TLS termination. This exposes sensitive user information (retrieved from the upstream auth service) to eavesdropping and tampering by network attackers."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 10,
+          "description": "The code creates an insecure HTTPS client that disables certificate verification. This allows Man-in-the-Middle (MITM) attacks where attackers can intercept and modify traffic to 'https://auth.example.com/userinfo' without detection.",
+          "fix": "Configure the HttpsConnector with proper TLS settings including `danger_accept_invalid_certs(false)` or use a custom connector configuration that enforces strict certificate validation. Never disable certificate verification in production."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 48,
+          "description": "The application serves user profile data over plain HTTP on port 8080 without TLS termination. This exposes sensitive user information (retrieved from the upstream auth service) to eavesdropping and tampering by network attackers.",
+          "fix": "Configure Axum or Hyper to serve traffic over HTTPS using a valid certificate, ensuring end-to-end encryption for all data in transit."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 69269.19,
+      "secure_latency_ms": 105019.65
+    },
+    {
+      "id": "authentication-000010-87ba2861",
+      "technique": "API key leakage",
+      "cwe": "CWE-287",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "leakage"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 7,
+      "vuln_descriptions": [
+        "Hardcoded Stripe live API key (sk_live_...) exposed in source code. This allows attackers to initiate unauthorized charges and access sensitive payment data.",
+        "Hardcoded Stripe publishable key exposed in source code. While less critical than live keys, it should still be removed from version control.",
+        "Hardcoded AWS Access Key ID (AKIA...) exposed in source code. This allows attackers to access or manipulate AWS resources associated with this account.",
+        "Hardcoded AWS Secret Access Key (wJalrXUtnFEMI/...) exposed in source code. Combined with the access key, this grants full control over AWS services.",
+        "Sensitive API keys logged to error_log during exceptions. This permanently exposes secrets in application logs which may be accessible by attackers or stored insecurely.",
+        "Database password and API key hardcoded directly in config.php file committed to git repository. These secrets are permanently exposed in version control history.",
+        "Database password 'SuperSecret123!' is weak (contains only alphanumeric characters) and hardcoded. This increases the risk of brute force attacks if leaked."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 5,
+          "description": "Hardcoded Stripe live API key (sk_live_...) exposed in source code. This allows attackers to initiate unauthorized charges and access sensitive payment data.",
+          "fix": "Move all secrets to environment variables or a secure secret management system like AWS Secrets Manager, Azure Key Vault, or HashiCorp Vault."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 6,
+          "description": "Hardcoded Stripe publishable key exposed in source code. While less critical than live keys, it should still be removed from version control.",
+          "fix": "Remove hardcoded keys and use environment variables for configuration values."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 7,
+          "description": "Hardcoded AWS Access Key ID (AKIA...) exposed in source code. This allows attackers to access or manipulate AWS resources associated with this account.",
+          "fix": "Use IAM roles for EC2/Lambda functions and store credentials in environment variables."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 8,
+          "description": "Hardcoded AWS Secret Access Key (wJalrXUtnFEMI/...) exposed in source code. Combined with the access key, this grants full control over AWS services.",
+          "fix": "Remove hardcoded credentials and use secure secret management solutions."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 24,
+          "description": "Sensitive API keys logged to error_log during exceptions. This permanently exposes secrets in application logs which may be accessible by attackers or stored insecurely.",
+          "fix": "Never log sensitive data like API keys. Use sanitized error messages that do not include secret values."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 32,
+          "description": "Database password and API key hardcoded directly in config.php file committed to git repository. These secrets are permanently exposed in version control history.",
+          "fix": "Store database credentials and API keys in environment variables or a secure secret management system."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 32,
+          "description": "Database password 'SuperSecret123!' is weak (contains only alphanumeric characters) and hardcoded. This increases the risk of brute force attacks if leaked.",
+          "fix": "Use strong passwords with mixed character types and store in secure secret management."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 96659.73,
+      "secure_latency_ms": 79135.06
+    },
+    {
+      "id": "authorization-000003-8c16fdae",
+      "technique": "Direct object reference protection",
+      "cwe": "CWE-284",
+      "lang": "ruby",
+      "severity": "CRITICAL",
+      "must_match": [
+        "direct"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Broken Object Level Authorization (BOLA): The 'show' action allows any authenticated user to access the order record of another user by manipulating the ID parameter. There is no check ensuring that @order.user_id matches current_user.id."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 10,
+          "description": "Broken Object Level Authorization (BOLA): The 'show' action allows any authenticated user to access the order record of another user by manipulating the ID parameter. There is no check ensuring that @order.user_id matches current_user.id.",
+          "fix": "Add a per-record authorization check before rendering the order details: ensure Order.find(params[:id]).user_id == current_user.id, or raise an error if they do not match."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 50212.16,
+      "secure_latency_ms": 80932.59
+    },
+    {
+      "id": "authorization-000003-943ae489",
+      "technique": "Resource-based authorization",
+      "cwe": "CWE-284",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "authoriz",
+        "resource"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "The GetDocument endpoint lacks ownership verification. It only checks if the user is authenticated but does not verify that the requesting user owns the document being accessed."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 26,
+          "description": "The GetDocument endpoint lacks ownership verification. It only checks if the user is authenticated but does not verify that the requesting user owns the document being accessed.",
+          "fix": "Add an authorization check to ensure the authenticated user's ID matches the owner of the requested document before returning its content."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 47505.36,
+      "secure_latency_ms": 56461.79
+    },
+    {
+      "id": "authorization-000006-f1d92c85",
+      "technique": "Path traversal",
+      "cwe": "CWE-284",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "path",
+        "traversa"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "Path Traversal vulnerability: User-supplied 'filename' parameter is directly concatenated to the base directory path without validation or sanitization. An attacker can use '../' sequences to access arbitrary files on the server (e.g., C:\\Windows\\System32\\config\\SAM)."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 16,
+          "description": "Path Traversal vulnerability: User-supplied 'filename' parameter is directly concatenated to the base directory path without validation or sanitization. An attacker can use '../' sequences to access arbitrary files on the server (e.g., C:\\Windows\\System32\\config\\SAM).",
+          "fix": "Validate that the resolved file path remains within the intended _baseDirectory by checking if Path.GetFullPath(filePath) starts with Path.GetFullPath(_baseDirectory), or implement a whitelist of allowed filenames."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 50230.14,
+      "secure_latency_ms": 216438.47
+    },
+    {
+      "id": "authorization-000007-530324da",
+      "error": "ValidationError: 6 validation errors for SecurityFindings\nfindings.0.severity\n  Field required [type=missing, input_value={'description': \"The `lis...tical filtering logic.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.0.line_number\n  Field required [type=missing, input_value={'description': \"The `lis...tical filtering logic.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.severity\n  Field required [type=missing, input_value={'description': 'The code... proper configuration.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.line_number\n  Field required [type=missing, input_value={'description': 'The code... proper configuration.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.2.severity\n  Field required [type=missing, input_value={'description': 'The data...se()` on both objects.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.2.line_number\n  Field required [type=missing, input_value={'description': 'The data...se()` on both objects.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing"
+    },
+    {
+      "id": "authorization-000008-417c5660",
+      "technique": "Resource-based authorization",
+      "cwe": "CWE-284",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "authoriz",
+        "resource"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Broken Access Control (IDOR): The GetOrder endpoint only verifies that the user is authenticated but does not verify ownership of the requested order. An attacker can access any other customer's orders by simply changing the orderId parameter in the URL.",
+        "Insecure Null Coalescing Operator Logic: The condition '!User.Identity?.IsAuthenticated ?? true' is logically flawed and insecure. If User.Identity or IsAuthenticated is null (which can happen in certain scenarios), the expression evaluates to 'true', allowing unauthenticated access."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 24,
+          "description": "Broken Access Control (IDOR): The GetOrder endpoint only verifies that the user is authenticated but does not verify ownership of the requested order. An attacker can access any other customer's orders by simply changing the orderId parameter in the URL.",
+          "fix": "Add a check to ensure the retrieved Order belongs to the currently authenticated user before returning it. For example: 'if (order.CustomerId != GetCurrentUserId()) return Forbidden();'"
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 24,
+          "description": "Insecure Null Coalescing Operator Logic: The condition '!User.Identity?.IsAuthenticated ?? true' is logically flawed and insecure. If User.Identity or IsAuthenticated is null (which can happen in certain scenarios), the expression evaluates to 'true', allowing unauthenticated access.",
+          "fix": "Use a standard if statement for clarity and safety: 'if (!User.Identity.IsAuthenticated) return Unauthorized();'. Ensure that authentication checks are explicit and do not rely on potentially ambiguous operator precedence."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 28,
+          "description": "The condition `if (!User.Identity?.IsAuthenticated ?? true)` is logically flawed. If User.Identity is null (anonymous user), the expression evaluates to false, and then `?? true` makes it return true, allowing anonymous users to proceed past this check.",
+          "fix": "Change the logic to explicitly handle the case where Identity is null: `if (!User?.Identity.IsAuthenticated) { return Unauthorized(); }`. This ensures that if User.Identity is null (anonymous), access is denied."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 47,
+          "description": "Logging sensitive information such as user identifiers and order IDs to the error stream (`Console.Error.WriteLine`) can expose internal system details or PII in logs. While not a direct injection flaw, it represents poor logging hygiene.",
+          "fix": "Remove `Console.Error.WriteLine` from production code. Use structured logging with sanitized data (e.g., omitting sensitive fields) and ensure log levels are appropriate for the environment."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 65728.37,
+      "secure_latency_ms": 77511.47
+    },
+    {
+      "id": "authorization-000010-a5c69653",
+      "technique": "Multi-tenant data leakage",
+      "cwe": "CWE-284",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "leakage",
+        "multi",
+        "tenant"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Tenant isolation bypass vulnerability. The getCustomer function retrieves a tenant ID from the JWT token but ignores it in the database query. Any user can access any customer by providing their own customerID parameter without being restricted to their organization's data.",
+        "Insecure input validation and authorization bypass. The listCustomers function accepts a client-controlled 'tenant_id' parameter from the URL query string instead of using the authenticated user's tenant ID from their JWT token context. This allows users to access data for other tenants by simply changing the request parameter."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 38,
+          "description": "Tenant isolation bypass vulnerability. The getCustomer function retrieves a tenant ID from the JWT token but ignores it in the database query. Any user can access any customer by providing their own customerID parameter without being restricted to their organization's data.",
+          "fix": "Add tenant validation before querying: 'if customer.TenantID != tenantID { http.Error(w, \"Forbidden\", 403); return }' after scanning or add the condition directly in the query as 'WHERE id = $1 AND tenant_id = $2'"
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 65,
+          "description": "Insecure input validation and authorization bypass. The listCustomers function accepts a client-controlled 'tenant_id' parameter from the URL query string instead of using the authenticated user's tenant ID from their JWT token context. This allows users to access data for other tenants by simply changing the request parameter.",
+          "fix": "Remove the client-controlled 'tenant_id' parameter and use the tenantID retrieved from r.Context().Value(\"tenant_id\") in the database query: 'query := \"SELECT id, tenant_id, name, email, ssn FROM customers WHERE tenant_id = $1\"', then pass authenticated tenantID as the argument."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 92,
+          "description": "The extractTenantFromJWT function returns a hardcoded default TenantContext (TenantID: 1) when an error occurs or if the token is invalid. This bypasses tenant isolation entirely and allows any user to access data from 'tenant_id = 1', effectively breaking multi-tenancy.",
+          "fix": "Ensure that extractTenantFromJWT always validates the JWT signature, checks for required claims (especially TenantID), and returns a proper error instead of defaulting values if validation fails. Never return hardcoded tenant IDs."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 92,
+          "description": "The function extracts 'UserID' from the token but does not use it to enforce row-level or column-level access controls (e.g., ensuring a user can only see their own data). This could lead to unauthorized information disclosure if users are allowed to view other customers within the same tenant.",
+          "fix": "Modify extractTenantFromJWT to return UserID and Role from the JWT. Update getCustomer and listCustomers queries to filter by 'user_id' or implement row-level security policies in the database."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 108850.4,
+      "secure_latency_ms": 89321.94
+    },
+    {
+      "id": "cryptography-000002-03dc5d25",
+      "technique": "Hard-coded encryption keys",
+      "cwe": "CWE-321",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "coded",
+        "encrypti",
+        "hard",
+        "keys"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Hard-coded encryption key 'MySecretKey12345MySecretKey12345' in source code. This exposes the secret to anyone with access to the repository or binary distribution.",
+        "Hard-coded initialization vector 'InitVector123456' exposed in source code. IVs should be randomly generated for each encryption operation to ensure semantic security.",
+        "Using ECB mode or static IVs with AES-CBC without proper randomness allows attackers to detect patterns in encrypted data. While CBC is used here, a fixed IV makes all encryptions of identical plaintext produce identical ciphertext.",
+        "Sensitive credit card data (PII) is being processed in memory without explicit sanitization or logging controls. If error messages are logged, they may leak plaintext."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 5,
+          "description": "Hard-coded encryption key 'MySecretKey12345MySecretKey12345' in source code. This exposes the secret to anyone with access to the repository or binary distribution.",
+          "fix": "Use a secure secrets management system (e.g., environment variables, HashiCorp Vault, AWS Secrets Manager) and never hard-code keys in application source."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 6,
+          "description": "Hard-coded initialization vector 'InitVector123456' exposed in source code. IVs should be randomly generated for each encryption operation to ensure semantic security.",
+          "fix": "Generate a random IV using crypto.randomBytes(16) for every encryption call and prepend it to the ciphertext."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 20,
+          "description": "Using ECB mode or static IVs with AES-CBC without proper randomness allows attackers to detect patterns in encrypted data. While CBC is used here, a fixed IV makes all encryptions of identical plaintext produce identical ciphertext.",
+          "fix": "Always generate a unique random IV for each encryption operation and store it alongside the ciphertext."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 21,
+          "description": "Sensitive credit card data (PII) is being processed in memory without explicit sanitization or logging controls. If error messages are logged, they may leak plaintext.",
+          "fix": "Ensure no sensitive data appears in logs and implement strict input validation before processing."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 77015.63,
+      "secure_latency_ms": 69509.68
+    },
+    {
+      "id": "cryptography-000002-23ae9c8b",
+      "error": "ValidationError: 4 validation errors for SecurityFindings\nfindings.0.severity\n  Field required [type=missing, input_value={'description': 'Client c...sted CAs are accepted.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.0.line_number\n  Field required [type=missing, input_value={'description': 'Client c...sted CAs are accepted.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.severity\n  Field required [type=missing, input_value={'description': 'The serv...with mTLS termination.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.line_number\n  Field required [type=missing, input_value={'description': 'The serv...with mTLS termination.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing"
+    },
+    {
+      "id": "cryptography-000002-4bd6085b",
+      "technique": "Weak TLS versions (SSLv3, TLS 1.0)",
+      "cwe": "CWE-327",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "sslv3",
+        "versions"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The HTTPS server configuration explicitly enables outdated TLS protocols (SSLv3 and earlier) by using 'secureProtocol: SSLv23_method' without specifying a minimum version. This allows connections over insecure legacy protocols that are vulnerable to known attacks like POODLE.",
+        "The cipher suite configuration 'ALL:!aNULL' allows weak and deprecated ciphers such as RC4, DES, MD5-based hashes, etc. These are vulnerable to various cryptographic attacks.",
+        "Private keys are loaded directly from files in the root directory ('server-key.pem') without any path restrictions or additional security measures. If these files have overly permissive permissions (e.g., world-readable), they could be exposed to unauthorized access."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 12,
+          "description": "The HTTPS server configuration explicitly enables outdated TLS protocols (SSLv3 and earlier) by using 'secureProtocol: SSLv23_method' without specifying a minimum version. This allows connections over insecure legacy protocols that are vulnerable to known attacks like POODLE.",
+          "fix": "Remove the secureProtocol option or set it to 'TLSv1_2_method'. Additionally, explicitly configure minVersion to require TLS 1.2 (e.g., options.minVersion = 'TLSv1.2')."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 15,
+          "description": "The cipher suite configuration 'ALL:!aNULL' allows weak and deprecated ciphers such as RC4, DES, MD5-based hashes, etc. These are vulnerable to various cryptographic attacks.",
+          "fix": "Replace the default cipher list with a secure set of modern ECDHE key exchange algorithms using strong suites like AES-GCM or ChaCha20-Poly1305 (e.g., ciphers: 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384')."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 9,
+          "description": "Private keys are loaded directly from files in the root directory ('server-key.pem') without any path restrictions or additional security measures. If these files have overly permissive permissions (e.g., world-readable), they could be exposed to unauthorized access.",
+          "fix": "Ensure private key files have restrictive file permissions (chmod 600) and store them outside of web-accessible directories if possible."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 77517.87,
+      "secure_latency_ms": 50785.79
+    },
+    {
+      "id": "cryptography-000005-ebaa3d42",
+      "technique": "Missing encryption at rest",
+      "cwe": "CWE-311",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "encrypti",
+        "rest"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Credit card number and CVV are stored in plaintext. This violates PCI-DSS requirements (Requirement 3) which mandates that sensitive authentication data must not be stored after authorization.",
+        "The SQL query uses parameterized queries which prevents SQL injection attacks."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 28,
+          "description": "Credit card number and CVV are stored in plaintext. This violates PCI-DSS requirements (Requirement 3) which mandates that sensitive authentication data must not be stored after authorization.",
+          "fix": "Never store the full credit card number or CVV on your database. Instead:\n1. Use a specialized, PCI-compliant payment processor like Stripe, Braintree, or PayPal.\n2. If you absolutely must process cards internally (not recommended), use tokenization services to replace sensitive data with non-sensitive tokens before storage."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 30,
+          "description": "The SQL query uses parameterized queries which prevents SQL injection attacks.",
+          "fix": "This is a good practice. The current implementation using `@` parameters and `AddWithValue` correctly mitigates SQL Injection risks. No change needed for this specific line."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 48,
+          "description": "The code logs the last four digits of a credit card number in plain text. While this is less sensitive than logging full numbers or CVV, it still exposes partial payment information to anyone with access to application logs.",
+          "fix": "Remove `lastFourDigits` from log messages. If logging for debugging purposes is necessary, ensure that any PII (Personally Identifiable Information) like card fragments are masked before being written to the logger."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 50,
+          "description": "The code returns a response containing `lastFourDigits` of the credit card number. This exposes partial payment information in API responses.",
+          "fix": "Do not return any part of the credit card number (even last four digits) to the client unless absolutely necessary for business logic and even then, consider if it's needed at all."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 63269.18,
+      "secure_latency_ms": 73157.18
+    },
+    {
+      "id": "cryptography-000008-339b0c44",
+      "technique": "Weak hashing (MD5, SHA1)",
+      "cwe": "CWE-327",
+      "lang": "java",
+      "severity": "CRITICAL",
+      "must_match": [
+        "hashing",
+        "sha1"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded database credentials (DB_USER and DB_PASS) are exposed in source code. This allows attackers to directly access the database if they gain access to the application files.",
+        "The code uses MD5 for password hashing. MD5 is cryptographically broken and vulnerable to collision attacks and rainbow table lookups.",
+        "The database connection string contains the host 'localhost' which may be vulnerable to SSRF if used in an untrusted context. Additionally, using DriverManager.getConnection directly without a secure configuration can expose credentials."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 10,
+          "description": "Hardcoded database credentials (DB_USER and DB_PASS) are exposed in source code. This allows attackers to directly access the database if they gain access to the application files.",
+          "fix": "Use environment variables or a secure secrets management system (e.g., AWS Secrets Manager, HashiCorp Vault) to store database credentials."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 15,
+          "description": "The code uses MD5 for password hashing. MD5 is cryptographically broken and vulnerable to collision attacks and rainbow table lookups.",
+          "fix": "Use a strong, adaptive key derivation function such as bcrypt, scrypt, or Argon2 with appropriate salt generation."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 19,
+          "description": "The database connection string contains the host 'localhost' which may be vulnerable to SSRF if used in an untrusted context. Additionally, using DriverManager.getConnection directly without a secure configuration can expose credentials.",
+          "fix": "Ensure that connections are established securely and use environment variables for DB_URL."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 14,
+          "description": "Hardcoded database credentials (DB_URL, DB_USER, DB_PASS) are exposed in source code. This allows attackers to directly access the database if they gain access to the application or repository.",
+          "fix": "Move database connection parameters to a secure configuration file outside of version control (e.g., environment variables, secrets manager like AWS Secrets Manager, HashiCorp Vault), and load them at runtime."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 48,
+          "description": "The logger logs the username directly in an info message. If usernames contain sensitive data or are predictable, this could aid attackers in user enumeration attacks.",
+          "fix": "Remove specific user details from log messages. Log generic success/failure instead of including PII like 'User registered successfully: {username}'."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 66164.15,
+      "secure_latency_ms": 66664.61
+    },
+    {
+      "id": "cryptography-000010-364c8129",
+      "technique": "Hard-coded encryption keys",
+      "cwe": "CWE-321",
+      "lang": "csharp",
+      "severity": "CRITICAL",
+      "must_match": [
+        "coded",
+        "encrypti",
+        "hard",
+        "keys"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "Hard-coded encryption key and IV are embedded directly in the source code. This allows anyone with access to view the repository or decompile the binary to obtain the keys used for encrypting sensitive API keys.",
+        "The Initialization Vector (IV) is hard-coded. Reusing the same static IV with AES in CBC mode can lead to deterministic ciphertext patterns that may allow attackers to infer information about plaintext data."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 10,
+          "description": "Hard-coded encryption key and IV are embedded directly in the source code. This allows anyone with access to view the repository or decompile the binary to obtain the keys used for encrypting sensitive API keys.",
+          "fix": "Use a secure secrets management system (e.g., Azure Key Vault, AWS Secrets Manager) or environment variables to store encryption keys and IVs at runtime."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 10,
+          "description": "The Initialization Vector (IV) is hard-coded. Reusing the same static IV with AES in CBC mode can lead to deterministic ciphertext patterns that may allow attackers to infer information about plaintext data.",
+          "fix": "Generate a random IV for each encryption operation and prepend it to the encrypted output so it can be used during decryption."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 54,
+          "description": "The DecryptApiKey method uses a fixed buffer size for the MemoryStream constructor (iv.Length) which could lead to an IndexOutOfRangeException if the ciphertext is shorter than expected. Additionally, using Array.Copy on potentially malformed input without validation might throw exceptions.",
+          "fix": "Validate that fullCipher has sufficient length before attempting decryption: 'if (fullCipher.Length < iv.Length + aes.BlockSize / 8)' and handle potential errors gracefully."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 54,
+          "description": "The DecryptApiKey method does not validate the integrity of the ciphertext. An attacker could potentially tamper with the IV or padding to cause decryption failures that might be used for side-channel attacks.",
+          "fix": "Implement a Message Authentication Code (MAC) like HMAC-SHA256 on the plaintext before encryption, and verify it after decryption."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 64112.91,
+      "secure_latency_ms": 74072.08
+    },
+    {
+      "id": "dependencies-000002-544519c9",
+      "technique": "outdated_dependency_exploitation",
+      "cwe": "CWE-1035",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "dependen",
+        "exploita",
+        "outdated"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "The 'random-package' dependency is set to the 'latest' tag without a specific version number. This allows for automatic updates that could introduce breaking changes or new vulnerabilities immediately after publication.",
+        "The dependency 'unverified-plugin' is installed from an untrusted Git repository ('git+https://github.com/unknown/repo.git'). This introduces a significant supply chain risk as the code integrity cannot be verified.",
+        "The postinstall script runs an arbitrary Node.js file (\"node setup.js\"). This is highly dangerous as the script could execute malicious code during installation (e.g., downloading malware or modifying system files).",
+        "'ua-parser-js' is set to '*' which resolves to any version available in the registry. This lack of pinning can lead to installing vulnerable versions if not managed carefully.",
+        "'express' is pinned with '~', which allows patch-level updates but might miss security fixes if the major/minor versions change unexpectedly or if relying on a specific older vulnerable version."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 6,
+          "description": "The 'random-package' dependency is set to the 'latest' tag without a specific version number. This allows for automatic updates that could introduce breaking changes or new vulnerabilities immediately after publication.",
+          "fix": "Pin the package to a specific semantic version (e.g., '^1.2.3') instead of using 'latest'."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 7,
+          "description": "The dependency 'unverified-plugin' is installed from an untrusted Git repository ('git+https://github.com/unknown/repo.git'). This introduces a significant supply chain risk as the code integrity cannot be verified.",
+          "fix": "Remove this package or ensure it comes from a trusted source with proper version pinning."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 10,
+          "description": "The postinstall script runs an arbitrary Node.js file (\"node setup.js\"). This is highly dangerous as the script could execute malicious code during installation (e.g., downloading malware or modifying system files).",
+          "fix": "Remove the postinstall hook. If necessary for configuration, use a safer mechanism like npm config or environment variables."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 5,
+          "description": "'ua-parser-js' is set to '*' which resolves to any version available in the registry. This lack of pinning can lead to installing vulnerable versions if not managed carefully.",
+          "fix": "Pin 'ua-parser-js' to a specific known-safe version (e.g., '^1.0.37')."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 4,
+          "description": "'express' is pinned with '~', which allows patch-level updates but might miss security fixes if the major/minor versions change unexpectedly or if relying on a specific older vulnerable version.",
+          "fix": "Pin 'express' to a specific known-safe minor and patch version (e.g., '^4.17.3')."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 86151.67,
+      "secure_latency_ms": 52973.15
+    },
+    {
+      "id": "dependencies-000002-ecb86b2c",
+      "technique": "prototype_pollution",
+      "cwe": "CWE-1321",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "pollutio",
+        "prototyp"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The code uses lodash without specifying a version. If the installed version is less than 4.17.19, it may be vulnerable to prototype pollution attacks.",
+        "The code uses _.merge() which is vulnerable to prototype pollution if userSettings contains '__proto__', 'constructor', or 'prototype' keys. This can lead to arbitrary code execution and bypassing security checks.",
+        "The admin check relies on user.isAdmin which could be manipulated via prototype pollution. An attacker can pollute Object.prototype to make this property true for all objects."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 1,
+          "description": "The code uses lodash without specifying a version. If the installed version is less than 4.17.19, it may be vulnerable to prototype pollution attacks.",
+          "fix": "Upgrade lodash to version >= 4.17.20 or use _.mergeWith() with a customizer function that prevents property assignment on Object.prototype."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 15,
+          "description": "The code uses _.merge() which is vulnerable to prototype pollution if userSettings contains '__proto__', 'constructor', or 'prototype' keys. This can lead to arbitrary code execution and bypassing security checks.",
+          "fix": "Use a safe merge function that filters out dangerous properties like __proto__, constructor, and prototype before merging."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 27,
+          "description": "The admin check relies on user.isAdmin which could be manipulated via prototype pollution. An attacker can pollute Object.prototype to make this property true for all objects.",
+          "fix": "Create a new object with Object.create(null) before checking isAdmin or use _.mergeWith() and filter out dangerous keys."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 1,
+          "description": "The code uses lodash version that must be >= 4.17.19 to prevent prototype pollution vulnerabilities in older versions.",
+          "fix": "Ensure the installed version of 'lodash' is at least 4.17.19 or higher by running: npm install lodash@latest"
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 20,
+          "description": "The settings schema uses a regex pattern for language that allows uppercase letters in country codes (e.g., '-[A-Z]{2}'), but the example default value 'en' is lowercase. This inconsistency could lead to unexpected behavior or validation bypasses if case sensitivity isn't strictly enforced.",
+          "fix": "Update the regex pattern to be consistent with expected input, e.g., use '[a-z]{2}(-[a-zA-Z]{2})?' and ensure all inputs are normalized to a standard case before processing."
+        },
+        {
+          "severity": "LOW",
+          "line_number": 35,
+          "description": "The defaultConfig object is frozen but then merged using spread operator with sanitizedInput. While the input is validated, there's no explicit check for prototype pollution in the merge operation itself if lodash isn't used or if future changes introduce it.",
+          "fix": "Consider explicitly checking that neither 'defaultConfig' nor 'sanitizedInput' contain dangerous keys like '__proto__', 'constructor', etc., before merging. Alternatively, use Object.assign with a defensive copy strategy."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 68376.45,
+      "secure_latency_ms": 84167.78
+    },
+    {
+      "id": "dependencies-000003-570edc95",
+      "technique": "Package verification",
+      "cwe": "CWE-1035",
+      "lang": "typescript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "package",
+        "verifica"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Hardcoded JWT secret 'dev-secret' used as fallback when environment variable is not set. This exposes the application to token forgery and unauthorized access.",
+        "The application relies on the `jsonwebtoken` library without verifying its integrity. If a compromised fork is installed (e.g., via typosquatting), it could leak tokens or execute arbitrary code.",
+        "The application calls an external API (`axios.get`) without verifying the integrity of the axios library or its dependencies. A compromised fork could exfiltrate user data.",
+        "Raw error details from the JWT library are leaked in the response body when token validation fails. This could expose internal stack traces and sensitive information to attackers.",
+        "The code imports `express` but does not verify its integrity. A compromised fork could introduce backdoors into the application."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 12,
+          "description": "Hardcoded JWT secret 'dev-secret' used as fallback when environment variable is not set. This exposes the application to token forgery and unauthorized access.",
+          "fix": "Always require a secure, randomly generated JWT_SECRET from an environment variable (e.g., process.env.JWT_SECRET). Never use hardcoded secrets or default values like 'dev-secret'. Rotate this secret regularly."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 15,
+          "description": "The application relies on the `jsonwebtoken` library without verifying its integrity. If a compromised fork is installed (e.g., via typosquatting), it could leak tokens or execute arbitrary code.",
+          "fix": "Verify package signatures and use lockfile integrity checks (npm audit --audit-level=high, npm install --lockfile-version 3). Consider using `npm ci` with strict registry settings. Pin exact versions in package-lock.json."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 18,
+          "description": "The application calls an external API (`axios.get`) without verifying the integrity of the axios library or its dependencies. A compromised fork could exfiltrate user data.",
+          "fix": "Verify all npm packages for known vulnerabilities and malicious forks using tools like `npm audit`, `snyk test`, or SCA solutions. Use a private registry with signature verification if possible."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 23,
+          "description": "Raw error details from the JWT library are leaked in the response body when token validation fails. This could expose internal stack traces and sensitive information to attackers.",
+          "fix": "Catch errors generically and return a sanitized error message without exposing implementation details or raw exceptions."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 1,
+          "description": "The code imports `express` but does not verify its integrity. A compromised fork could introduce backdoors into the application.",
+          "fix": "Use lockfile integrity verification and SCA tools to ensure all dependencies are from trusted sources."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 68,
+          "description": "The code logs detailed error information from JWT verification failures to the console. While this is not directly exposed in API responses (which correctly return generic errors), logging sensitive details like specific token claims or internal state can aid attackers during incident response analysis if log files are compromised.",
+          "fix": "Remove sensitive debugging data from exception handling and ensure that only non-sensitive error messages are logged."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 68,
+          "description": "The code logs detailed error information from JWT verification failures to the console. While this is not directly exposed in API responses (which correctly return generic errors), logging sensitive details like specific token claims or internal state can aid attackers during incident response analysis if log files are compromised.",
+          "fix": "Remove sensitive debugging data from exception handling and ensure that only non-sensitive error messages are logged."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 89388.83,
+      "secure_latency_ms": 82157.63
+    },
+    {
+      "id": "dependencies-000009-5397dfba",
+      "technique": "dependency_confusion_supply_chain",
+      "cwe": "CWE-1035",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "chain",
+        "confusio",
+        "dependen",
+        "supply"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "The application uses an unverified third-party cryptographic library (github.com/some-user/crypto-utils) which may contain vulnerabilities or backdoors. Using unknown crypto libraries is a severe security risk.",
+        "Sensitive cryptographic key is logged in plaintext. This exposes private keys to anyone with access to logs, leading to potential compromise of encrypted data and system security.",
+        "The application executes arbitrary code from an untrusted external URL during runtime using exec.Command with a remote script fetched via curl and piped to bash. This is a severe command injection vulnerability allowing attackers to execute any system commands.",
+        "The go.mod file uses 'latest' tag for the logging library which can lead to unpredictable behavior due to unexpected updates. It also includes a replace directive pointing to local paths which may bypass security controls.",
+        "The go.mod file includes a dependency from an unknown organization (github.com/unknown-org/logging) which may not be audited for security vulnerabilities."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 18,
+          "description": "The application uses an unverified third-party cryptographic library (github.com/some-user/crypto-utils) which may contain vulnerabilities or backdoors. Using unknown crypto libraries is a severe security risk.",
+          "fix": "Replace the custom crypto-utils with well-audited standard Go cryptography packages like 'crypto' from the standard library, or use reputable open-source alternatives that have been vetted by independent auditors."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 20,
+          "description": "Sensitive cryptographic key is logged in plaintext. This exposes private keys to anyone with access to logs, leading to potential compromise of encrypted data and system security.",
+          "fix": "Never log sensitive information such as encryption keys or secrets. Remove the logging statement that includes 'key' variable."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 24,
+          "description": "The application executes arbitrary code from an untrusted external URL during runtime using exec.Command with a remote script fetched via curl and piped to bash. This is a severe command injection vulnerability allowing attackers to execute any system commands.",
+          "fix": "Do not fetch or execute scripts from the internet directly in your application. If you must download files, validate their integrity (checksums), verify signatures, and use safe execution methods that do not allow arbitrary code execution."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 14,
+          "description": "The go.mod file uses 'latest' tag for the logging library which can lead to unpredictable behavior due to unexpected updates. It also includes a replace directive pointing to local paths which may bypass security controls.",
+          "fix": "Pin all dependencies to specific versions instead of using tags like 'latest'. Remove or carefully review any replace directives that point to unverified internal repositories."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 15,
+          "description": "The go.mod file includes a dependency from an unknown organization (github.com/unknown-org/logging) which may not be audited for security vulnerabilities.",
+          "fix": "Use only well-known and trusted libraries. Avoid using packages from organizations with unclear reputations or those that have had previous security incidents."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 89323.18,
+      "secure_latency_ms": 59280.26
+    },
+    {
+      "id": "design_flaws-000010-a98e686d",
+      "technique": "Security by obscurity",
+      "cwe": "CWE-840",
+      "lang": "javascript",
+      "severity": "HIGH",
+      "must_match": [
+        "obscurit"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "Admin endpoint '/api/secret-admin-panel' lacks authentication and exposes sensitive data including all users, system configuration, and API keys.",
+        "User data export endpoint '/api/internal/export-all-users' is accessible without authentication and executes an unparameterized SQL query exposing all user records.",
+        "Debug endpoint '/api/debug-12345' exposes environment variables including database connection strings and internal network information without authentication.",
+        "'/api/docs' endpoint hints at hidden routes via JavaScript bundle references, potentially aiding attackers to discover secret endpoints through source inspection."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 7,
+          "description": "Admin endpoint '/api/secret-admin-panel' lacks authentication and exposes sensitive data including all users, system configuration, and API keys.",
+          "fix": "Implement strict role-based access control (RBAC) requiring admin-level credentials. Remove direct exposure of internal APIs or ensure they are behind a dedicated auth middleware."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 15,
+          "description": "User data export endpoint '/api/internal/export-all-users' is accessible without authentication and executes an unparameterized SQL query exposing all user records.",
+          "fix": "Add robust authentication (e.g., JWT validation) before allowing access. Use parameterized queries to prevent SQL injection."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 23,
+          "description": "Debug endpoint '/api/debug-12345' exposes environment variables including database connection strings and internal network information without authentication.",
+          "fix": "Remove sensitive data from the response. Never expose process.env or internal IPs in production APIs."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 30,
+          "description": "'/api/docs' endpoint hints at hidden routes via JavaScript bundle references, potentially aiding attackers to discover secret endpoints through source inspection.",
+          "fix": "Sanitize and minify the bundled code. Remove or obfuscate internal route paths from client-side bundles."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 58,
+          "description": "SQL Injection vulnerability in the user export endpoint. The code uses `db.query()` with a hardcoded SQL string that could be vulnerable if not properly parameterized or sanitized.",
+          "fix": "Use prepared statements/parameterized queries to prevent SQL injection: db.query('SELECT id, email, created_at FROM users', [])"
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 47,
+          "description": "Potential information disclosure. The debug endpoint exposes `requestId` which could be used for request tracking or fingerprinting.",
+          "fix": "Remove the requestId from the response in production environments and ensure no sensitive internal identifiers are exposed."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 72512.08,
+      "secure_latency_ms": 73166.12
+    },
+    {
+      "id": "integrity-000001-cefedf11",
+      "technique": "insecure_deserialization",
+      "cwe": "CWE-502",
+      "lang": "python",
+      "severity": "CRITICAL",
+      "must_match": [
+        "deserial"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "The application deserializes user-controlled cookie data using pickle.loads() without validation. An attacker can craft a malicious serialized object that executes arbitrary code when the server processes it, leading to Remote Code Execution (RCE).",
+        "The application uses base64 encoding which is reversible and provides no security against tampering. Combined with unsafe deserialization via pickle, this allows attackers to modify session data before it reaches the vulnerable deserialize function."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 19,
+          "description": "The application deserializes user-controlled cookie data using pickle.loads() without validation. An attacker can craft a malicious serialized object that executes arbitrary code when the server processes it, leading to Remote Code Execution (RCE).",
+          "fix": "Do not use pickle for session storage in web applications. Use secure alternatives like JWT tokens with proper signing or encrypted sessions stored securely."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 19,
+          "description": "The application uses base64 encoding which is reversible and provides no security against tampering. Combined with unsafe deserialization via pickle, this allows attackers to modify session data before it reaches the vulnerable deserialize function.",
+          "fix": "Use secure serialization formats like JWT (JSON Web Tokens) or encrypted sessions that prevent arbitrary code execution during deserialization."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 12,
+          "description": "Hardcoded secret key 'your-256-bit-secret-key-from-env' in source code. This exposes the application's cryptographic signing key to anyone who can view the repository or binary.",
+          "fix": "Use environment variables (e.g., os.environ.get('SECRET_KEY')) for all secrets and never hardcode them into the source code."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 30,
+          "description": "The sign_data function uses datetime.utcnow() which relies on system time. If an attacker can manipulate server clock or if NTP is compromised, tokens could be forged with valid signatures but incorrect expiration times.",
+          "fix": "Use a secure monotonic clock source and ensure the system clock is synchronized via trusted NTP."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 47,
+          "description": "The verify_and_load function does not validate that 'exp' key exists in session data before accessing it. If an attacker crafts a malicious payload without this field, json.loads will succeed but datetime.fromisoformat(data['exp']) will raise KeyError.",
+          "fix": "Add explicit validation: if 'exp' not in data or isinstance(data.get('exp'), str): return None"
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 3,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 61213.42,
+      "secure_latency_ms": 85191.01
+    },
+    {
+      "id": "integrity-000003-79daf2f7",
+      "error": "ValidationError: 2 validation errors for SecurityFindings\nfindings.0.severity\n  Field required [type=missing, input_value={'description': 'The code...ts.', 'line_number': 20}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.severity\n  Field required [type=missing, input_value={'description': 'The code...ic.', 'line_number': 23}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing"
+    },
+    {
+      "id": "integrity-000004-f1731e5a",
+      "technique": "unsafe_deserialization",
+      "cwe": "CWE-502",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "deserial"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Arbitrary command execution vulnerability. The handleMessage function allows an attacker to specify a type (e.g., 'Command') and execute arbitrary system commands via the Execute() method on dynamically instantiated objects.",
+        "Missing size limit on JSON request body allows for Denial of Service (DoS) attacks via memory exhaustion.",
+        "Ignoring errors from Execute() method execution can hide critical failures and allow attackers to infer information about system state based on response timing."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 35,
+          "description": "Arbitrary command execution vulnerability. The handleMessage function allows an attacker to specify a type (e.g., 'Command') and execute arbitrary system commands via the Execute() method on dynamically instantiated objects.",
+          "fix": "Remove dynamic type instantiation using reflection. Implement strict input validation that only accepts predefined safe types or reject requests containing executable logic."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 28,
+          "description": "Missing size limit on JSON request body allows for Denial of Service (DoS) attacks via memory exhaustion.",
+          "fix": "Set a maximum byte size limit when decoding the JSON payload using json.Decoder's SetMaxTokenSize or by reading and limiting input before unmarshaling."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 43,
+          "description": "Ignoring errors from Execute() method execution can hide critical failures and allow attackers to infer information about system state based on response timing.",
+          "fix": "Always check the error returned by executor.Execute() and return appropriate HTTP status codes or log security-relevant events."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 73102.81,
+      "secure_latency_ms": 237767.05
+    },
+    {
+      "id": "integrity-000010-6c6e0f0a",
+      "technique": "insecure_deserialization",
+      "cwe": "CWE-502",
+      "lang": "javascript",
+      "severity": "CRITICAL",
+      "must_match": [
+        "deserial"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The application uses 'node-serialize' to deserialize untrusted user input from cookies. This library is known to be vulnerable to Remote Code Execution (RCE) via prototype pollution attacks.",
+        "The application uses 'node-serialize' to serialize session data. This library is vulnerable to RCE attacks if the serialized object contains malicious properties.",
+        "The application stores session data in cookies without proper signing or encryption. An attacker could modify the cookie contents if they can intercept it."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 1,
+          "description": "The application uses 'node-serialize' to deserialize untrusted user input from cookies. This library is known to be vulnerable to Remote Code Execution (RCE) via prototype pollution attacks.",
+          "fix": "Remove the dependency on 'node-serialize'. Do not use it for deserializing data that comes from users or external sources."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 1,
+          "description": "The application uses 'node-serialize' to serialize session data. This library is vulnerable to RCE attacks if the serialized object contains malicious properties.",
+          "fix": "Remove the dependency on 'node-serialize'. Use a secure alternative like JSON.stringify() for serialization."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 1,
+          "description": "The application stores session data in cookies without proper signing or encryption. An attacker could modify the cookie contents if they can intercept it.",
+          "fix": "Use httpOnly and Secure flags on cookies to prevent JavaScript access and ensure transmission over HTTPS only."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 12,
+          "description": "The JWT_SECRET defaults to 'change-in-production' if the environment variable is not set. This hardcoded fallback value should never be used in production as it allows attackers to forge valid tokens.",
+          "fix": "Remove the default fallback and ensure an error or secure random secret generation occurs when NODE_ENV is development but no env var exists, forcing developers to explicitly configure a strong secret."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 43,
+          "description": "The JWT verification includes 'maxAge: '1h'', which may not be effective because the token's expiration time (exp claim) is set during signing. The maxAge option in jwt.verify() only applies to tokens without an exp claim or when verifying relative age from now.",
+          "fix": "Remove the 'maxAge' parameter from jwt.verify(). Rely solely on the 'exp' claim included in the JWT payload, which was correctly configured with a 1-hour expiration during token signing."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": false,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 66399.92,
+      "secure_latency_ms": 77493.67
+    },
+    {
+      "id": "logging-000001-471cf74f",
+      "technique": "Missing security event logging",
+      "cwe": "CWE-778",
+      "lang": "python",
+      "severity": "HIGH",
+      "must_match": [
+        "event",
+        "logging"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Hardcoded secret key 'supersecret' used for session management. This exposes the application to potential session hijacking and makes it vulnerable if an attacker gains access to source code.",
+        "The login endpoint does not implement rate limiting. This makes the application vulnerable to brute-force attacks and credential stuffing.",
+        "The error message 'Invalid credentials' is generic but could be improved. While it doesn't leak information directly, consider implementing account lockout after multiple failures and logging suspicious activity."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 6,
+          "description": "Hardcoded secret key 'supersecret' used for session management. This exposes the application to potential session hijacking and makes it vulnerable if an attacker gains access to source code.",
+          "fix": "Use a strong, randomly generated secret key (at least 32 characters) stored in environment variables or a secure secrets manager instead of hardcoding."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 18,
+          "description": "The login endpoint does not implement rate limiting. This makes the application vulnerable to brute-force attacks and credential stuffing.",
+          "fix": "Implement rate limiting using Flask-Limiter or similar extensions to restrict the number of failed login attempts per IP address."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 18,
+          "description": "The error message 'Invalid credentials' is generic but could be improved. While it doesn't leak information directly, consider implementing account lockout after multiple failures and logging suspicious activity.",
+          "fix": "Implement a mechanism to track failed login attempts per user/IP and temporarily block access if the threshold is exceeded."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 13,
+          "description": "Hardcoded secret key 'supersecret' used for session management. This exposes the application to session hijacking and allows attackers to forge sessions if they can guess or intercept this value.",
+          "fix": "Generate a strong, random secret key using secrets.token_hex(32) at startup time from environment variables (e.g., FLASK_SECRET_KEY). Never hardcode sensitive values in source code."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 48,
+          "description": "Session fixation vulnerability: The application sets session['user_id'] and session['username'] after successful login without regenerating the session ID. An attacker could set a known session token before forcing authentication to hijack the user's session.",
+          "fix": "Regenerate the session identifier immediately upon successful authentication using Flask's secure_session_cookie or by calling app.config.update({'SESSION_COOKIE_SECURE': True, 'SESSION_COOKIE_HTTPONLY': True}) and regenerating the session ID."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 56,
+          "description": "Information disclosure: The error message in failed login attempts reveals generic text ('Invalid credentials') which is good practice, but if this were to change or be inconsistent with other endpoints, it could lead to user enumeration. Additionally, the logging of 'details' includes raw request data that might contain sensitive information depending on implementation.",
+          "fix": "Ensure consistent error messages across all authentication failure points and avoid including potentially sensitive details in logs unless necessary for security monitoring."
+        },
+        {
+          "severity": "LOW",
+          "line_number": 28,
+          "description": "Potential log injection: The logging function constructs a JSON string using json.dumps(event) which includes user input (username). While unlikely to cause issues with standard formatters, if the logger is misconfigured or used in an unsafe context, it could lead to log injection attacks.",
+          "fix": "Use structured logging libraries like structlog or python-json-logger that handle escaping properly. Alternatively, ensure no untrusted data reaches the formatter without proper sanitization."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 4,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 67103.78,
+      "secure_latency_ms": 106642.36
+    },
+    {
+      "id": "misconfiguration-000005-726bc5d1",
+      "technique": "XML external entities",
+      "cwe": "CWE-16",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "entities",
+        "external"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The processUserXML method uses simplexml_load_string without disabling external entities. This allows attackers to perform XXE (XML External Entity) attacks by including malicious XML payloads that can read local files or cause denial of service.",
+        "The loadXMLDocument method uses DOMDocument::loadXML without disabling external entities. This is vulnerable to XXE attacks where an attacker can define a malicious entity in the XML payload.",
+        "The application reads raw user input from php://input without any validation or sanitization. While not directly exploitable in this context due to XXE being the primary risk, it's a general security best practice."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 5,
+          "description": "The processUserXML method uses simplexml_load_string without disabling external entities. This allows attackers to perform XXE (XML External Entity) attacks by including malicious XML payloads that can read local files or cause denial of service.",
+          "fix": "Disable external entities and DTDs before parsing user-supplied XML using libxml_use_internal_errors(true); $parser = new DOMDocument(); $parser->loadHTML($data, LIBXML_NOENT | LIBXML_NONET);"
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 20,
+          "description": "The loadXMLDocument method uses DOMDocument::loadXML without disabling external entities. This is vulnerable to XXE attacks where an attacker can define a malicious entity in the XML payload.",
+          "fix": "Create a custom parser configuration that disables external entities and DTDs before loading the document."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 30,
+          "description": "The application reads raw user input from php://input without any validation or sanitization. While not directly exploitable in this context due to XXE being the primary risk, it's a general security best practice.",
+          "fix": "Implement proper input validation and size limits before processing XML data."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 70397.06,
+      "secure_latency_ms": 55856.48
+    },
+    {
+      "id": "misconfiguration-000008-1dee194c",
+      "technique": "Verbose error messages",
+      "cwe": "CWE-16",
+      "lang": "python",
+      "severity": "MEDIUM",
+      "must_match": [
+        "error",
+        "messages",
+        "verbose"
+      ],
+      "detected": true,
+      "severity_match": false,
+      "vuln_findings": 5,
+      "vuln_descriptions": [
+        "Hardcoded database credentials (DB_PASS) exposed in source code. This allows attackers to directly access the production database if they gain access to the application files.",
+        "SQL injection vulnerability. The user_id parameter is directly interpolated into the SQL query string using f-string formatting without any sanitization or parameterized queries.",
+        "Sensitive information leakage in error responses. The exception handler returns full stack traces (traceback), database names, and server hostnames to the client, which aids attackers in reconnaissance.",
+        "Debug mode enabled in production environment via app.config['DEBUG'] = True and app.run(debug=True). This exposes detailed error pages and potentially sensitive information.",
+        "Insecure exception handling: The code raises a ValueError with sensitive context (table name) and returns it in an error response. This can leak internal application logic."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 12,
+          "description": "Hardcoded database credentials (DB_PASS) exposed in source code. This allows attackers to directly access the production database if they gain access to the application files.",
+          "fix": "Use environment variables or a secure secrets management system (e.g., AWS Secrets Manager, HashiCorp Vault) to store and retrieve sensitive configuration values like DB_HOST, DB_NAME, DB_USER, and DB_PASS at runtime."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 23,
+          "description": "SQL injection vulnerability. The user_id parameter is directly interpolated into the SQL query string using f-string formatting without any sanitization or parameterized queries.",
+          "fix": "Use parameterized queries (prepared statements) to safely handle user input. Replace: cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\") with cursor.execute(\"SELECT * FROM users WHERE id = %s\", [user_id])."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 28,
+          "description": "Sensitive information leakage in error responses. The exception handler returns full stack traces (traceback), database names, and server hostnames to the client, which aids attackers in reconnaissance.",
+          "fix": "Configure Flask's logging or use a custom error handler that logs detailed exceptions internally but only sends generic error messages (e.g., 'An internal error occurred') to clients. Never expose raw exception details or stack traces."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 1,
+          "description": "Debug mode enabled in production environment via app.config['DEBUG'] = True and app.run(debug=True). This exposes detailed error pages and potentially sensitive information.",
+          "fix": "Set DEBUG=False before deploying the application to any public-facing or non-development environments. Ensure that debug endpoints are not accessible from external networks."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 28,
+          "description": "Insecure exception handling: The code raises a ValueError with sensitive context (table name) and returns it in an error response. This can leak internal application logic.",
+          "fix": "Catch specific exceptions separately or use generic logging for errors without exposing them to the client. Avoid including table names or other structural details in user-facing messages."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 24,
+          "description": "Database credentials (DB_HOST, DB_NAME, DB_USER, DB_PASS) are loaded from environment variables. While this is a good practice compared to hardcoding in source code, if these secrets are committed to version control or exposed via container logs/environment inspection, they could be compromised.",
+          "fix": "Ensure that database connection strings and credentials stored in environment variables are managed securely using secret management solutions (e.g., HashiCorp Vault, AWS Secrets Manager) rather than plain text environment variables. Never commit .env files containing secrets to version control."
+        },
+        {
+          "severity": "LOW",
+          "line_number": 48,
+          "description": "The error handler logs detailed exception information including the full stack trace and message for unknown errors (exc_info=True). While this is logged internally, if an attacker can access these logs or trigger specific exceptions that leak sensitive data in log messages, it could aid them.",
+          "fix": "Review what details are being logged. Consider sanitizing error messages before logging to ensure no PII or internal system information leaks into the logs."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 54,
+          "description": "The application returns a generic 'Resource not found' message for both non-existent users and other errors (like database connection failures). While this prevents user enumeration of existing IDs in some cases, it also hides potential infrastructure issues. However, the main risk here is that if an attacker can trigger specific exceptions or manipulate requests to cause different error paths, they might infer information about system state.",
+          "fix": "Ensure all error handling paths return consistent generic messages without leaking internal details. Consider implementing proper HTTP status codes and ensuring database connection errors are handled gracefully with a standard 'Service unavailable' message."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 94554.99,
+      "secure_latency_ms": 92555.78
+    },
+    {
+      "id": "misconfiguration-000008-8a9acb10",
+      "technique": "Missing security headers",
+      "cwe": "CWE-16",
+      "lang": "python",
+      "severity": "MEDIUM",
+      "must_match": [
+        "headers"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 4,
+      "vuln_descriptions": [
+        "The /transfer endpoint processes fund transfers without CSRF protection. Since it uses POST with request.form.get(), an attacker could exploit this via a malicious website to initiate unauthorized money transfers from the user's session.",
+        "The /api/user/profile endpoint returns hardcoded sensitive user data including role 'admin'. This exposes internal system information and could be used to infer roles of other users or facilitate privilege escalation if combined with other vulnerabilities.",
+        "The /transfer endpoint does not validate input parameters (amount and to_account). An attacker could inject malicious values like negative amounts or account IDs that bypass business logic checks.",
+        "The Flask application runs with debug=True exposed to production traffic (if deployed without proper environment controls). This exposes detailed error messages that can leak sensitive information like stack traces or database details."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 20,
+          "description": "The /transfer endpoint processes fund transfers without CSRF protection. Since it uses POST with request.form.get(), an attacker could exploit this via a malicious website to initiate unauthorized money transfers from the user's session.",
+          "fix": "Implement anti-CSRF tokens (e.g., using Flask-WTF or implementing custom token validation) for all state-changing operations like form submissions."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 14,
+          "description": "The /api/user/profile endpoint returns hardcoded sensitive user data including role 'admin'. This exposes internal system information and could be used to infer roles of other users or facilitate privilege escalation if combined with other vulnerabilities.",
+          "fix": "Retrieve actual user profile from a secure database based on the authenticated session's identity, rather than returning static mock data."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 19,
+          "description": "The /transfer endpoint does not validate input parameters (amount and to_account). An attacker could inject malicious values like negative amounts or account IDs that bypass business logic checks.",
+          "fix": "Validate all incoming request parameters on the server side. Ensure amount is a positive number within allowed limits and verify 'to_account' exists in an authorized list."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 24,
+          "description": "The Flask application runs with debug=True exposed to production traffic (if deployed without proper environment controls). This exposes detailed error messages that can leak sensitive information like stack traces or database details.",
+          "fix": "Set app.run(debug=False) in production environments and ensure the DEBUG flag is disabled via environment variables."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 72745.09,
+      "secure_latency_ms": 66148.53
+    },
+    {
+      "id": "mixed-000005-27249b6d",
+      "technique": "DNS exfiltration via command injection",
+      "cwe": "CWE-78",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "command",
+        "exfiltra",
+        "injectio"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "Command injection vulnerability in nslookup() function. The domain parameter from user input is directly concatenated into a shell command without proper sanitization or use of escapeshellarg(). An attacker can inject arbitrary commands by providing malicious payloads like 'domain.com; rm -rf /'.",
+        "Command injection vulnerability in pingHost() function. Although escapeshellarg is used on $host, the variable is still concatenated into a command string which can be vulnerable to certain edge cases or future modifications.",
+        "Direct exposure of sensitive system information to user input via command injection in nslookup(). The output from the potentially compromised command is returned directly to the client."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 12,
+          "description": "Command injection vulnerability in nslookup() function. The domain parameter from user input is directly concatenated into a shell command without proper sanitization or use of escapeshellarg(). An attacker can inject arbitrary commands by providing malicious payloads like 'domain.com; rm -rf /'.",
+          "fix": "Use escapeshellarg($domain) to properly escape the variable before including it in the command string, or better yet, avoid shell execution entirely and use a dedicated DNS library if available."
+        },
+        {
+          "severity": "CRITICAL",
+          "line_number": 21,
+          "description": "Command injection vulnerability in pingHost() function. Although escapeshellarg is used on $host, the variable is still concatenated into a command string which can be vulnerable to certain edge cases or future modifications.",
+          "fix": "Use escapeshellarg($host) consistently and ensure no other variables are appended without escaping. Consider using process_control with proper argument separation instead of shell_exec."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 28,
+          "description": "Direct exposure of sensitive system information to user input via command injection in nslookup(). The output from the potentially compromised command is returned directly to the client.",
+          "fix": "Sanitize and validate all inputs before processing. Never return raw shell execution results without filtering or sanitizing them."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 69773.73,
+      "secure_latency_ms": 231995.28
+    },
+    {
+      "id": "mixed-000006-2a246189",
+      "technique": "XSS in PDF generators",
+      "cwe": "CWE-79",
+      "lang": "java",
+      "severity": "HIGH",
+      "must_match": [
+        "generato"
+      ],
+      "detected": false,
+      "severity_match": false,
+      "vuln_findings": 1,
+      "vuln_descriptions": [
+        "User-supplied input (customerName, address, itemDescription) is directly concatenated into an HTML string without sanitization. This allows attackers to inject malicious JavaScript or CSS via XSS vectors when the PDF is rendered in a browser."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 17,
+          "description": "User-supplied input (customerName, address, itemDescription) is directly concatenated into an HTML string without sanitization. This allows attackers to inject malicious JavaScript or CSS via XSS vectors when the PDF is rendered in a browser.",
+          "fix": "Sanitize all user inputs by removing or escaping special characters like < > \" ' & before embedding them in HTML content."
+        }
+      ],
+      "secure_findings_list": [],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": true,
+      "secure_findings": 0,
+      "secure_flagged": false,
+      "secure_any_finding": false,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 48861.77,
+      "secure_latency_ms": 90421.95
+    },
+    {
+      "id": "ssrf-000004-5879805b",
+      "technique": "DNS rebinding",
+      "cwe": "CWE-918",
+      "lang": "go",
+      "severity": "CRITICAL",
+      "must_match": [
+        "rebindin"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 2,
+      "vuln_descriptions": [
+        "DNS Rebinding Attack Vector: The code performs a DNS lookup on user-supplied input to resolve the hostname. It then checks if the resolved IP is public and blocks internal IPs. However, when making the actual HTTP request (http.Get), it uses the original targetURL which may contain an attacker-controlled domain that resolves differently at that moment. An attacker can set up a malicious DNS entry where their domain initially resolves to a public IP (passing the check) but then changes its record to point to an internal/private IP when the actual HTTP request is made, allowing them to access internal resources.",
+        "Incomplete Input Validation: The code extracts a hostname from an arbitrary user-supplied URL string without validating its format or ensuring it's not malicious. While the intent is good (blocking internal IPs), this approach relies on DNS behavior which can be manipulated."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 35,
+          "description": "DNS Rebinding Attack Vector: The code performs a DNS lookup on user-supplied input to resolve the hostname. It then checks if the resolved IP is public and blocks internal IPs. However, when making the actual HTTP request (http.Get), it uses the original targetURL which may contain an attacker-controlled domain that resolves differently at that moment. An attacker can set up a malicious DNS entry where their domain initially resolves to a public IP (passing the check) but then changes its record to point to an internal/private IP when the actual HTTP request is made, allowing them to access internal resources.",
+          "fix": "Do not perform user-controlled DNS lookups before making requests. Instead of resolving the hostname yourself and checking if it's public, use a proxy or reverse proxy architecture where you control the network path entirely. Alternatively, validate that the target URL belongs only to your own domains (whitelist approach) rather than trying to block private IPs after resolution."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 31,
+          "description": "Incomplete Input Validation: The code extracts a hostname from an arbitrary user-supplied URL string without validating its format or ensuring it's not malicious. While the intent is good (blocking internal IPs), this approach relies on DNS behavior which can be manipulated.",
+          "fix": "Implement strict input validation for URLs and consider using allowlists of permitted domains rather than attempting to block private IP ranges after resolution."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "HIGH",
+          "line_number": 105,
+          "description": "The secureWebhookHandler function does not validate the target URL against a whitelist of allowed domains. An attacker can provide any arbitrary HTTP/HTTPS URL in the 'url' query parameter to fetch and exfiltrate data from external sites.",
+          "fix": "Implement an allowlist of permitted hostnames or IP addresses for outbound requests. Validate that parsedURL.Host matches one of the whitelisted entries before making the request."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 109,
+          "description": "The code ignores DNS rebinding attacks by using only ips[0] from net.LookupIP without validating all resolved IPs against a whitelist. If an attacker controls the target domain's DNS and returns multiple A records (e.g., one legitimate IP and one malicious internal IP), connecting to just the first IP could bypass intended security checks.",
+          "fix": "Validate ALL returned IPs in ips slice, not just ips[0], before dialing. Only proceed if all resolved IPs are allowed by a strict allowlist."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 123,
+          "description": "The code ignores the error from io.ReadAll when reading the response body (body, _ := io.ReadAll(...)). This could lead to silent failures or incomplete data processing if an I/O error occurs during read.",
+          "fix": "Check for errors returned by io.ReadAll and handle them appropriately. Log the error or return a 502 Bad Gateway status code."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 3,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": true,
+      "vuln_latency_ms": 99620.11,
+      "secure_latency_ms": 777985.08
+    },
+    {
+      "id": "ssrf-000010-2c00dc33",
+      "technique": "SSRF via file upload",
+      "cwe": "CWE-918",
+      "lang": "php",
+      "severity": "CRITICAL",
+      "must_match": [
+        "file",
+        "ssrf",
+        "upload"
+      ],
+      "detected": true,
+      "severity_match": true,
+      "vuln_findings": 3,
+      "vuln_descriptions": [
+        "The code loads and processes SVG files without validating them. SVGs can contain external references (e.g., <image>, <script>) that lead to Remote Code Execution (RCE) or data exfiltration when parsed by simplexml_load_file(). The processSvg() method blindly returns the XML content, potentially executing embedded scripts.",
+        "The code uses Imagick to process images without validating file extensions or content type. ImageMagick is known to be vulnerable to RCE via crafted image files (e.g., CVE-2019-10153). An attacker could upload a maliciously crafted PNG/JPG that triggers an exploit when processed by the thumbnailImage() method.",
+        "The destination path is constructed by directly concatenating user-supplied filename ($file['name']) with the upload directory without sanitization. This allows Path Traversal attacks where an attacker can use filenames like '../../../etc/passwd' to write files outside the intended upload directory."
+      ],
+      "vuln_findings_list": [
+        {
+          "severity": "CRITICAL",
+          "line_number": 14,
+          "description": "The code loads and processes SVG files without validating them. SVGs can contain external references (e.g., <image>, <script>) that lead to Remote Code Execution (RCE) or data exfiltration when parsed by simplexml_load_file(). The processSvg() method blindly returns the XML content, potentially executing embedded scripts.",
+          "fix": "Validate and sanitize all incoming files before processing. For SVGs specifically: 1. Strip out external references using a library like libsvg-sanitize or custom regex to remove <image>, <script> tags with xlink:href attributes pointing outside the domain. 2. Use an allowlist approach for permitted elements/attributes."
+        },
+        {
+          "severity": "HIGH",
+          "line_number": 20,
+          "description": "The code uses Imagick to process images without validating file extensions or content type. ImageMagick is known to be vulnerable to RCE via crafted image files (e.g., CVE-2019-10153). An attacker could upload a maliciously crafted PNG/JPG that triggers an exploit when processed by the thumbnailImage() method.",
+          "fix": "Implement strict input validation: 1. Verify file extension against a whitelist of safe formats (jpg, png, gif) before processing. 2. Validate MIME type using finfo_file(). 3. Use ImageMagick's -limit memory and resource limits to mitigate DoS/RCE risks."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 10,
+          "description": "The destination path is constructed by directly concatenating user-supplied filename ($file['name']) with the upload directory without sanitization. This allows Path Traversal attacks where an attacker can use filenames like '../../../etc/passwd' to write files outside the intended upload directory.",
+          "fix": "Sanitize the uploaded file name before using it in path construction: 1. Extract only the base filename (no directories) from $_FILES['name']. 2. Remove or replace any characters that could be used for traversal (/, ..). 3. Generate a unique safe filename (e.g., hash of original + extension) to prevent overwrites and injection."
+        }
+      ],
+      "secure_findings_list": [
+        {
+          "severity": "MEDIUM",
+          "line_number": 10,
+          "description": "The code sets the MAGICK_CONFIGURE_PATH environment variable to a specific ImageMagick installation path. This is insecure because it assumes a non-standard or potentially vulnerable system configuration exists at that location. If an attacker can control this directory (e.g., via symlink attacks), they could bypass security policies and execute arbitrary commands using ImageMagick's dangerous features.",
+          "fix": "Remove the `putenv('MAGICK_CONFIGURE_PATH=...')` call entirely. Instead, rely on system-level configuration of ImageMagick to disable or restrict dangerous coders (like PDF, PS, SVG) via policy.xml files in /etc/ImageMagick-6/policy.xml and ensure this is enforced at the OS level before PHP runs."
+        },
+        {
+          "severity": "MEDIUM",
+          "line_number": 45,
+          "description": "The `createThumbnailWithGD` function uses GD library functions to process images. While safer than ImageMagick for untrusted files, there's a potential risk if the uploaded file contains malformed data that causes memory corruption or crashes in PHP (e.g., via crafted PNG headers). Additionally, using imagecopyresampled without explicit bounds checking could theoretically lead to buffer overflows in older GD versions.",
+          "fix": "Add additional validation before processing: check for valid EXIF metadata and ensure dimensions are within reasonable limits. Consider adding a timeout when calling `imagecreatefrom*` functions to prevent hanging on malformed files."
+        }
+      ],
+      "vuln_retrieved": [],
+      "secure_retrieved": [],
+      "vuln_unverified": [],
+      "secure_unverified": [],
+      "vuln_declined": false,
+      "secure_declined": false,
+      "secure_findings": 2,
+      "secure_flagged": true,
+      "secure_any_finding": true,
+      "secure_flagged_high": false,
+      "vuln_latency_ms": 93713.58,
+      "secure_latency_ms": 94775.92
+    },
+    {
+      "id": "xxe-000007-de4694cd",
+      "error": "ValidationError: 4 validation errors for SecurityFindings\nfindings.0.severity\n  Field required [type=missing, input_value={'description': 'The code...solve_entities=False)`\"}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.0.line_number\n  Field required [type=missing, input_value={'description': 'The code...solve_entities=False)`\"}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.severity\n  Field required [type=missing, input_value={'description': 'The appl...ing local development.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfindings.1.line_number\n  Field required [type=missing, input_value={'description': 'The appl...ing local development.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing"
+    }
+  ]
+}

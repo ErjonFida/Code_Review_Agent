@@ -6,7 +6,9 @@ import re
 import time
 from datetime import datetime, timezone
 
-from graph import MODEL, get_context, retrieve_examples, security_agent
+import urllib.request
+
+from graph import MODEL, REVIEW_STRUCTURED, REVIEW_THINK, get_context, retrieve_examples, security_agent
 from evals import judge
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,6 +21,16 @@ EXT = {
     "go": "go", "csharp": "cs", "php": "php", "ruby": "rb", "kotlin": "kt",
     "yaml": "yaml", "c": "c", "cpp": "cpp", "rust": "rs",
 }
+
+
+def _ollama_version() -> str:
+    # A runtime update changes the reviewer as surely as a code change does, so
+    # every report records which runtime produced it.
+    try:
+        with urllib.request.urlopen("http://localhost:11434/api/version", timeout=5) as r:
+            return json.load(r)["version"]
+    except (OSError, ValueError, KeyError):
+        return "unknown"
 
 
 def load_gold(path: str) -> list[dict]:
@@ -93,7 +105,7 @@ def review(code: str, case: dict, use_rag: bool, exclude: list[str]) -> tuple[li
         {"id": r["id"], "distance": round(r["distance"], 4), "technique": _retrieved_technique(r)}
         for r in state["retrieved_examples"]
     ]
-    return findings, (time.perf_counter() - started) * 1000, retrieved, out.get("unverified_findings", [])
+    return findings, (time.perf_counter() - started) * 1000, retrieved, out
 
 
 def _percentile(values: list[float], pct: int) -> float:
@@ -178,8 +190,8 @@ def run(cases: list[dict], use_rag: bool, scorer: str = "judge") -> list[dict]:
     for index, case in enumerate(cases, start=1):
         print(f"\n--- [{index}/{len(cases)}] {case['case_id']} ({case['technique']}) ---")
         try:
-            vuln_findings, vuln_ms, vuln_retrieved, vuln_dropped = review(case["vulnerable_code"], case, use_rag, exclude)
-            secure_findings, secure_ms, secure_retrieved, secure_dropped = review(case["secure_code"], case, use_rag, exclude)
+            vuln_findings, vuln_ms, vuln_retrieved, vuln_out = review(case["vulnerable_code"], case, use_rag, exclude)
+            secure_findings, secure_ms, secure_retrieved, secure_out = review(case["secure_code"], case, use_rag, exclude)
         except Exception as e:
             # A structured-output parse failure should cost one case, not the run.
             print(f"  ERROR: {type(e).__name__}: {e}")
@@ -203,8 +215,8 @@ def run(cases: list[dict], use_rag: bool, scorer: str = "judge") -> list[dict]:
             "secure_findings_list": secure_findings,
             "vuln_retrieved": vuln_retrieved,
             "secure_retrieved": secure_retrieved,
-            "vuln_unverified": vuln_dropped,
-            "secure_unverified": secure_dropped,
+            "vuln_unverified": vuln_out.get("unverified_findings", []),
+            "secure_unverified": secure_out.get("unverified_findings", []),
             "secure_findings": len(secure_findings),
             "secure_flagged": secure_hit is not None,
             "secure_any_finding": len(secure_findings) > 0,
@@ -306,6 +318,9 @@ def main() -> None:
         "config": {
             "arm": "rag" if use_rag else "no-rag",
             "model": MODEL,
+            "reviewer_options": {"think": REVIEW_THINK or "model default",
+                                 "structured": REVIEW_STRUCTURED or "json_schema"},
+            "ollama_version": _ollama_version(),
             "dataset": os.path.basename(args.dataset),
             "gold_fingerprint": hashlib.sha256(
                 open(args.dataset, "rb").read()).hexdigest()[:16],

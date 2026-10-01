@@ -100,6 +100,22 @@ def test_report_renders_as_github_markdown():
 
 
 
+def test_a_missing_tool_call_is_an_error_not_a_clean_review():
+    import graph
+    from langchain_core.runnables import RunnableLambda
+
+    with mock.patch.object(graph, "_reviewer", lambda schema: RunnableLambda(lambda _: None)):
+        context = graph.get_context({"raw_diff": "+x = 1"})
+        static = graph.static_analysis_agent({"sanitized_diff": "x = 1", "pr_context": context["pr_context"]})
+        try:
+            graph.security_agent({"sanitized_diff": "x = 1", "retrieved_examples": []})
+            raise AssertionError("a missing tool call was treated as a clean review")
+        except ValueError:
+            pass
+    assert context["pr_context"]["primary_language"] == "unknown"
+    assert static == {"static_findings": []}
+
+
 def test_retrieval_runs_only_for_large_diffs():
     import graph
     retrieved_for = []

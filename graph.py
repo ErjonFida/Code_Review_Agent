@@ -21,6 +21,8 @@ REQUEST_TIMEOUT_S = 600
 # Whether it helps on large diffs is untested; the default sits ~10x above the
 # largest diff the eval covers. 0 means always retrieve, a huge value means never.
 RETRIEVAL_MIN_CHARS = int(os.getenv("RETRIEVAL_MIN_CHARS", "20000"))
+REVIEW_THINK = os.getenv("REVIEW_THINK", "")            # "off": no hidden reasoning
+REVIEW_STRUCTURED = os.getenv("REVIEW_STRUCTURED", "")  # "function_calling": tool-call output
 
 
 def _reviewer(schema):
@@ -30,8 +32,9 @@ def _reviewer(schema):
         temperature=0,
         num_predict=MAX_OUTPUT_TOKENS,
         client_kwargs={"timeout": REQUEST_TIMEOUT_S},
+        **({"reasoning": False} if REVIEW_THINK == "off" else {}),
     )
-    return llm.with_structured_output(schema)
+    return llm.with_structured_output(schema, **({"method": REVIEW_STRUCTURED} if REVIEW_STRUCTURED else {}))
 
 class GraphState(TypedDict):
 
@@ -115,6 +118,8 @@ def get_context(state: GraphState) -> Dict[str, Any]:
     
     chain = prompt | structured_llm
     extraction_result = chain.invoke({"code": sanitized_diff})
+    if extraction_result is None:  # tool-call output, but the model answered in prose
+        extraction_result = PRContext(primary_language="unknown", imported_libraries=[], core_concept="unknown")
     
     print(f"  Language : {extraction_result.primary_language}")
     print(f"  Libraries: {extraction_result.imported_libraries}")
@@ -210,6 +215,9 @@ If the code is secure, return an empty findings list."""
     chain = prompt | structured_llm
     result = chain.invoke({"diff": sanitized_diff, "examples": examples_text})
 
+    if result is None:
+        raise ValueError("the model answered in prose instead of a tool call")
+
     findings = [f.model_dump() for f in result.findings]
     print(f"  Found {len(findings)} security issue(s)")
     for f in findings:
@@ -257,7 +265,7 @@ If the code is clean, return an empty findings list."""
         "concept": pr_context.get("core_concept", "unknown")
     })
 
-    findings = [f.model_dump() for f in result.findings]
+    findings = [] if result is None else [f.model_dump() for f in result.findings]
     print(f"  Found {len(findings)} code quality issue(s)")
     for f in findings:
         print(f"    [{f['category']}] Line {f['line_number']}: {f['description'][:80]}")
